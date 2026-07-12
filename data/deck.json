@@ -1,0 +1,2821 @@
+{
+  "meta": {
+    "id": "chinese-hsk1-2",
+    "title": "你好 — kurze Pause?",
+    "instruction": "Übersetze ins Deutsche, Enter = nächstes Feld",
+    "placeholder": "deutsch …",
+    "ui": {
+      "check": "Prüfen",
+      "done": "Fertig",
+      "solution": "Lösung",
+      "wasRight": "war doch richtig ✓",
+      "correct": "richtig",
+      "allSkipped": "alles übersprungen"
+    }
+  },
+  "cards": [
+    {
+      "id": "爱",
+      "front": "ài",
+      "answers": [
+        "lieben",
+        "Liebe"
+      ],
+      "extra": "爱",
+      "level": 1
+    },
+    {
+      "id": "八",
+      "front": "bā",
+      "answers": [
+        "acht"
+      ],
+      "extra": "八",
+      "level": 1
+    },
+    {
+      "id": "爸爸",
+      "front": "bàba",
+      "answers": [
+        "Papa",
+        "Vater"
+      ],
+      "extra": "爸爸",
+      "level": 1
+    },
+    {
+      "id": "杯子",
+      "front": "bēizi",
+      "answers": [
+        "Tasse",
+        "Becher",
+        "Glas"
+      ],
+      "extra": "杯子",
+      "level": 1
+    },
+    {
+      "id": "北京",
+      "front": "Běijīng",
+      "answers": [
+        "Peking"
+      ],
+      "extra": "北京",
+      "level": 1
+    },
+    {
+      "id": "不",
+      "front": "bù",
+      "answers": [
+        "nicht",
+        "nein"
+      ],
+      "extra": "不",
+      "level": 1
+    },
+    {
+      "id": "不客气",
+      "front": "bú kèqi",
+      "answers": [
+        "keine Ursache",
+        "gern geschehen",
+        "bitte"
+      ],
+      "extra": "不客气",
+      "level": 1
+    },
+    {
+      "id": "菜",
+      "front": "cài",
+      "answers": [
+        "Gericht",
+        "Gemüse",
+        "Essen"
+      ],
+      "extra": "菜",
+      "level": 1
+    },
+    {
+      "id": "茶",
+      "front": "chá",
+      "answers": [
+        "Tee"
+      ],
+      "extra": "茶",
+      "level": 1
+    },
+    {
+      "id": "吃",
+      "front": "chī",
+      "answers": [
+        "essen"
+      ],
+      "extra": "吃",
+      "level": 1
+    },
+    {
+      "id": "出租车",
+      "front": "chūzūchē",
+      "answers": [
+        "Taxi"
+      ],
+      "extra": "出租车",
+      "level": 1
+    },
+    {
+      "id": "打电话",
+      "front": "dǎ diànhuà",
+      "answers": [
+        "telefonieren",
+        "anrufen"
+      ],
+      "extra": "打电话",
+      "level": 1
+    },
+    {
+      "id": "大",
+      "front": "dà",
+      "answers": [
+        "groß"
+      ],
+      "extra": "大",
+      "level": 1
+    },
+    {
+      "id": "点",
+      "front": "diǎn",
+      "answers": [
+        "Uhr",
+        "Uhrzeit"
+      ],
+      "hint": "(Uhrzeit)",
+      "extra": "点",
+      "level": 1
+    },
+    {
+      "id": "电脑",
+      "front": "diànnǎo",
+      "answers": [
+        "Computer",
+        "Rechner"
+      ],
+      "extra": "电脑",
+      "level": 1
+    },
+    {
+      "id": "电视",
+      "front": "diànshì",
+      "answers": [
+        "Fernseher",
+        "Fernsehen"
+      ],
+      "extra": "电视",
+      "level": 1
+    },
+    {
+      "id": "电影",
+      "front": "diànyǐng",
+      "answers": [
+        "Film",
+        "Kinofilm"
+      ],
+      "extra": "电影",
+      "level": 1
+    },
+    {
+      "id": "东西",
+      "front": "dōngxi",
+      "answers": [
+        "Sache",
+        "Ding",
+        "Sachen"
+      ],
+      "extra": "东西",
+      "level": 1
+    },
+    {
+      "id": "都",
+      "front": "dōu",
+      "answers": [
+        "alle",
+        "beide"
+      ],
+      "extra": "都",
+      "level": 1
+    },
+    {
+      "id": "读",
+      "front": "dú",
+      "answers": [
+        "lesen",
+        "vorlesen"
+      ],
+      "extra": "读",
+      "level": 1
+    },
+    {
+      "id": "对不起",
+      "front": "duìbuqǐ",
+      "answers": [
+        "Entschuldigung",
+        "tut mir leid"
+      ],
+      "extra": "对不起",
+      "level": 1
+    },
+    {
+      "id": "多",
+      "front": "duō",
+      "answers": [
+        "viel",
+        "viele"
+      ],
+      "extra": "多",
+      "level": 1
+    },
+    {
+      "id": "多少",
+      "front": "duōshao",
+      "answers": [
+        "wie viel",
+        "wie viele",
+        "wieviel"
+      ],
+      "extra": "多少",
+      "level": 1
+    },
+    {
+      "id": "儿子",
+      "front": "érzi",
+      "answers": [
+        "Sohn"
+      ],
+      "extra": "儿子",
+      "level": 1
+    },
+    {
+      "id": "二",
+      "front": "èr",
+      "answers": [
+        "zwei"
+      ],
+      "extra": "二",
+      "level": 1
+    },
+    {
+      "id": "饭店",
+      "front": "fàndiàn",
+      "answers": [
+        "Restaurant",
+        "Hotel"
+      ],
+      "extra": "饭店",
+      "level": 1
+    },
+    {
+      "id": "飞机",
+      "front": "fēijī",
+      "answers": [
+        "Flugzeug"
+      ],
+      "extra": "飞机",
+      "level": 1
+    },
+    {
+      "id": "分钟",
+      "front": "fēnzhōng",
+      "answers": [
+        "Minute",
+        "Minuten"
+      ],
+      "extra": "分钟",
+      "level": 1
+    },
+    {
+      "id": "高兴",
+      "front": "gāoxìng",
+      "answers": [
+        "froh",
+        "glücklich",
+        "fröhlich"
+      ],
+      "extra": "高兴",
+      "level": 1
+    },
+    {
+      "id": "工作",
+      "front": "gōngzuò",
+      "answers": [
+        "Arbeit",
+        "arbeiten"
+      ],
+      "extra": "工作",
+      "level": 1
+    },
+    {
+      "id": "狗",
+      "front": "gǒu",
+      "answers": [
+        "Hund"
+      ],
+      "extra": "狗",
+      "level": 1
+    },
+    {
+      "id": "汉语",
+      "front": "Hànyǔ",
+      "answers": [
+        "Chinesisch"
+      ],
+      "hint": "(Sprache)",
+      "extra": "汉语",
+      "level": 1
+    },
+    {
+      "id": "好",
+      "front": "hǎo",
+      "answers": [
+        "gut"
+      ],
+      "extra": "好",
+      "level": 1
+    },
+    {
+      "id": "号",
+      "front": "hào",
+      "answers": [
+        "Nummer",
+        "Datum",
+        "Tag"
+      ],
+      "extra": "号",
+      "level": 1
+    },
+    {
+      "id": "喝",
+      "front": "hē",
+      "answers": [
+        "trinken"
+      ],
+      "extra": "喝",
+      "level": 1
+    },
+    {
+      "id": "和",
+      "front": "hé",
+      "answers": [
+        "und",
+        "mit"
+      ],
+      "extra": "和",
+      "level": 1
+    },
+    {
+      "id": "很",
+      "front": "hěn",
+      "answers": [
+        "sehr"
+      ],
+      "extra": "很",
+      "level": 1
+    },
+    {
+      "id": "后面",
+      "front": "hòumiàn",
+      "answers": [
+        "hinten",
+        "dahinter",
+        "hinter"
+      ],
+      "extra": "后面",
+      "level": 1
+    },
+    {
+      "id": "回",
+      "front": "huí",
+      "answers": [
+        "zurückkehren",
+        "zurückgehen",
+        "zurück"
+      ],
+      "extra": "回",
+      "level": 1
+    },
+    {
+      "id": "会",
+      "front": "huì",
+      "answers": [
+        "können"
+      ],
+      "hint": "(gelernt haben)",
+      "extra": "会",
+      "level": 1
+    },
+    {
+      "id": "几",
+      "front": "jǐ",
+      "answers": [
+        "wie viele",
+        "einige"
+      ],
+      "extra": "几",
+      "level": 1
+    },
+    {
+      "id": "家",
+      "front": "jiā",
+      "answers": [
+        "Familie",
+        "Zuhause",
+        "Haus"
+      ],
+      "extra": "家",
+      "level": 1
+    },
+    {
+      "id": "叫",
+      "front": "jiào",
+      "answers": [
+        "heißen",
+        "rufen"
+      ],
+      "extra": "叫",
+      "level": 1
+    },
+    {
+      "id": "今天",
+      "front": "jīntiān",
+      "answers": [
+        "heute"
+      ],
+      "extra": "今天",
+      "level": 1
+    },
+    {
+      "id": "九",
+      "front": "jiǔ",
+      "answers": [
+        "neun"
+      ],
+      "extra": "九",
+      "level": 1
+    },
+    {
+      "id": "开",
+      "front": "kāi",
+      "answers": [
+        "öffnen",
+        "aufmachen",
+        "fahren"
+      ],
+      "extra": "开",
+      "level": 1
+    },
+    {
+      "id": "看",
+      "front": "kàn",
+      "answers": [
+        "sehen",
+        "schauen",
+        "anschauen",
+        "lesen"
+      ],
+      "extra": "看",
+      "level": 1
+    },
+    {
+      "id": "看见",
+      "front": "kànjiàn",
+      "answers": [
+        "sehen",
+        "erblicken"
+      ],
+      "extra": "看见",
+      "level": 1
+    },
+    {
+      "id": "块快",
+      "front": "kuài",
+      "answers": [
+        "Yuan",
+        "Geld",
+        "schnell"
+      ],
+      "extra": "块 / 快",
+      "level": 1
+    },
+    {
+      "id": "来",
+      "front": "lái",
+      "answers": [
+        "kommen"
+      ],
+      "extra": "来",
+      "level": 1
+    },
+    {
+      "id": "老师",
+      "front": "lǎoshī",
+      "answers": [
+        "Lehrer",
+        "Lehrerin"
+      ],
+      "extra": "老师",
+      "level": 1
+    },
+    {
+      "id": "冷",
+      "front": "lěng",
+      "answers": [
+        "kalt"
+      ],
+      "extra": "冷",
+      "level": 1
+    },
+    {
+      "id": "里",
+      "front": "lǐ",
+      "answers": [
+        "in",
+        "innen",
+        "drinnen"
+      ],
+      "extra": "里",
+      "level": 1
+    },
+    {
+      "id": "六",
+      "front": "liù",
+      "answers": [
+        "sechs"
+      ],
+      "extra": "六",
+      "level": 1
+    },
+    {
+      "id": "妈妈",
+      "front": "māma",
+      "answers": [
+        "Mama",
+        "Mutter"
+      ],
+      "extra": "妈妈",
+      "level": 1
+    },
+    {
+      "id": "买",
+      "front": "mǎi",
+      "answers": [
+        "kaufen"
+      ],
+      "extra": "买",
+      "level": 1
+    },
+    {
+      "id": "猫",
+      "front": "māo",
+      "answers": [
+        "Katze"
+      ],
+      "extra": "猫",
+      "level": 1
+    },
+    {
+      "id": "没关系",
+      "front": "méi guānxi",
+      "answers": [
+        "macht nichts",
+        "kein Problem"
+      ],
+      "extra": "没关系",
+      "level": 1
+    },
+    {
+      "id": "没有",
+      "front": "méiyǒu",
+      "answers": [
+        "nicht haben",
+        "es gibt nicht",
+        "kein"
+      ],
+      "extra": "没有",
+      "level": 1
+    },
+    {
+      "id": "米饭",
+      "front": "mǐfàn",
+      "answers": [
+        "Reis",
+        "gekochter Reis"
+      ],
+      "extra": "米饭",
+      "level": 1
+    },
+    {
+      "id": "名字",
+      "front": "míngzi",
+      "answers": [
+        "Name"
+      ],
+      "extra": "名字",
+      "level": 1
+    },
+    {
+      "id": "明天",
+      "front": "míngtiān",
+      "answers": [
+        "morgen"
+      ],
+      "extra": "明天",
+      "level": 1
+    },
+    {
+      "id": "哪",
+      "front": "nǎ",
+      "answers": [
+        "welcher",
+        "welche",
+        "welches"
+      ],
+      "extra": "哪",
+      "level": 1
+    },
+    {
+      "id": "哪儿",
+      "front": "nǎr",
+      "answers": [
+        "wo"
+      ],
+      "extra": "哪儿",
+      "level": 1
+    },
+    {
+      "id": "那",
+      "front": "nà",
+      "answers": [
+        "das",
+        "jenes",
+        "dann"
+      ],
+      "hint": "(dort drüben)",
+      "extra": "那",
+      "level": 1
+    },
+    {
+      "id": "能",
+      "front": "néng",
+      "answers": [
+        "können",
+        "dürfen"
+      ],
+      "hint": "(imstande sein)",
+      "extra": "能",
+      "level": 1
+    },
+    {
+      "id": "你",
+      "front": "nǐ",
+      "answers": [
+        "du"
+      ],
+      "extra": "你",
+      "level": 1
+    },
+    {
+      "id": "年",
+      "front": "nián",
+      "answers": [
+        "Jahr"
+      ],
+      "extra": "年",
+      "level": 1
+    },
+    {
+      "id": "女儿",
+      "front": "nǚ'ér",
+      "answers": [
+        "Tochter"
+      ],
+      "extra": "女儿",
+      "level": 1
+    },
+    {
+      "id": "朋友",
+      "front": "péngyou",
+      "answers": [
+        "Freund",
+        "Freundin"
+      ],
+      "extra": "朋友",
+      "level": 1
+    },
+    {
+      "id": "漂亮",
+      "front": "piàoliang",
+      "answers": [
+        "schön",
+        "hübsch"
+      ],
+      "extra": "漂亮",
+      "level": 1
+    },
+    {
+      "id": "苹果",
+      "front": "píngguǒ",
+      "answers": [
+        "Apfel"
+      ],
+      "extra": "苹果",
+      "level": 1
+    },
+    {
+      "id": "七",
+      "front": "qī",
+      "answers": [
+        "sieben"
+      ],
+      "extra": "七",
+      "level": 1
+    },
+    {
+      "id": "前面",
+      "front": "qiánmiàn",
+      "answers": [
+        "vorne",
+        "davor",
+        "vorn"
+      ],
+      "extra": "前面",
+      "level": 1
+    },
+    {
+      "id": "钱",
+      "front": "qián",
+      "answers": [
+        "Geld"
+      ],
+      "extra": "钱",
+      "level": 1
+    },
+    {
+      "id": "请",
+      "front": "qǐng",
+      "answers": [
+        "bitte",
+        "einladen"
+      ],
+      "extra": "请",
+      "level": 1
+    },
+    {
+      "id": "去",
+      "front": "qù",
+      "answers": [
+        "gehen",
+        "hingehen"
+      ],
+      "extra": "去",
+      "level": 1
+    },
+    {
+      "id": "热",
+      "front": "rè",
+      "answers": [
+        "heiß",
+        "warm"
+      ],
+      "extra": "热",
+      "level": 1
+    },
+    {
+      "id": "人",
+      "front": "rén",
+      "answers": [
+        "Mensch",
+        "Person"
+      ],
+      "extra": "人",
+      "level": 1
+    },
+    {
+      "id": "认识",
+      "front": "rènshi",
+      "answers": [
+        "kennen",
+        "kennenlernen"
+      ],
+      "extra": "认识",
+      "level": 1
+    },
+    {
+      "id": "三",
+      "front": "sān",
+      "answers": [
+        "drei"
+      ],
+      "extra": "三",
+      "level": 1
+    },
+    {
+      "id": "商店",
+      "front": "shāngdiàn",
+      "answers": [
+        "Geschäft",
+        "Laden"
+      ],
+      "extra": "商店",
+      "level": 1
+    },
+    {
+      "id": "上",
+      "front": "shàng",
+      "answers": [
+        "oben",
+        "auf",
+        "über"
+      ],
+      "extra": "上",
+      "level": 1
+    },
+    {
+      "id": "上午",
+      "front": "shàngwǔ",
+      "answers": [
+        "Vormittag"
+      ],
+      "extra": "上午",
+      "level": 1
+    },
+    {
+      "id": "少",
+      "front": "shǎo",
+      "answers": [
+        "wenig"
+      ],
+      "extra": "少",
+      "level": 1
+    },
+    {
+      "id": "谁",
+      "front": "shéi",
+      "answers": [
+        "wer"
+      ],
+      "extra": "谁",
+      "level": 1
+    },
+    {
+      "id": "什么",
+      "front": "shénme",
+      "answers": [
+        "was"
+      ],
+      "extra": "什么",
+      "level": 1
+    },
+    {
+      "id": "十",
+      "front": "shí",
+      "answers": [
+        "zehn"
+      ],
+      "extra": "十",
+      "level": 1
+    },
+    {
+      "id": "时候",
+      "front": "shíhou",
+      "answers": [
+        "Zeit",
+        "Zeitpunkt",
+        "Moment"
+      ],
+      "extra": "时候",
+      "level": 1
+    },
+    {
+      "id": "是",
+      "front": "shì",
+      "answers": [
+        "sein",
+        "ja"
+      ],
+      "extra": "是",
+      "level": 1
+    },
+    {
+      "id": "书",
+      "front": "shū",
+      "answers": [
+        "Buch"
+      ],
+      "extra": "书",
+      "level": 1
+    },
+    {
+      "id": "水",
+      "front": "shuǐ",
+      "answers": [
+        "Wasser"
+      ],
+      "extra": "水",
+      "level": 1
+    },
+    {
+      "id": "水果",
+      "front": "shuǐguǒ",
+      "answers": [
+        "Obst",
+        "Frucht",
+        "Früchte"
+      ],
+      "extra": "水果",
+      "level": 1
+    },
+    {
+      "id": "睡觉",
+      "front": "shuìjiào",
+      "answers": [
+        "schlafen"
+      ],
+      "extra": "睡觉",
+      "level": 1
+    },
+    {
+      "id": "说",
+      "front": "shuō",
+      "answers": [
+        "sprechen",
+        "sagen",
+        "reden"
+      ],
+      "extra": "说",
+      "level": 1
+    },
+    {
+      "id": "四",
+      "front": "sì",
+      "answers": [
+        "vier"
+      ],
+      "extra": "四",
+      "level": 1
+    },
+    {
+      "id": "岁",
+      "front": "suì",
+      "answers": [
+        "Jahre",
+        "Jahre alt"
+      ],
+      "hint": "(Alter)",
+      "extra": "岁",
+      "level": 1
+    },
+    {
+      "id": "他她它",
+      "front": "tā",
+      "answers": [
+        "er",
+        "sie",
+        "es"
+      ],
+      "extra": "他 / 她 / 它",
+      "level": 1
+    },
+    {
+      "id": "太",
+      "front": "tài",
+      "answers": [
+        "zu",
+        "zu sehr",
+        "allzu"
+      ],
+      "hint": "(zu viel)",
+      "extra": "太",
+      "level": 1
+    },
+    {
+      "id": "天气",
+      "front": "tiānqì",
+      "answers": [
+        "Wetter"
+      ],
+      "extra": "天气",
+      "level": 1
+    },
+    {
+      "id": "听",
+      "front": "tīng",
+      "answers": [
+        "hören",
+        "zuhören"
+      ],
+      "extra": "听",
+      "level": 1
+    },
+    {
+      "id": "同学",
+      "front": "tóngxué",
+      "answers": [
+        "Mitschüler",
+        "Klassenkamerad",
+        "Kommilitone"
+      ],
+      "extra": "同学",
+      "level": 1
+    },
+    {
+      "id": "喂",
+      "front": "wéi",
+      "answers": [
+        "hallo"
+      ],
+      "hint": "(am Telefon)",
+      "extra": "喂",
+      "level": 1
+    },
+    {
+      "id": "我",
+      "front": "wǒ",
+      "answers": [
+        "ich"
+      ],
+      "extra": "我",
+      "level": 1
+    },
+    {
+      "id": "我们",
+      "front": "wǒmen",
+      "answers": [
+        "wir"
+      ],
+      "extra": "我们",
+      "level": 1
+    },
+    {
+      "id": "五",
+      "front": "wǔ",
+      "answers": [
+        "fünf"
+      ],
+      "extra": "五",
+      "level": 1
+    },
+    {
+      "id": "喜欢",
+      "front": "xǐhuan",
+      "answers": [
+        "mögen",
+        "gern haben",
+        "gefallen"
+      ],
+      "extra": "喜欢",
+      "level": 1
+    },
+    {
+      "id": "下",
+      "front": "xià",
+      "answers": [
+        "unten",
+        "unter",
+        "nächste"
+      ],
+      "extra": "下",
+      "level": 1
+    },
+    {
+      "id": "下午",
+      "front": "xiàwǔ",
+      "answers": [
+        "Nachmittag"
+      ],
+      "extra": "下午",
+      "level": 1
+    },
+    {
+      "id": "下雨",
+      "front": "xiàyǔ",
+      "answers": [
+        "regnen",
+        "es regnet"
+      ],
+      "extra": "下雨",
+      "level": 1
+    },
+    {
+      "id": "先生",
+      "front": "xiānsheng",
+      "answers": [
+        "Herr"
+      ],
+      "extra": "先生",
+      "level": 1
+    },
+    {
+      "id": "现在",
+      "front": "xiànzài",
+      "answers": [
+        "jetzt"
+      ],
+      "extra": "现在",
+      "level": 1
+    },
+    {
+      "id": "想",
+      "front": "xiǎng",
+      "answers": [
+        "möchten",
+        "wollen",
+        "denken"
+      ],
+      "extra": "想",
+      "level": 1
+    },
+    {
+      "id": "小",
+      "front": "xiǎo",
+      "answers": [
+        "klein"
+      ],
+      "extra": "小",
+      "level": 1
+    },
+    {
+      "id": "小姐",
+      "front": "xiǎojiě",
+      "answers": [
+        "Fräulein",
+        "Frau"
+      ],
+      "hint": "(Anrede)",
+      "extra": "小姐",
+      "level": 1
+    },
+    {
+      "id": "些",
+      "front": "xiē",
+      "answers": [
+        "einige",
+        "ein paar"
+      ],
+      "extra": "些",
+      "level": 1
+    },
+    {
+      "id": "写",
+      "front": "xiě",
+      "answers": [
+        "schreiben"
+      ],
+      "extra": "写",
+      "level": 1
+    },
+    {
+      "id": "谢谢",
+      "front": "xièxie",
+      "answers": [
+        "danke"
+      ],
+      "extra": "谢谢",
+      "level": 1
+    },
+    {
+      "id": "星期",
+      "front": "xīngqī",
+      "answers": [
+        "Woche"
+      ],
+      "extra": "星期",
+      "level": 1
+    },
+    {
+      "id": "学生",
+      "front": "xuésheng",
+      "answers": [
+        "Schüler",
+        "Student"
+      ],
+      "extra": "学生",
+      "level": 1
+    },
+    {
+      "id": "学习",
+      "front": "xuéxí",
+      "answers": [
+        "lernen",
+        "studieren"
+      ],
+      "extra": "学习",
+      "level": 1
+    },
+    {
+      "id": "学校",
+      "front": "xuéxiào",
+      "answers": [
+        "Schule"
+      ],
+      "extra": "学校",
+      "level": 1
+    },
+    {
+      "id": "一",
+      "front": "yī",
+      "answers": [
+        "eins"
+      ],
+      "extra": "一",
+      "level": 1
+    },
+    {
+      "id": "衣服",
+      "front": "yīfu",
+      "answers": [
+        "Kleidung",
+        "Kleider"
+      ],
+      "extra": "衣服",
+      "level": 1
+    },
+    {
+      "id": "医生",
+      "front": "yīshēng",
+      "answers": [
+        "Arzt",
+        "Ärztin",
+        "Doktor"
+      ],
+      "extra": "医生",
+      "level": 1
+    },
+    {
+      "id": "医院",
+      "front": "yīyuàn",
+      "answers": [
+        "Krankenhaus"
+      ],
+      "extra": "医院",
+      "level": 1
+    },
+    {
+      "id": "椅子",
+      "front": "yǐzi",
+      "answers": [
+        "Stuhl"
+      ],
+      "extra": "椅子",
+      "level": 1
+    },
+    {
+      "id": "一点儿",
+      "front": "yìdiǎnr",
+      "answers": [
+        "ein bisschen",
+        "etwas",
+        "ein wenig"
+      ],
+      "extra": "一点儿",
+      "level": 1
+    },
+    {
+      "id": "有",
+      "front": "yǒu",
+      "answers": [
+        "haben",
+        "es gibt"
+      ],
+      "extra": "有",
+      "level": 1
+    },
+    {
+      "id": "月",
+      "front": "yuè",
+      "answers": [
+        "Monat",
+        "Mond"
+      ],
+      "extra": "月",
+      "level": 1
+    },
+    {
+      "id": "在再",
+      "front": "zài",
+      "answers": [
+        "in",
+        "an",
+        "sich befinden",
+        "wieder",
+        "nochmal",
+        "noch einmal"
+      ],
+      "extra": "在 / 再",
+      "level": 1
+    },
+    {
+      "id": "再见",
+      "front": "zàijiàn",
+      "answers": [
+        "auf Wiedersehen",
+        "tschüss"
+      ],
+      "extra": "再见",
+      "level": 1
+    },
+    {
+      "id": "怎么",
+      "front": "zěnme",
+      "answers": [
+        "wie"
+      ],
+      "extra": "怎么",
+      "level": 1
+    },
+    {
+      "id": "怎么样",
+      "front": "zěnmeyàng",
+      "answers": [
+        "wie ist es",
+        "wie wärs",
+        "wie gehts"
+      ],
+      "extra": "怎么样",
+      "level": 1
+    },
+    {
+      "id": "这",
+      "front": "zhè",
+      "answers": [
+        "das",
+        "dieses",
+        "dies"
+      ],
+      "hint": "(hier)",
+      "extra": "这",
+      "level": 1
+    },
+    {
+      "id": "中国",
+      "front": "Zhōngguó",
+      "answers": [
+        "China"
+      ],
+      "extra": "中国",
+      "level": 1
+    },
+    {
+      "id": "中午",
+      "front": "zhōngwǔ",
+      "answers": [
+        "Mittag"
+      ],
+      "extra": "中午",
+      "level": 1
+    },
+    {
+      "id": "住",
+      "front": "zhù",
+      "answers": [
+        "wohnen",
+        "leben"
+      ],
+      "extra": "住",
+      "level": 1
+    },
+    {
+      "id": "桌子",
+      "front": "zhuōzi",
+      "answers": [
+        "Tisch"
+      ],
+      "extra": "桌子",
+      "level": 1
+    },
+    {
+      "id": "字",
+      "front": "zì",
+      "answers": [
+        "Schriftzeichen",
+        "Zeichen"
+      ],
+      "extra": "字",
+      "level": 1
+    },
+    {
+      "id": "昨天",
+      "front": "zuótiān",
+      "answers": [
+        "gestern"
+      ],
+      "extra": "昨天",
+      "level": 1
+    },
+    {
+      "id": "坐做",
+      "front": "zuò",
+      "answers": [
+        "sitzen",
+        "machen",
+        "tun"
+      ],
+      "extra": "坐 / 做",
+      "level": 1
+    },
+    {
+      "id": "白",
+      "front": "bái",
+      "answers": [
+        "weiß"
+      ],
+      "extra": "白",
+      "level": 2
+    },
+    {
+      "id": "百",
+      "front": "bǎi",
+      "answers": [
+        "hundert"
+      ],
+      "extra": "百",
+      "level": 2
+    },
+    {
+      "id": "帮助",
+      "front": "bāngzhù",
+      "answers": [
+        "helfen",
+        "Hilfe"
+      ],
+      "extra": "帮助",
+      "level": 2
+    },
+    {
+      "id": "报纸",
+      "front": "bàozhǐ",
+      "answers": [
+        "Zeitung"
+      ],
+      "extra": "报纸",
+      "level": 2
+    },
+    {
+      "id": "比",
+      "front": "bǐ",
+      "answers": [
+        "als",
+        "vergleichen"
+      ],
+      "hint": "(Vergleich)",
+      "extra": "比",
+      "level": 2
+    },
+    {
+      "id": "别",
+      "front": "bié",
+      "answers": [
+        "nicht"
+      ],
+      "hint": "(Verbot: tu das nicht!)",
+      "extra": "别",
+      "level": 2
+    },
+    {
+      "id": "宾馆",
+      "front": "bīnguǎn",
+      "answers": [
+        "Hotel"
+      ],
+      "extra": "宾馆",
+      "level": 2
+    },
+    {
+      "id": "长",
+      "front": "cháng",
+      "answers": [
+        "lang"
+      ],
+      "extra": "长",
+      "level": 2
+    },
+    {
+      "id": "唱歌",
+      "front": "chànggē",
+      "answers": [
+        "singen"
+      ],
+      "extra": "唱歌",
+      "level": 2
+    },
+    {
+      "id": "出",
+      "front": "chū",
+      "answers": [
+        "hinausgehen",
+        "herauskommen",
+        "raus"
+      ],
+      "extra": "出",
+      "level": 2
+    },
+    {
+      "id": "穿",
+      "front": "chuān",
+      "answers": [
+        "anziehen",
+        "tragen"
+      ],
+      "hint": "(Kleidung)",
+      "extra": "穿",
+      "level": 2
+    },
+    {
+      "id": "次",
+      "front": "cì",
+      "answers": [
+        "Mal"
+      ],
+      "extra": "次",
+      "level": 2
+    },
+    {
+      "id": "从",
+      "front": "cóng",
+      "answers": [
+        "von",
+        "ab",
+        "aus"
+      ],
+      "extra": "从",
+      "level": 2
+    },
+    {
+      "id": "错",
+      "front": "cuò",
+      "answers": [
+        "falsch",
+        "Fehler"
+      ],
+      "extra": "错",
+      "level": 2
+    },
+    {
+      "id": "打篮球",
+      "front": "dǎ lánqiú",
+      "answers": [
+        "Basketball spielen"
+      ],
+      "extra": "打篮球",
+      "level": 2
+    },
+    {
+      "id": "大家",
+      "front": "dàjiā",
+      "answers": [
+        "alle",
+        "jeder"
+      ],
+      "extra": "大家",
+      "level": 2
+    },
+    {
+      "id": "但是",
+      "front": "dànshì",
+      "answers": [
+        "aber",
+        "jedoch"
+      ],
+      "extra": "但是",
+      "level": 2
+    },
+    {
+      "id": "到",
+      "front": "dào",
+      "answers": [
+        "ankommen",
+        "bis",
+        "nach"
+      ],
+      "extra": "到",
+      "level": 2
+    },
+    {
+      "id": "等",
+      "front": "děng",
+      "answers": [
+        "warten"
+      ],
+      "extra": "等",
+      "level": 2
+    },
+    {
+      "id": "弟弟",
+      "front": "dìdi",
+      "answers": [
+        "jüngerer Bruder",
+        "kleiner Bruder",
+        "Bruder"
+      ],
+      "extra": "弟弟",
+      "level": 2
+    },
+    {
+      "id": "第一",
+      "front": "dì-yī",
+      "answers": [
+        "erster",
+        "erste",
+        "der erste"
+      ],
+      "extra": "第一",
+      "level": 2
+    },
+    {
+      "id": "懂",
+      "front": "dǒng",
+      "answers": [
+        "verstehen"
+      ],
+      "extra": "懂",
+      "level": 2
+    },
+    {
+      "id": "对",
+      "front": "duì",
+      "answers": [
+        "richtig",
+        "korrekt",
+        "stimmt"
+      ],
+      "extra": "对",
+      "level": 2
+    },
+    {
+      "id": "房间",
+      "front": "fángjiān",
+      "answers": [
+        "Zimmer",
+        "Raum"
+      ],
+      "extra": "房间",
+      "level": 2
+    },
+    {
+      "id": "非常",
+      "front": "fēicháng",
+      "answers": [
+        "sehr",
+        "außerordentlich",
+        "extrem"
+      ],
+      "extra": "非常",
+      "level": 2
+    },
+    {
+      "id": "服务员",
+      "front": "fúwùyuán",
+      "answers": [
+        "Kellner",
+        "Bedienung",
+        "Kellnerin"
+      ],
+      "extra": "服务员",
+      "level": 2
+    },
+    {
+      "id": "高",
+      "front": "gāo",
+      "answers": [
+        "hoch",
+        "groß"
+      ],
+      "extra": "高",
+      "level": 2
+    },
+    {
+      "id": "告诉",
+      "front": "gàosu",
+      "answers": [
+        "sagen",
+        "mitteilen",
+        "erzählen"
+      ],
+      "extra": "告诉",
+      "level": 2
+    },
+    {
+      "id": "哥哥",
+      "front": "gēge",
+      "answers": [
+        "älterer Bruder",
+        "großer Bruder",
+        "Bruder"
+      ],
+      "extra": "哥哥",
+      "level": 2
+    },
+    {
+      "id": "给",
+      "front": "gěi",
+      "answers": [
+        "geben"
+      ],
+      "extra": "给",
+      "level": 2
+    },
+    {
+      "id": "公共汽车",
+      "front": "gōnggòng qìchē",
+      "answers": [
+        "Bus"
+      ],
+      "extra": "公共汽车",
+      "level": 2
+    },
+    {
+      "id": "公司",
+      "front": "gōngsī",
+      "answers": [
+        "Firma",
+        "Unternehmen"
+      ],
+      "extra": "公司",
+      "level": 2
+    },
+    {
+      "id": "贵",
+      "front": "guì",
+      "answers": [
+        "teuer"
+      ],
+      "extra": "贵",
+      "level": 2
+    },
+    {
+      "id": "还",
+      "front": "hái",
+      "answers": [
+        "noch",
+        "außerdem"
+      ],
+      "extra": "还",
+      "level": 2
+    },
+    {
+      "id": "孩子",
+      "front": "háizi",
+      "answers": [
+        "Kind"
+      ],
+      "extra": "孩子",
+      "level": 2
+    },
+    {
+      "id": "好吃",
+      "front": "hǎochī",
+      "answers": [
+        "lecker"
+      ],
+      "extra": "好吃",
+      "level": 2
+    },
+    {
+      "id": "黑",
+      "front": "hēi",
+      "answers": [
+        "schwarz",
+        "dunkel"
+      ],
+      "extra": "黑",
+      "level": 2
+    },
+    {
+      "id": "红",
+      "front": "hóng",
+      "answers": [
+        "rot"
+      ],
+      "extra": "红",
+      "level": 2
+    },
+    {
+      "id": "火车站",
+      "front": "huǒchēzhàn",
+      "answers": [
+        "Bahnhof"
+      ],
+      "extra": "火车站",
+      "level": 2
+    },
+    {
+      "id": "机场",
+      "front": "jīchǎng",
+      "answers": [
+        "Flughafen"
+      ],
+      "extra": "机场",
+      "level": 2
+    },
+    {
+      "id": "鸡蛋",
+      "front": "jīdàn",
+      "answers": [
+        "Ei",
+        "Hühnerei"
+      ],
+      "extra": "鸡蛋",
+      "level": 2
+    },
+    {
+      "id": "教室",
+      "front": "jiàoshì",
+      "answers": [
+        "Klassenzimmer",
+        "Klassenraum"
+      ],
+      "extra": "教室",
+      "level": 2
+    },
+    {
+      "id": "姐姐",
+      "front": "jiějie",
+      "answers": [
+        "ältere Schwester",
+        "große Schwester",
+        "Schwester"
+      ],
+      "extra": "姐姐",
+      "level": 2
+    },
+    {
+      "id": "介绍",
+      "front": "jièshào",
+      "answers": [
+        "vorstellen"
+      ],
+      "extra": "介绍",
+      "level": 2
+    },
+    {
+      "id": "进近",
+      "front": "jìn",
+      "answers": [
+        "hineingehen",
+        "eintreten",
+        "nah",
+        "nahe"
+      ],
+      "extra": "进 / 近",
+      "level": 2
+    },
+    {
+      "id": "觉得",
+      "front": "juéde",
+      "answers": [
+        "finden",
+        "meinen",
+        "fühlen"
+      ],
+      "extra": "觉得",
+      "level": 2
+    },
+    {
+      "id": "咖啡",
+      "front": "kāfēi",
+      "answers": [
+        "Kaffee"
+      ],
+      "extra": "咖啡",
+      "level": 2
+    },
+    {
+      "id": "开始",
+      "front": "kāishǐ",
+      "answers": [
+        "anfangen",
+        "beginnen",
+        "Anfang"
+      ],
+      "extra": "开始",
+      "level": 2
+    },
+    {
+      "id": "考试",
+      "front": "kǎoshì",
+      "answers": [
+        "Prüfung",
+        "Test"
+      ],
+      "extra": "考试",
+      "level": 2
+    },
+    {
+      "id": "可能",
+      "front": "kěnéng",
+      "answers": [
+        "vielleicht",
+        "möglich"
+      ],
+      "extra": "可能",
+      "level": 2
+    },
+    {
+      "id": "可以",
+      "front": "kěyǐ",
+      "answers": [
+        "dürfen",
+        "können"
+      ],
+      "hint": "(Erlaubnis)",
+      "extra": "可以",
+      "level": 2
+    },
+    {
+      "id": "课",
+      "front": "kè",
+      "answers": [
+        "Unterricht",
+        "Lektion",
+        "Kurs"
+      ],
+      "extra": "课",
+      "level": 2
+    },
+    {
+      "id": "快乐",
+      "front": "kuàilè",
+      "answers": [
+        "glücklich",
+        "fröhlich"
+      ],
+      "extra": "快乐",
+      "level": 2
+    },
+    {
+      "id": "累",
+      "front": "lèi",
+      "answers": [
+        "müde",
+        "erschöpft"
+      ],
+      "extra": "累",
+      "level": 2
+    },
+    {
+      "id": "离",
+      "front": "lí",
+      "answers": [
+        "entfernt von",
+        "entfernt"
+      ],
+      "extra": "离",
+      "level": 2
+    },
+    {
+      "id": "两",
+      "front": "liǎng",
+      "answers": [
+        "zwei"
+      ],
+      "hint": "(vor Zählwort)",
+      "extra": "两",
+      "level": 2
+    },
+    {
+      "id": "零",
+      "front": "líng",
+      "answers": [
+        "null"
+      ],
+      "extra": "零",
+      "level": 2
+    },
+    {
+      "id": "路",
+      "front": "lù",
+      "answers": [
+        "Straße",
+        "Weg"
+      ],
+      "extra": "路",
+      "level": 2
+    },
+    {
+      "id": "旅游",
+      "front": "lǚyóu",
+      "answers": [
+        "reisen",
+        "Reise"
+      ],
+      "extra": "旅游",
+      "level": 2
+    },
+    {
+      "id": "卖",
+      "front": "mài",
+      "answers": [
+        "verkaufen"
+      ],
+      "extra": "卖",
+      "level": 2
+    },
+    {
+      "id": "慢",
+      "front": "màn",
+      "answers": [
+        "langsam"
+      ],
+      "extra": "慢",
+      "level": 2
+    },
+    {
+      "id": "忙",
+      "front": "máng",
+      "answers": [
+        "beschäftigt"
+      ],
+      "extra": "忙",
+      "level": 2
+    },
+    {
+      "id": "每",
+      "front": "měi",
+      "answers": [
+        "jeder",
+        "jede",
+        "jedes"
+      ],
+      "extra": "每",
+      "level": 2
+    },
+    {
+      "id": "妹妹",
+      "front": "mèimei",
+      "answers": [
+        "jüngere Schwester",
+        "kleine Schwester",
+        "Schwester"
+      ],
+      "extra": "妹妹",
+      "level": 2
+    },
+    {
+      "id": "门",
+      "front": "mén",
+      "answers": [
+        "Tür"
+      ],
+      "extra": "门",
+      "level": 2
+    },
+    {
+      "id": "面条",
+      "front": "miàntiáo",
+      "answers": [
+        "Nudeln"
+      ],
+      "extra": "面条",
+      "level": 2
+    },
+    {
+      "id": "男",
+      "front": "nán",
+      "answers": [
+        "männlich",
+        "Mann"
+      ],
+      "extra": "男",
+      "level": 2
+    },
+    {
+      "id": "您",
+      "front": "nín",
+      "answers": [
+        "Sie"
+      ],
+      "hint": "(höflich)",
+      "extra": "您",
+      "level": 2
+    },
+    {
+      "id": "牛奶",
+      "front": "niúnǎi",
+      "answers": [
+        "Milch"
+      ],
+      "extra": "牛奶",
+      "level": 2
+    },
+    {
+      "id": "女",
+      "front": "nǚ",
+      "answers": [
+        "weiblich",
+        "Frau"
+      ],
+      "extra": "女",
+      "level": 2
+    },
+    {
+      "id": "旁边",
+      "front": "pángbiān",
+      "answers": [
+        "daneben",
+        "neben",
+        "nebenan"
+      ],
+      "extra": "旁边",
+      "level": 2
+    },
+    {
+      "id": "跑步",
+      "front": "pǎobù",
+      "answers": [
+        "laufen",
+        "joggen",
+        "rennen"
+      ],
+      "extra": "跑步",
+      "level": 2
+    },
+    {
+      "id": "便宜",
+      "front": "piányi",
+      "answers": [
+        "billig",
+        "günstig"
+      ],
+      "extra": "便宜",
+      "level": 2
+    },
+    {
+      "id": "票",
+      "front": "piào",
+      "answers": [
+        "Ticket",
+        "Fahrkarte",
+        "Eintrittskarte"
+      ],
+      "extra": "票",
+      "level": 2
+    },
+    {
+      "id": "妻子",
+      "front": "qīzi",
+      "answers": [
+        "Ehefrau",
+        "Frau"
+      ],
+      "extra": "妻子",
+      "level": 2
+    },
+    {
+      "id": "起床",
+      "front": "qǐchuáng",
+      "answers": [
+        "aufstehen"
+      ],
+      "extra": "起床",
+      "level": 2
+    },
+    {
+      "id": "千",
+      "front": "qiān",
+      "answers": [
+        "tausend"
+      ],
+      "extra": "千",
+      "level": 2
+    },
+    {
+      "id": "铅笔",
+      "front": "qiānbǐ",
+      "answers": [
+        "Bleistift"
+      ],
+      "extra": "铅笔",
+      "level": 2
+    },
+    {
+      "id": "晴",
+      "front": "qíng",
+      "answers": [
+        "sonnig",
+        "klar",
+        "heiter"
+      ],
+      "hint": "(Wetter)",
+      "extra": "晴",
+      "level": 2
+    },
+    {
+      "id": "去年",
+      "front": "qùnián",
+      "answers": [
+        "letztes Jahr",
+        "voriges Jahr",
+        "vergangenes Jahr"
+      ],
+      "extra": "去年",
+      "level": 2
+    },
+    {
+      "id": "让",
+      "front": "ràng",
+      "answers": [
+        "lassen",
+        "veranlassen"
+      ],
+      "extra": "让",
+      "level": 2
+    },
+    {
+      "id": "日",
+      "front": "rì",
+      "answers": [
+        "Tag",
+        "Sonne"
+      ],
+      "extra": "日",
+      "level": 2
+    },
+    {
+      "id": "上班",
+      "front": "shàngbān",
+      "answers": [
+        "zur Arbeit gehen",
+        "arbeiten gehen",
+        "arbeiten"
+      ],
+      "extra": "上班",
+      "level": 2
+    },
+    {
+      "id": "身体",
+      "front": "shēntǐ",
+      "answers": [
+        "Körper",
+        "Gesundheit"
+      ],
+      "extra": "身体",
+      "level": 2
+    },
+    {
+      "id": "生病",
+      "front": "shēngbìng",
+      "answers": [
+        "krank sein",
+        "krank werden",
+        "krank"
+      ],
+      "extra": "生病",
+      "level": 2
+    },
+    {
+      "id": "生日",
+      "front": "shēngrì",
+      "answers": [
+        "Geburtstag"
+      ],
+      "extra": "生日",
+      "level": 2
+    },
+    {
+      "id": "时间",
+      "front": "shíjiān",
+      "answers": [
+        "Zeit"
+      ],
+      "extra": "时间",
+      "level": 2
+    },
+    {
+      "id": "事情",
+      "front": "shìqing",
+      "answers": [
+        "Angelegenheit",
+        "Sache"
+      ],
+      "extra": "事情",
+      "level": 2
+    },
+    {
+      "id": "手表",
+      "front": "shǒubiǎo",
+      "answers": [
+        "Armbanduhr",
+        "Uhr"
+      ],
+      "extra": "手表",
+      "level": 2
+    },
+    {
+      "id": "手机",
+      "front": "shǒujī",
+      "answers": [
+        "Handy",
+        "Mobiltelefon",
+        "Smartphone"
+      ],
+      "extra": "手机",
+      "level": 2
+    },
+    {
+      "id": "说话",
+      "front": "shuōhuà",
+      "answers": [
+        "sprechen",
+        "reden"
+      ],
+      "extra": "说话",
+      "level": 2
+    },
+    {
+      "id": "送",
+      "front": "sòng",
+      "answers": [
+        "schenken",
+        "bringen",
+        "begleiten"
+      ],
+      "extra": "送",
+      "level": 2
+    },
+    {
+      "id": "所以",
+      "front": "suǒyǐ",
+      "answers": [
+        "deshalb",
+        "also",
+        "darum"
+      ],
+      "extra": "所以",
+      "level": 2
+    },
+    {
+      "id": "虽然",
+      "front": "suīrán",
+      "answers": [
+        "obwohl"
+      ],
+      "extra": "虽然",
+      "level": 2
+    },
+    {
+      "id": "踢足球",
+      "front": "tī zúqiú",
+      "answers": [
+        "Fußball spielen"
+      ],
+      "extra": "踢足球",
+      "level": 2
+    },
+    {
+      "id": "题",
+      "front": "tí",
+      "answers": [
+        "Aufgabe",
+        "Frage"
+      ],
+      "hint": "(Übung/Prüfung)",
+      "extra": "题",
+      "level": 2
+    },
+    {
+      "id": "跳舞",
+      "front": "tiàowǔ",
+      "answers": [
+        "tanzen"
+      ],
+      "extra": "跳舞",
+      "level": 2
+    },
+    {
+      "id": "外",
+      "front": "wài",
+      "answers": [
+        "außen",
+        "draußen",
+        "außerhalb"
+      ],
+      "extra": "外",
+      "level": 2
+    },
+    {
+      "id": "完玩",
+      "front": "wán",
+      "answers": [
+        "fertig",
+        "beenden",
+        "spielen"
+      ],
+      "extra": "完 / 玩",
+      "level": 2
+    },
+    {
+      "id": "晚上",
+      "front": "wǎnshang",
+      "answers": [
+        "Abend",
+        "abends"
+      ],
+      "extra": "晚上",
+      "level": 2
+    },
+    {
+      "id": "往",
+      "front": "wǎng",
+      "answers": [
+        "in Richtung",
+        "nach",
+        "Richtung"
+      ],
+      "extra": "往",
+      "level": 2
+    },
+    {
+      "id": "为什么",
+      "front": "wèishénme",
+      "answers": [
+        "warum",
+        "wieso",
+        "weshalb"
+      ],
+      "extra": "为什么",
+      "level": 2
+    },
+    {
+      "id": "问",
+      "front": "wèn",
+      "answers": [
+        "fragen"
+      ],
+      "extra": "问",
+      "level": 2
+    },
+    {
+      "id": "问题",
+      "front": "wèntí",
+      "answers": [
+        "Frage",
+        "Problem"
+      ],
+      "extra": "问题",
+      "level": 2
+    },
+    {
+      "id": "西瓜",
+      "front": "xīguā",
+      "answers": [
+        "Wassermelone",
+        "Melone"
+      ],
+      "extra": "西瓜",
+      "level": 2
+    },
+    {
+      "id": "希望",
+      "front": "xīwàng",
+      "answers": [
+        "hoffen",
+        "Hoffnung",
+        "wünschen"
+      ],
+      "extra": "希望",
+      "level": 2
+    },
+    {
+      "id": "洗",
+      "front": "xǐ",
+      "answers": [
+        "waschen"
+      ],
+      "extra": "洗",
+      "level": 2
+    },
+    {
+      "id": "小时",
+      "front": "xiǎoshí",
+      "answers": [
+        "Stunde"
+      ],
+      "extra": "小时",
+      "level": 2
+    },
+    {
+      "id": "笑",
+      "front": "xiào",
+      "answers": [
+        "lachen",
+        "lächeln"
+      ],
+      "extra": "笑",
+      "level": 2
+    },
+    {
+      "id": "新",
+      "front": "xīn",
+      "answers": [
+        "neu"
+      ],
+      "extra": "新",
+      "level": 2
+    },
+    {
+      "id": "姓",
+      "front": "xìng",
+      "answers": [
+        "Nachname",
+        "Familienname",
+        "heißen"
+      ],
+      "extra": "姓",
+      "level": 2
+    },
+    {
+      "id": "休息",
+      "front": "xiūxi",
+      "answers": [
+        "sich ausruhen",
+        "Pause machen",
+        "ausruhen",
+        "Pause"
+      ],
+      "extra": "休息",
+      "level": 2
+    },
+    {
+      "id": "雪",
+      "front": "xuě",
+      "answers": [
+        "Schnee"
+      ],
+      "extra": "雪",
+      "level": 2
+    },
+    {
+      "id": "颜色",
+      "front": "yánsè",
+      "answers": [
+        "Farbe"
+      ],
+      "extra": "颜色",
+      "level": 2
+    },
+    {
+      "id": "眼睛",
+      "front": "yǎnjing",
+      "answers": [
+        "Auge",
+        "Augen"
+      ],
+      "extra": "眼睛",
+      "level": 2
+    },
+    {
+      "id": "羊肉",
+      "front": "yángròu",
+      "answers": [
+        "Lammfleisch",
+        "Hammelfleisch",
+        "Lamm"
+      ],
+      "extra": "羊肉",
+      "level": 2
+    },
+    {
+      "id": "药要",
+      "front": "yào",
+      "answers": [
+        "Medikament",
+        "Medizin",
+        "wollen",
+        "müssen"
+      ],
+      "extra": "药 / 要",
+      "level": 2
+    },
+    {
+      "id": "也",
+      "front": "yě",
+      "answers": [
+        "auch"
+      ],
+      "extra": "也",
+      "level": 2
+    },
+    {
+      "id": "一起",
+      "front": "yìqǐ",
+      "answers": [
+        "zusammen",
+        "gemeinsam"
+      ],
+      "extra": "一起",
+      "level": 2
+    },
+    {
+      "id": "一下",
+      "front": "yíxià",
+      "answers": [
+        "mal kurz",
+        "kurz",
+        "mal"
+      ],
+      "extra": "一下",
+      "level": 2
+    },
+    {
+      "id": "已经",
+      "front": "yǐjīng",
+      "answers": [
+        "schon",
+        "bereits"
+      ],
+      "extra": "已经",
+      "level": 2
+    },
+    {
+      "id": "阴",
+      "front": "yīn",
+      "answers": [
+        "bewölkt",
+        "bedeckt",
+        "wolkig"
+      ],
+      "hint": "(Wetter)",
+      "extra": "阴",
+      "level": 2
+    },
+    {
+      "id": "意思",
+      "front": "yìsi",
+      "answers": [
+        "Bedeutung",
+        "Sinn"
+      ],
+      "extra": "意思",
+      "level": 2
+    },
+    {
+      "id": "因为",
+      "front": "yīnwèi",
+      "answers": [
+        "weil",
+        "da"
+      ],
+      "extra": "因为",
+      "level": 2
+    },
+    {
+      "id": "游泳",
+      "front": "yóuyǒng",
+      "answers": [
+        "schwimmen"
+      ],
+      "extra": "游泳",
+      "level": 2
+    },
+    {
+      "id": "右边",
+      "front": "yòubian",
+      "answers": [
+        "rechts",
+        "rechte Seite"
+      ],
+      "extra": "右边",
+      "level": 2
+    },
+    {
+      "id": "鱼",
+      "front": "yú",
+      "answers": [
+        "Fisch"
+      ],
+      "extra": "鱼",
+      "level": 2
+    },
+    {
+      "id": "远",
+      "front": "yuǎn",
+      "answers": [
+        "weit",
+        "fern",
+        "weit entfernt"
+      ],
+      "extra": "远",
+      "level": 2
+    },
+    {
+      "id": "运动",
+      "front": "yùndòng",
+      "answers": [
+        "Sport",
+        "sich bewegen",
+        "Bewegung"
+      ],
+      "extra": "运动",
+      "level": 2
+    },
+    {
+      "id": "早上",
+      "front": "zǎoshang",
+      "answers": [
+        "Morgen",
+        "morgens",
+        "früh"
+      ],
+      "hint": "(Tageszeit)",
+      "extra": "早上",
+      "level": 2
+    },
+    {
+      "id": "丈夫",
+      "front": "zhàngfu",
+      "answers": [
+        "Ehemann",
+        "Mann"
+      ],
+      "extra": "丈夫",
+      "level": 2
+    },
+    {
+      "id": "找",
+      "front": "zhǎo",
+      "answers": [
+        "suchen"
+      ],
+      "extra": "找",
+      "level": 2
+    },
+    {
+      "id": "真",
+      "front": "zhēn",
+      "answers": [
+        "wirklich",
+        "echt"
+      ],
+      "extra": "真",
+      "level": 2
+    },
+    {
+      "id": "正在",
+      "front": "zhèngzài",
+      "answers": [
+        "gerade",
+        "dabei sein"
+      ],
+      "extra": "正在",
+      "level": 2
+    },
+    {
+      "id": "知道",
+      "front": "zhīdào",
+      "answers": [
+        "wissen"
+      ],
+      "extra": "知道",
+      "level": 2
+    },
+    {
+      "id": "准备",
+      "front": "zhǔnbèi",
+      "answers": [
+        "vorbereiten",
+        "planen",
+        "vorhaben"
+      ],
+      "extra": "准备",
+      "level": 2
+    },
+    {
+      "id": "走",
+      "front": "zǒu",
+      "answers": [
+        "gehen",
+        "laufen",
+        "losgehen"
+      ],
+      "extra": "走",
+      "level": 2
+    },
+    {
+      "id": "最",
+      "front": "zuì",
+      "answers": [
+        "am meisten"
+      ],
+      "hint": "(Superlativ)",
+      "extra": "最",
+      "level": 2
+    },
+    {
+      "id": "左边",
+      "front": "zuǒbian",
+      "answers": [
+        "links",
+        "linke Seite"
+      ],
+      "extra": "左边",
+      "level": 2
+    }
+  ]
+}

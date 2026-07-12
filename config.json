@@ -1,0 +1,9 @@
+{
+  "port": 4823,
+  "thresholdSeconds": 60,
+  "cooldownMinutes": 5,
+  "hotkey": "Ctrl+Alt+L",
+  "wordsPerPopup": 5,
+  "autostart": true,
+  "deckPath": "data/deck.json"
+}

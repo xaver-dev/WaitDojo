@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WaitWords — Statistics</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #1c1f26; color: #e8e6e3;
+    padding: 16px;
+  }
+  h1 { font-size: 16px; color: #f0c674; margin-bottom: 12px; }
+  .chips { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .chip { padding: 6px 12px; border-radius: 10px; font-size: 12px; background: #242833; border: 1px solid #333846; }
+  .chip b { font-size: 14px; }
+  .chip.new b { color: #8ec9ff; }
+  .chip.learning b { color: #f0c674; }
+  .chip.problem b { color: #ff9caa; }
+  .chip.good b { color: #96d9a4; }
+  .filters { display: flex; gap: 6px; margin-bottom: 10px; }
+  .filters button {
+    background: #242833; color: #9aa0ae; border: 1px solid #333846;
+    border-radius: 8px; padding: 4px 10px; font-size: 11px; cursor: pointer;
+  }
+  .filters button.active { background: #f0c674; color: #1c1f26; border-color: #f0c674; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #2a2e38; }
+  th { color: #8a8f9c; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+  td.front { font-weight: 600; }
+  .st { font-size: 10px; padding: 2px 7px; border-radius: 6px; background: #333846; }
+  .st.new { background: #23394a; color: #8ec9ff; }
+  .st.learning { background: #40391f; color: #f0c674; }
+  .st.problem { background: #4a2530; color: #ff9caa; }
+  .st.good { background: #24402c; color: #96d9a4; }
+</style>
+</head>
+<body>
+  <h1>Statistics</h1>
+  <div class="chips" id="chips"></div>
+  <div class="filters" id="filters">
+    <button data-f="all" class="active">all</button>
+    <button data-f="problem">problem</button>
+    <button data-f="learning">learning</button>
+    <button data-f="new">new</button>
+    <button data-f="good">good</button>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Prompt</th><th>Answers</th><th>Level</th><th>Status</th><th>✓</th><th>✗</th><th>Streak</th></tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <script src="stats.js"></script>
+</body>
+</html>

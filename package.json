@@ -1,0 +1,16 @@
+{
+  "name": "waitwords",
+  "version": "1.0.0",
+  "description": "Chinesisch-Vokabel-Popup für Wartezeiten auf lange Tool-Läufe",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "install-hooks": "node scripts/install-hooks.js",
+    "uninstall-hooks": "node scripts/install-hooks.js --remove"
+  },
+  "author": "xaver",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.2.0"
+  }
+}

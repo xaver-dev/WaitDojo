@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>WaitWords</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: transparent; overflow: hidden; }
+  body {
+    font-family: "Segoe UI", sans-serif;
+    color: #e8e6e3;
+    padding: 8px;
+    user-select: none;
+  }
+  .card {
+    background: #1c1f26;
+    border: 1px solid #3a3f4b;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: calc(100vh - 16px);
+    -webkit-app-region: drag;
+  }
+  header { display: flex; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 15px; font-weight: 600; color: #f0c674; }
+  header .sub { font-size: 11px; color: #8a8f9c; margin-top: 2px; }
+  #closeBtn {
+    -webkit-app-region: no-drag;
+    background: none; border: none; color: #8a8f9c;
+    font-size: 18px; cursor: pointer; padding: 2px 8px; border-radius: 8px;
+  }
+  #closeBtn:hover { background: #2a2e38; color: #fff; }
+  #rows { display: flex; flex-direction: column; gap: 8px; flex: 1; -webkit-app-region: no-drag; overflow-y: auto; min-height: 0; }
+  #rows::-webkit-scrollbar { width: 6px; }
+  #rows::-webkit-scrollbar-thumb { background: #3a3f4b; border-radius: 3px; }
+  .row {
+    background: #242833;
+    border: 1px solid #333846;
+    border-radius: 10px;
+    padding: 8px 10px;
+  }
+  .row .top { display: flex; align-items: baseline; justify-content: space-between; }
+  .row .front { font-size: 17px; font-weight: 600; letter-spacing: .3px; }
+  .row .hint { font-size: 11px; font-weight: 400; color: #8a8f9c; }
+  .row .badge {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .5px;
+    padding: 2px 6px; border-radius: 6px; background: #333846; color: #9aa0ae;
+  }
+  .badge.problem { background: #4a2530; color: #ff9caa; }
+  .badge.new { background: #23394a; color: #8ec9ff; }
+  .badge.good { background: #24402c; color: #96d9a4; }
+  .row input {
+    width: 100%; margin-top: 6px;
+    background: #1a1d24; border: 1px solid #3a3f4b; border-radius: 7px;
+    color: #e8e6e3; font-size: 13px; padding: 6px 8px; outline: none;
+  }
+  .row input:focus { border-color: #f0c674; }
+  .row.correct { border-color: #3f7a4d; }
+  .row.correct input { border-color: #3f7a4d; color: #96d9a4; }
+  .row.wrong { border-color: #8a3a49; }
+  .row.wrong input { border-color: #8a3a49; color: #ff9caa; }
+  .row.skipped { opacity: .75; }
+  .solution { font-size: 12px; color: #b8bdc9; margin-top: 5px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .solution b { color: #f0c674; font-weight: 600; }
+  .override {
+    background: none; border: 1px solid #3f7a4d; color: #96d9a4;
+    border-radius: 6px; font-size: 10px; padding: 2px 7px; cursor: pointer; white-space: nowrap;
+  }
+  .override:hover { background: #24402c; }
+  footer { display: flex; gap: 8px; align-items: center; -webkit-app-region: no-drag; }
+  #mainBtn {
+    flex: 1;
+    background: #f0c674; color: #1c1f26; border: none;
+    border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  #mainBtn:hover { background: #f7d48c; }
+  #summary { font-size: 12px; color: #9aa0ae; white-space: nowrap; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <header>
+      <div>
+        <h1 id="title"></h1>
+        <div class="sub" id="instruction"></div>
+      </div>
+      <button id="closeBtn" title="Close (Esc)">✕</button>
+    </header>
+    <div id="rows"></div>
+    <footer>
+      <span id="summary"></span>
+      <button id="mainBtn"></button>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
