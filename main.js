@@ -306,6 +306,8 @@ function startServer() {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'content-type');
+    // Chrome Private Network Access: erlaubt Requests von öffentlichen Seiten an localhost
+    res.setHeader('Access-Control-Allow-Private-Network', 'true');
     if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
     if (req.method === 'GET' && req.url === '/debug/quiz' && process.env.WAITWORDS_DEBUG === '1') {
