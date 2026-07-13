@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WaitWords — Setup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #1c1f26; color: #e8e6e3;
+    padding: 22px; font-size: 13px; line-height: 1.5;
+  }
+  h1 { font-size: 19px; color: #f0c674; margin-bottom: 6px; }
+  h2 { font-size: 15px; margin: 0 0 10px; }
+  p.lead { color: #b8bdc9; margin-bottom: 18px; }
+  .muted { color: #8a8f9c; font-size: 12px; }
+  label { display: block; font-weight: 600; margin: 12px 0 4px; }
+  input[type=text], input[type=number], textarea, select {
+    width: 100%; background: #242833; border: 1px solid #3a3f4b; border-radius: 8px;
+    color: #e8e6e3; font-size: 13px; padding: 8px 10px; outline: none; font-family: inherit;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #f0c674; }
+  textarea { resize: vertical; }
+  .rowflex { display: flex; gap: 12px; }
+  .rowflex > div { flex: 1; }
+  input[type=color] { width: 46px; height: 34px; padding: 2px; background: #242833; border: 1px solid #3a3f4b; border-radius: 8px; cursor: pointer; }
+  .btns { display: flex; gap: 10px; margin-top: 20px; }
+  button {
+    background: #f0c674; color: #1c1f26; border: none; border-radius: 9px;
+    padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  button:hover { filter: brightness(1.08); }
+  button.ghost { background: none; border: 1px solid #3a3f4b; color: #b8bdc9; }
+  button.ghost:hover { border-color: #f0c674; color: #fff; filter: none; }
+  button.wide { width: 100%; padding: 14px; font-size: 14px; }
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .choices button { text-align: left; }
+  .choices .sub { display: block; font-weight: 400; color: #6b5a2e; font-size: 11px; margin-top: 2px; }
+  .choices .ghost .sub { color: #8a8f9c; }
+  pre#promptOut {
+    background: #14161c; border: 1px solid #3a3f4b; border-radius: 8px;
+    padding: 10px; font-size: 11px; white-space: pre-wrap; word-break: break-word;
+    max-height: 200px; overflow-y: auto; color: #c9cdd6; margin-top: 6px;
+  }
+  #msg { margin-top: 12px; font-size: 12px; }
+  #msg.err { color: #ff9caa; white-space: pre-wrap; }
+  #msg.ok { color: #96d9a4; }
+  .step { display: none; }
+  .step.active { display: block; }
+  .steplabel { font-size: 11px; color: #8a8f9c; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+  <!-- Step 1: Welcome -->
+  <section class="step active" id="step1">
+    <h1>Welcome to WaitWords</h1>
+    <p class="lead">Learn something in the seconds you'd otherwise spend waiting for an AI tool to finish. Pick how to start:</p>
+    <div class="choices">
+      <button class="wide" id="createBtn">Create my own topic
+        <span class="sub">Physics, Spanish, anatomy… you describe it, an AI chatbot builds the cards</span>
+      </button>
+      <button class="wide ghost" id="bundledBtn">Use the bundled Chinese deck
+        <span class="sub">HSK 1–2 vocabulary (Pinyin → German), ready to go</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Step 2: Topic form -->
+  <section class="step" id="step2">
+    <div class="steplabel">Step 1 of 2 — describe your deck</div>
+    <h2>What do you want to learn?</h2>
+    <label for="topic">Topic</label>
+    <input type="text" id="topic" placeholder="e.g. Physics basics, Spanish A1, Latin roots">
+    <label for="desc">Your level &amp; focus (free text)</label>
+    <textarea id="desc" rows="3" placeholder="e.g. Absolute beginner. Everyday vocabulary only, no grammar terms."></textarea>
+    <div class="rowflex">
+      <div>
+        <label for="lang">Answer language</label>
+        <input type="text" id="lang" value="Deutsch">
+      </div>
+      <div>
+        <label for="count">Number of cards</label>
+        <input type="number" id="count" value="30" min="5" max="200">
+      </div>
+    </div>
+    <label for="title">Popup headline <span class="muted">(optional)</span></label>
+    <input type="text" id="title" placeholder="defaults to your topic">
+    <div class="rowflex">
+      <div>
+        <label for="theme">Design preset</label>
+        <select id="theme">
+          <option value="default">Default (gold)</option>
+          <option value="chinese">Chinese (red &amp; gold frame)</option>
+          <option value="nature">Nature (green)</option>
+          <option value="medical">Medical (blue)</option>
+          <option value="minimal">Minimal (grey)</option>
+        </select>
+      </div>
+      <div>
+        <label for="accent">Accent color</label>
+        <input type="color" id="accent" value="#f0c674">
+      </div>
+    </div>
+    <div class="btns">
+      <button class="ghost" id="back2">Back</button>
+      <button id="buildBtn">Build prompt →</button>
+    </div>
+  </section>
+
+  <!-- Step 3: Paste -->
+  <section class="step" id="step3">
+    <div class="steplabel">Step 2 of 2 — generate &amp; paste</div>
+    <h2>Generate the cards</h2>
+    <p class="muted">1. The prompt below was copied to your clipboard. Paste it into any AI chatbot (Claude, ChatGPT, Gemini…).</p>
+    <pre id="promptOut"></pre>
+    <button class="ghost" id="copyBtn" style="margin-top:8px">Copy prompt again</button>
+    <label for="json">2. Paste the chatbot's JSON answer here</label>
+    <textarea id="json" rows="6" placeholder='{ "meta": { … }, "cards": [ … ] }'></textarea>
+    <div id="msg"></div>
+    <div class="btns">
+      <button class="ghost" id="back3">Back</button>
+      <button id="createDeckBtn">Create deck</button>
+    </div>
+  </section>
+
+  <script src="onboarding.js"></script>
+</body>
+</html>

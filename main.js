@@ -86,6 +86,8 @@ const metaDefaults = {
   title: 'Quick break?',
   instruction: 'Type your answer, Enter = next field',
   placeholder: 'answer …',
+  theme: 'default', // Preset-Name, siehe popup.html [data-theme=…]
+  accent: '',       // optionale Hex-Akzentfarbe, überschreibt Preset
   ui: {},
 };
 const uiDefaults = {
@@ -106,22 +108,32 @@ function deckList() {
   return [config.deckPath];
 }
 
-function activeDeckPath() {
+function activeDeckIndex() {
   const list = deckList();
   let i = usage.activeDeckIndex || 0;
   if (i >= list.length || i >= MAX_DECKS) i = 0; // Free: nur die ersten MAX_DECKS wählbar
-  return list[i];
+  return i;
 }
 
-function loadDeck() {
-  const deckPath = path.resolve(APP_DIR, activeDeckPath());
-  let deck;
-  try {
-    deck = readJson(deckPath);
-  } catch (e) {
-    return `Deck file could not be read or is not valid JSON:\n${deckPath}\n\n${e.message}`;
+function activeDeckPath() {
+  return deckList()[activeDeckIndex()];
+}
+
+// Für den Deck-Switcher im Popup: die frei wählbaren Decks mit Titel + aktiv-Flag
+function deckSwitcher() {
+  const list = deckList();
+  const ai = activeDeckIndex();
+  const out = [];
+  for (let i = 0; i < list.length && i < MAX_DECKS; i++) {
+    out.push({ index: i, title: deckTitle(list[i]), active: i === ai });
   }
+  return { decks: out, freeCount: Math.min(list.length, MAX_DECKS), maxFree: MAX_DECKS };
+}
+
+// Gibt Fehler-Array zurück (leer = gültig). Für loadDeck und den Onboarding-Wizard.
+function validateDeckObject(deck) {
   const errors = [];
+  if (!deck || typeof deck !== 'object') { errors.push('Top level must be a JSON object.'); return errors; }
   if (!Array.isArray(deck.cards) || deck.cards.length === 0) {
     errors.push('"cards" must be a non-empty array.');
   } else {
@@ -134,6 +146,18 @@ function loadDeck() {
       if (!Array.isArray(c.answers) || c.answers.length === 0) errors.push(`Card ${i} (${c.id || '?'}): "answers" must be a non-empty array.`);
     });
   }
+  return errors;
+}
+
+function loadDeck() {
+  const deckPath = path.resolve(APP_DIR, activeDeckPath());
+  let deck;
+  try {
+    deck = readJson(deckPath);
+  } catch (e) {
+    return `Deck file could not be read or is not valid JSON:\n${deckPath}\n\n${e.message}`;
+  }
+  const errors = validateDeckObject(deck);
   if (errors.length > 0) {
     return `Deck is invalid: ${deckPath}\n\n${errors.slice(0, 10).join('\n')}${errors.length > 10 ? `\n… and ${errors.length - 10} more` : ''}`;
   }
@@ -232,6 +256,7 @@ function applyResults(results) {
 
 let popupWin = null;
 let statsWin = null;
+let onboardingWin = null;
 let tray = null;
 let lastPopupAt = 0;
 let pausedUntil = 0;
@@ -303,6 +328,32 @@ function showStats() {
   statsWin.on('closed', () => { statsWin = null; });
 }
 
+function showOnboarding() {
+  if (onboardingWin && !onboardingWin.isDestroyed()) { onboardingWin.focus(); return; }
+  onboardingWin = new BrowserWindow({
+    width: 560,
+    height: 660,
+    title: 'WaitWords — Setup',
+    autoHideMenuBar: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+  onboardingWin.loadFile('onboarding.html');
+  onboardingWin.once('ready-to-show', () => {
+    if (process.env.WAITWORDS_SHOT_ONBOARD) {
+      setTimeout(() => {
+        if (!onboardingWin || onboardingWin.isDestroyed()) return;
+        onboardingWin.webContents.capturePage().then((img) => {
+          fs.writeFileSync(process.env.WAITWORDS_SHOT_ONBOARD, img.toPNG());
+        }).catch(() => {});
+      }, 1200);
+    }
+  });
+  onboardingWin.on('closed', () => { onboardingWin = null; });
+}
+
 // ---------------------------------------------------------------- IPC
 
 let lastQuiz = [];
@@ -312,12 +363,29 @@ ipcMain.handle('get-quiz-words', () => {
     meta,
     words: lastQuiz,
     usage: { used: usedToday(), limit: POPUPS_PER_DECK_PER_DAY },
+    switcher: deckSwitcher(),
   };
 });
 
 ipcMain.handle('submit-results', (_e, results) => {
   applyResults(results);
   return true;
+});
+
+// Deck-Wechsel aus dem Popup heraus (zählt NICHT gegen das Limit — reines Umschalten)
+ipcMain.handle('set-active-deck', (_e, index) => {
+  const list = deckList();
+  if (typeof index !== 'number' || index < 0 || index >= list.length || index >= MAX_DECKS) {
+    return { ok: false };
+  }
+  usage.activeDeckIndex = index;
+  saveUsage();
+  const err = loadDeck();
+  if (err) { dialog.showErrorBox('WaitWords — deck error', err); return { ok: false }; }
+  loadProgress();
+  buildTrayMenu();
+  updateTrayTooltip();
+  return { ok: true };
 });
 
 ipcMain.handle('get-stats', () => {
@@ -328,6 +396,83 @@ ipcMain.handle('get-stats', () => {
     status: statusOf(w.id),
     ...statsFor(w.id),
   }));
+});
+
+function slugify(s) {
+  return String(s || 'deck')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40) || 'deck';
+}
+
+function writeConfig() {
+  try {
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2) + '\n');
+  } catch (e) {
+    console.error('config.json nicht schreibbar:', e.message);
+  }
+}
+
+// Vom Onboarding-Wizard: geprüftes Deck-JSON speichern, in config eintragen, aktivieren.
+// payload: { json (string), theme, accent, title }
+function createDeckFromPayload(payload) {
+  let deck;
+  try {
+    deck = JSON.parse(String(payload.json || '').replace(/^﻿/, ''));
+  } catch (e) {
+    return { ok: false, error: 'Not valid JSON: ' + e.message };
+  }
+  const errors = validateDeckObject(deck);
+  if (errors.length > 0) return { ok: false, error: errors.slice(0, 8).join('\n') };
+
+  deck.meta = deck.meta || {};
+  const title = payload.title || deck.meta.title || 'My deck';
+  let slug = deck.meta.id ? slugify(deck.meta.id) : slugify(title);
+  // Dateinamen-Kollision vermeiden
+  let file = path.join(APP_DIR, 'data', slug + '.json');
+  let n = 2;
+  while (fs.existsSync(file) && slug !== slugify(meta.id)) {
+    slug = slugify(title) + '-' + n++;
+    file = path.join(APP_DIR, 'data', slug + '.json');
+  }
+  deck.meta.id = slug;
+  deck.meta.title = title;
+  if (payload.theme) deck.meta.theme = payload.theme;
+  if (payload.accent) deck.meta.accent = payload.accent;
+
+  try {
+    fs.writeFileSync(file, JSON.stringify(deck, null, 2) + '\n');
+  } catch (e) {
+    return { ok: false, error: 'Could not write deck file: ' + e.message };
+  }
+
+  const relPath = 'data/' + slug + '.json';
+  if (!Array.isArray(config.decks)) config.decks = deckList();
+  if (!config.decks.includes(relPath)) config.decks.push(relPath);
+  delete config.deckPath; // Legacy-Feld entfernen, decks[] ist jetzt maßgeblich
+  writeConfig();
+
+  usage.activeDeckIndex = config.decks.indexOf(relPath);
+  usage.onboarded = true;
+  saveUsage();
+
+  const err = loadDeck();
+  if (err) return { ok: false, error: err };
+  loadProgress();
+  buildTrayMenu();
+  updateTrayTooltip();
+  return { ok: true, title, cards: deck.cards.length };
+}
+
+ipcMain.handle('create-deck', (_e, payload) => createDeckFromPayload(payload));
+
+// Wizard: „Chinesisch-Beispieldeck behalten" oder Wizard später erneut geöffnet + abgebrochen
+ipcMain.handle('finish-onboarding', () => {
+  usage.onboarded = true;
+  saveUsage();
+  if (onboardingWin && !onboardingWin.isDestroyed()) onboardingWin.close();
+  return true;
 });
 
 ipcMain.on('close-popup', () => {
@@ -412,11 +557,29 @@ function startServer() {
           case '/stop': jobStop(sessionId); break;
           case '/reset': jobReset(sessionId); break;
           case '/trigger': showPopup(true); break;
-          case '/shot': // nur mit WAITWORDS_DEBUG=1: Popup-Inhalt als PNG speichern
-            if (process.env.WAITWORDS_DEBUG === '1' && popupWin && !popupWin.isDestroyed() && body.path) {
-              popupWin.webContents.capturePage()
+          case '/shot': // nur mit WAITWORDS_DEBUG=1: sichtbares Fenster als PNG speichern
+            if (process.env.WAITWORDS_DEBUG === '1' && body.path) {
+              const win = (onboardingWin && !onboardingWin.isDestroyed()) ? onboardingWin
+                : (popupWin && !popupWin.isDestroyed()) ? popupWin : null;
+              if (win) win.webContents.capturePage()
                 .then((img) => fs.writeFileSync(body.path, img.toPNG()))
                 .catch(() => {});
+            }
+            break;
+          case '/debug/onboard': // nur mit WAITWORDS_DEBUG=1: Wizard öffnen
+            if (process.env.WAITWORDS_DEBUG === '1') showOnboarding();
+            break;
+          case '/debug/onboard-js': // nur mit WAITWORDS_DEBUG=1: JS im Wizard ausführen
+            if (process.env.WAITWORDS_DEBUG === '1' && onboardingWin && !onboardingWin.isDestroyed() && body.js) {
+              onboardingWin.webContents.executeJavaScript(String(body.js)).catch(() => {});
+            }
+            break;
+          case '/debug/create-deck': // nur mit WAITWORDS_DEBUG=1: create-deck-Pfad testen
+            if (process.env.WAITWORDS_DEBUG === '1') {
+              const r = createDeckFromPayload(body);
+              res.writeHead(200, { 'content-type': 'application/json' });
+              res.end(JSON.stringify(r));
+              return;
             }
             break;
           case '/debug/fill': // nur mit WAITWORDS_DEBUG=1: Antworten setzen + prüfen
@@ -497,6 +660,7 @@ function buildTrayMenu() {
     { label: 'Show popup now', click: () => showPopup(true) },
     { label: 'Statistics', click: () => showStats() },
     ...(list.length > 1 ? [{ label: 'Switch deck', submenu: deckItems }] : []),
+    { label: 'New deck / setup…', click: () => showOnboarding() },
     {
       label: 'Pause 1 hour',
       click: () => { pausedUntil = Date.now() + 60 * 60 * 1000; },
@@ -546,6 +710,8 @@ if (!gotLock) {
         args: [APP_DIR],
       });
     }
+
+    if (!usage.onboarded) showOnboarding(); // Wizard nur beim allerersten Start
   });
 
   // Tray-App: kein Quit wenn alle Fenster zu

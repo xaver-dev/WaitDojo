@@ -25,14 +25,47 @@ function isCorrect(input, accepted) {
   return accepted.some((a) => normalize(a) === n);
 }
 
+function applyTheme(m) {
+  document.body.dataset.theme = m.theme || 'default';
+  if (m.accent) document.body.style.setProperty('--accent', m.accent);
+  else document.body.style.removeProperty('--accent');
+}
+
+function renderStatus(payload) {
+  const u = payload.usage || {};
+  document.getElementById('usageChip').innerHTML =
+    `<b>${u.used}</b>/${u.limit} today`;
+
+  const sw = payload.switcher || { decks: [] };
+  const pills = document.getElementById('deckPills');
+  pills.innerHTML = '';
+  if (sw.decks.length > 1) {
+    sw.decks.forEach((d) => {
+      const b = document.createElement('button');
+      b.className = 'pill' + (d.active ? ' active' : '');
+      b.textContent = d.title;
+      b.title = d.title;
+      if (!d.active) b.addEventListener('click', () => switchTo(d.index));
+      pills.appendChild(b);
+    });
+  }
+}
+
+async function switchTo(index) {
+  const r = await ipcRenderer.invoke('set-active-deck', index);
+  if (r && r.ok) location.reload(); // frisches Quiz + Theme des neuen Decks
+}
+
 async function init() {
   const payload = await ipcRenderer.invoke('get-quiz-words');
   meta = payload.meta;
   quiz = payload.words;
 
+  applyTheme(meta);
   document.getElementById('title').textContent = meta.title;
   document.getElementById('instruction').textContent = meta.instruction;
   mainBtn.textContent = meta.ui.check;
+  renderStatus(payload);
 
   const u = payload.usage;
   if (u && u.used >= u.limit) {

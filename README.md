@@ -17,6 +17,8 @@ npm install
 npm start
 ```
 
+On the **first start** a short setup wizard opens: either keep the bundled Chinese deck, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. You can reopen it any time via tray → **New deck / setup…**.
+
 The app lives in the system tray (look for the gold **W**). It registers itself to start with Windows (disable with `"autostart": false` in `config.json`).
 
 ### Hook up Claude Code (automatic popups)
@@ -39,6 +41,7 @@ ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. F
 - Wrong rows show the accepted solutions. Got marked wrong unfairly? Click **"I was right ✓"**.
 - **Esc** or ✕ closes. Unanswered cards count as *skipped*, never as wrong.
 - Popup never steals focus from your editor; max one popup per 5 minutes (tray menu has "Pause 1 hour").
+- The footer shows today's count (`3/5`) and a pill per deck — click another deck's pill to switch topic on the spot.
 - Tray menu → **Statistics** shows every card with its status: `new` / `learning` / `problem` / `good`.
 
 ## Free limits
@@ -71,7 +74,9 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
     "id": "physics-basics",
     "title": "Physics — quick break?",
     "instruction": "Type the answer, Enter = next field",
-    "placeholder": "answer …"
+    "placeholder": "answer …",
+    "theme": "medical",
+    "accent": "#6fb7d6"
   },
   "cards": [
     { "id": "unit-force", "front": "SI unit of force?", "answers": ["Newton", "N"], "hint": "", "level": 1 }
@@ -81,6 +86,8 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 
 - `front` — what you see. `answers` — every accepted answer (case-insensitive, leading articles der/die/das/ein/eine/the/a/an ignored).
 - `hint` — optional disambiguation shown in grey. `level` — 1 or 2, shown in statistics.
+- `meta.theme` — optional popup style preset: `default`, `chinese` (red & gold frame), `nature`, `medical`, `minimal`.
+- `meta.accent` — optional hex color overriding the preset's accent.
 - `meta.ui` — optional button-label translations, see [DECK_PROMPT.md](DECK_PROMPT.md).
 
 ## Configuration (`config.json`)

@@ -4,6 +4,7 @@
     "title": "你好 — kurze Pause?",
     "instruction": "Übersetze ins Deutsche, Enter = nächstes Feld",
     "placeholder": "deutsch …",
+    "theme": "chinese",
     "ui": {
       "check": "Prüfen",
       "done": "Fertig",
