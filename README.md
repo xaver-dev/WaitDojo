@@ -41,12 +41,25 @@ ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. F
 - Popup never steals focus from your editor; max one popup per 5 minutes (tray menu has "Pause 1 hour").
 - Tray menu → **Statistics** shows every card with its status: `new` / `learning` / `problem` / `good`.
 
+## Free limits
+
+WaitWords is free and open source. To keep the door open for an optional premium version later (if this project takes off), the free version has two limits from day one — no surprises down the road:
+
+- **5 quiz popups per deck per day** (counter resets at midnight)
+- **2 active decks** (additional configured decks appear greyed out)
+
+With two decks that's up to 10 popups (~50 cards) a day — plenty for serious learning, and you can spread it across two topics. The tray tooltip always shows today's count for the active deck.
+
+## Support
+
+This project is free. If it helps you and you want to support development, you can contribute voluntarily via the "Support this project ♥" link in the tray menu. Supporting is a pure donation — every user gets the identical software either way.
+
 ## Make it about YOUR topic
 
 1. Open [DECK_PROMPT.md](DECK_PROMPT.md), copy the prompt template.
 2. Fill in topic, card count, answer language, difficulty. Paste into Claude/ChatGPT/etc.
-3. Save the returned JSON as `data/deck.json` (or another file — set `deckPath` in `config.json`).
-4. Restart WaitWords.
+3. Save the returned JSON as `data/deck.json` — or as a new file added to the `decks` list in `config.json`.
+4. Restart WaitWords. With multiple decks, switch via tray menu → "Switch deck".
 
 Invalid deck files produce a clear error dialog on startup instead of a crash. Learning progress is stored per deck (`%APPDATA%\waitwords\progress-<deck-id>.json`), so switching decks keeps every deck's progress.
 
@@ -80,7 +93,7 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 | `hotkey` | Ctrl+Alt+L | Global hotkey for instant popup |
 | `wordsPerPopup` | 5 | Cards per popup |
 | `autostart` | true | Start with Windows |
-| `deckPath` | data/deck.json | Active deck file |
+| `decks` | ["data/deck.json"] | Deck files; first 2 selectable in the free version |
 
 ## How detection works
 

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, globalShortcut, screen, nativeImage, dialog } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, globalShortcut, screen, nativeImage, dialog, shell } = require('electron');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -28,6 +28,57 @@ try {
   console.error('config.json unreadable, using defaults:', e.message);
 }
 
+// Free-Limits: bewusst Konstanten statt config — siehe README („Free limits").
+// 5 Popups pro Deck und Tag, 2 aktive Decks.
+const POPUPS_PER_DECK_PER_DAY = 5;
+const MAX_DECKS = 2;
+const SUPPORT_URL = 'https://github.com/YOUR_USERNAME/WaitWords#support';
+
+// ---------------------------------------------------------------- Nutzung (Limits)
+
+let usagePath;
+// byDeck: Zähler pro Deck-id für den heutigen Tag; Mitternacht setzt zurück
+let usage = { date: '', byDeck: {}, activeDeckIndex: 0 };
+
+function localToday() {
+  return new Date().toLocaleDateString('sv'); // YYYY-MM-DD, lokale Zeitzone
+}
+
+function loadUsage() {
+  usagePath = path.join(app.getPath('userData'), 'usage.json');
+  try {
+    usage = { ...usage, ...readJson(usagePath) };
+  } catch {}
+  if (!usage.byDeck) usage.byDeck = {};
+  rolloverUsage();
+  saveUsage();
+}
+
+function saveUsage() {
+  try {
+    fs.writeFileSync(usagePath, JSON.stringify(usage, null, 2));
+  } catch (e) {
+    console.error('usage.json nicht schreibbar:', e.message);
+  }
+}
+
+function rolloverUsage() {
+  const t = localToday();
+  if (usage.date !== t) {
+    usage.date = t;
+    usage.byDeck = {};
+  }
+}
+
+function usedToday() {
+  rolloverUsage();
+  return usage.byDeck[meta.id] || 0;
+}
+
+function popupsLeft() {
+  return Math.max(0, POPUPS_PER_DECK_PER_DAY - usedToday());
+}
+
 // ---------------------------------------------------------------- Deck
 
 const metaDefaults = {
@@ -49,8 +100,21 @@ const uiDefaults = {
 let meta = { ...metaDefaults, ui: { ...uiDefaults } };
 let words = []; // Karten des aktiven Decks
 
+// decks-Array in config; altes deckPath-Feld bleibt als Fallback gültig
+function deckList() {
+  if (Array.isArray(config.decks) && config.decks.length > 0) return config.decks;
+  return [config.deckPath];
+}
+
+function activeDeckPath() {
+  const list = deckList();
+  let i = usage.activeDeckIndex || 0;
+  if (i >= list.length || i >= MAX_DECKS) i = 0; // Free: nur die ersten MAX_DECKS wählbar
+  return list[i];
+}
+
 function loadDeck() {
-  const deckPath = path.resolve(APP_DIR, config.deckPath);
+  const deckPath = path.resolve(APP_DIR, activeDeckPath());
   let deck;
   try {
     deck = readJson(deckPath);
@@ -183,7 +247,11 @@ function showPopup(force = false) {
   if (popupWin && !popupWin.isDestroyed()) return; // schon offen
   if (!force && !popupAllowed()) return;
   if (words.length === 0) return;
+  if (popupsLeft() <= 0) { updateTrayTooltip(); return; } // Deck-Limit: still, kein Popup
   lastPopupAt = Date.now();
+  usage.byDeck[meta.id] = usedToday() + 1;
+  saveUsage();
+  updateTrayTooltip();
 
   const { workArea } = screen.getPrimaryDisplay();
   const w = 380, h = 560;
@@ -216,7 +284,7 @@ function showPopup(force = false) {
       }, 1500);
     }
   });
-  popupWin.on('closed', () => { popupWin = null; });
+  popupWin.on('closed', () => { popupWin = null; lastQuiz = []; });
 }
 
 function showStats() {
@@ -240,7 +308,11 @@ function showStats() {
 let lastQuiz = [];
 ipcMain.handle('get-quiz-words', () => {
   lastQuiz = pickWords(config.wordsPerPopup).map((w) => ({ ...w, status: statusOf(w.id) }));
-  return { meta, words: lastQuiz };
+  return {
+    meta,
+    words: lastQuiz,
+    usage: { used: usedToday(), limit: POPUPS_PER_DECK_PER_DAY },
+  };
 });
 
 ipcMain.handle('submit-results', (_e, results) => {
@@ -318,7 +390,13 @@ function startServer() {
 
     if (req.method === 'GET' && req.url === '/health') {
       res.writeHead(200, { 'content-type': 'application/json' });
-      res.end(JSON.stringify({ ok: true, app: 'waitwords', activeSessions: sessions.size }));
+      res.end(JSON.stringify({
+        ok: true,
+        app: 'waitwords',
+        activeSessions: sessions.size,
+        deck: meta.id,
+        usage: { used: usedToday(), limit: POPUPS_PER_DECK_PER_DAY },
+      }));
       return;
     }
 
@@ -375,20 +453,65 @@ function makeTrayIcon() {
   return nativeImage.createEmpty();
 }
 
-function setupTray() {
-  tray = new Tray(makeTrayIcon());
-  tray.setToolTip('WaitWords — learn while you wait');
+function updateTrayTooltip() {
+  if (!tray) return;
+  tray.setToolTip(`WaitWords — ${usedToday()}/${POPUPS_PER_DECK_PER_DAY} today (${meta.title})`);
+}
+
+// Deck-Titel für Submenü (Dateiname als Fallback bei kaputtem/fehlendem Deck)
+function deckTitle(p) {
+  try {
+    const d = readJson(path.resolve(APP_DIR, p));
+    return (d.meta && d.meta.title) || path.basename(p);
+  } catch {
+    return `${path.basename(p)} (unreadable)`;
+  }
+}
+
+function switchDeck(index) {
+  usage.activeDeckIndex = index;
+  saveUsage();
+  if (popupWin && !popupWin.isDestroyed()) popupWin.close(); // altes Quiz gehört zum alten Deck
+  const err = loadDeck();
+  if (err) {
+    dialog.showErrorBox('WaitWords — deck error', err);
+    usage.activeDeckIndex = 0;
+    saveUsage();
+    loadDeck();
+  }
+  loadProgress();
+  buildTrayMenu();
+  updateTrayTooltip();
+}
+
+function buildTrayMenu() {
+  const list = deckList();
+  const deckItems = list.map((p, i) => ({
+    label: deckTitle(p) + (i >= MAX_DECKS ? ' (free limit)' : ''),
+    type: 'radio',
+    checked: i === (usage.activeDeckIndex || 0),
+    enabled: i < MAX_DECKS,
+    click: () => switchDeck(i),
+  }));
   const menu = Menu.buildFromTemplate([
     { label: 'Show popup now', click: () => showPopup(true) },
     { label: 'Statistics', click: () => showStats() },
+    ...(list.length > 1 ? [{ label: 'Switch deck', submenu: deckItems }] : []),
     {
       label: 'Pause 1 hour',
       click: () => { pausedUntil = Date.now() + 60 * 60 * 1000; },
     },
     { type: 'separator' },
+    { label: 'Support this project ♥', click: () => shell.openExternal(SUPPORT_URL) },
     { label: 'Quit', click: () => app.quit() },
   ]);
   tray.setContextMenu(menu);
+}
+
+function setupTray() {
+  tray = new Tray(makeTrayIcon());
+  buildTrayMenu();
+  updateTrayTooltip();
   tray.on('double-click', () => showStats());
 }
 
@@ -399,6 +522,7 @@ if (!gotLock) {
   app.quit();
 } else {
   app.whenReady().then(() => {
+    loadUsage(); // vor loadDeck — activeDeckIndex steht in usage.json
     const deckError = loadDeck();
     if (deckError) {
       dialog.showErrorBox('WaitWords — deck error', deckError);

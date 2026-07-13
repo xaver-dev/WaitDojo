@@ -34,6 +34,11 @@ async function init() {
   document.getElementById('instruction').textContent = meta.instruction;
   mainBtn.textContent = meta.ui.check;
 
+  const u = payload.usage;
+  if (u && u.used >= u.limit) {
+    document.getElementById('limitNote').hidden = false;
+  }
+
   rowsEl.innerHTML = '';
   quiz.forEach((w, i) => {
     const row = document.createElement('div');

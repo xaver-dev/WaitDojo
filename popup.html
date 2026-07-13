@@ -70,6 +70,7 @@
     border-radius: 6px; font-size: 10px; padding: 2px 7px; cursor: pointer; white-space: nowrap;
   }
   .override:hover { background: #24402c; }
+  #limitNote { font-size: 11px; color: #f0c674; text-align: center; }
   footer { display: flex; gap: 8px; align-items: center; -webkit-app-region: no-drag; }
   #mainBtn {
     flex: 1;
@@ -90,6 +91,7 @@
       <button id="closeBtn" title="Close (Esc)">✕</button>
     </header>
     <div id="rows"></div>
+    <div id="limitNote" hidden>Last free popup for this deck today — resets at midnight</div>
     <footer>
       <span id="summary"></span>
       <button id="mainBtn"></button>
