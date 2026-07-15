@@ -64,6 +64,8 @@ This project is free. If it helps you and you want to support development, you c
 3. Save the returned JSON as `data/deck.json` — or as a new file added to the `decks` list in `config.json`.
 4. Restart WaitWords. With multiple decks, switch via tray menu → "Switch deck".
 
+Switch or remove decks from the tray: **Switch deck** and **Delete deck**. Deleting asks for confirmation and moves the deck file to `data/.trash/` (recoverable) rather than erasing it. The free version keeps up to 2 active decks — delete one to make room for another.
+
 Invalid deck files produce a clear error dialog on startup instead of a crash. Learning progress is stored per deck (`%APPDATA%\waitwords\progress-<deck-id>.json`), so switching decks keeps every deck's progress.
 
 ### Deck format

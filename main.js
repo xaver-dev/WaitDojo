@@ -31,7 +31,9 @@ try {
 // Free-Limits: bewusst Konstanten statt config — siehe README („Free limits").
 // 5 Popups pro Deck und Tag, 2 aktive Decks.
 const POPUPS_PER_DECK_PER_DAY = 5;
-const MAX_DECKS = 2;
+// Deck-Limit: config.maxDecks überschreibt (0 = unbegrenzt); Default 2. Nicht öffentlich dokumentiert.
+const MAX_DECKS = config.maxDecks === 0 ? Infinity
+  : (typeof config.maxDecks === 'number' && config.maxDecks > 0 ? config.maxDecks : 2);
 const SUPPORT_URL = 'https://github.com/YOUR_USERNAME/WaitWords#support';
 
 // ---------------------------------------------------------------- Nutzung (Limits)
@@ -613,6 +615,14 @@ function startServer() {
           case '/debug/onboard': // nur mit WAITWORDS_DEBUG=1: Wizard öffnen
             if (process.env.WAITWORDS_DEBUG === '1') showOnboarding();
             break;
+          case '/debug/delete-deck': // nur mit WAITWORDS_DEBUG=1: deleteDeckCore testen
+            if (process.env.WAITWORDS_DEBUG === '1') {
+              const r = deleteDeckCore(Number(body.index));
+              res.writeHead(200, { 'content-type': 'application/json' });
+              res.end(JSON.stringify(r));
+              return;
+            }
+            break;
           case '/debug/shortcut': // nur mit WAITWORDS_DEBUG=1: Desktop-Verknüpfung erstellen
             if (process.env.WAITWORDS_DEBUG === '1') {
               const r = createDesktopShortcut();
@@ -699,6 +709,70 @@ function switchDeck(index) {
   updateTrayTooltip();
 }
 
+// Kern-Löschung ohne Dialog (auch für Debug/Test). Gibt {ok} oder {ok:false,error}.
+function deleteDeckCore(index) {
+  const list = deckList();
+  if (index < 0 || index >= list.length) return { ok: false, error: 'bad index' };
+  if (list.length <= 1) return { ok: false, error: 'must keep at least one deck' };
+  const rel = list[index];
+  const abs = path.resolve(APP_DIR, rel);
+  // Deck-id für progress-Datei ermitteln (vor dem Löschen)
+  let id = null;
+  try { id = (readJson(abs).meta || {}).id || null; } catch {}
+
+  config.decks = list.filter((_, i) => i !== index);
+  delete config.deckPath;
+  writeConfig();
+
+  // Deck-Datei NICHT hart löschen — nach data/.trash verschieben (wiederherstellbar).
+  // Beispiel-Deck data/deck.json bleibt unangetastet auf Platte (getrackt/shipped).
+  try {
+    if (path.basename(abs).toLowerCase() !== 'deck.json' && fs.existsSync(abs)) {
+      const trashDir = path.join(APP_DIR, 'data', '.trash');
+      fs.mkdirSync(trashDir, { recursive: true });
+      fs.renameSync(abs, path.join(trashDir, `${path.basename(abs)}.${Date.now()}`));
+    }
+  } catch (e) { console.error('Deck-Verschiebung in .trash fehlgeschlagen:', e.message); }
+  // Fortschritt löschen (reine Statistik, regeneriert sich bei Nutzung)
+  if (id) {
+    try { fs.unlinkSync(path.join(app.getPath('userData'), `progress-${id}.json`)); } catch {}
+  }
+
+  // aktiven Index nachziehen
+  let ai = usage.activeDeckIndex || 0;
+  if (index === ai) ai = 0;
+  else if (index < ai) ai -= 1;
+  usage.activeDeckIndex = Math.max(0, Math.min(ai, config.decks.length - 1));
+  saveUsage();
+
+  if (popupWin && !popupWin.isDestroyed()) popupWin.close();
+  const err = loadDeck();
+  if (err) dialog.showErrorBox('WaitWords — deck error', err);
+  loadProgress();
+  buildTrayMenu();
+  updateTrayTooltip();
+  return { ok: true };
+}
+
+function confirmDeleteDeck(index) {
+  const title = deckTitle(deckList()[index]);
+  const choice = dialog.showMessageBoxSync({
+    type: 'warning',
+    buttons: ['Delete', 'Cancel'],
+    defaultId: 1,
+    cancelId: 1,
+    title: 'Delete deck',
+    message: `Delete "${title}"?`,
+    detail: 'This removes the deck and its learning progress. This cannot be undone.',
+  });
+  if (choice === 0) {
+    const r = deleteDeckCore(index);
+    if (!r.ok && r.error === 'must keep at least one deck') {
+      dialog.showMessageBoxSync({ type: 'info', message: 'You must keep at least one deck.' });
+    }
+  }
+}
+
 function buildTrayMenu() {
   const list = deckList();
   const deckItems = list.map((p, i) => ({
@@ -708,11 +782,16 @@ function buildTrayMenu() {
     enabled: i < MAX_DECKS,
     click: () => switchDeck(i),
   }));
+  const deleteItems = list.map((p, i) => ({
+    label: deckTitle(p),
+    click: () => confirmDeleteDeck(i),
+  }));
   const menu = Menu.buildFromTemplate([
     { label: 'Show popup now', click: () => showPopup(true) },
     { label: 'Statistics', click: () => showStats() },
     ...(list.length > 1 ? [{ label: 'Switch deck', submenu: deckItems }] : []),
     { label: 'New deck / setup…', click: () => showOnboarding() },
+    ...(list.length > 1 ? [{ label: 'Delete deck', submenu: deleteItems }] : []),
     {
       label: 'Pause 1 hour',
       click: () => { pausedUntil = Date.now() + 60 * 60 * 1000; },
