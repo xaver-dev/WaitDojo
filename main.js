@@ -475,6 +475,50 @@ ipcMain.handle('finish-onboarding', () => {
   return true;
 });
 
+// ---- Autostart-Präferenz + Desktop-Verknüpfung
+
+// Effektive Autostart-Einstellung: Wizard-Präferenz schlägt config-Default
+function autostartEnabled() {
+  if (typeof usage.autostart === 'boolean') return usage.autostart;
+  return config.autostart !== false;
+}
+
+function applyAutostart(enabled) {
+  usage.autostart = !!enabled;
+  saveUsage();
+  app.setLoginItemSettings({
+    openAtLogin: !!enabled,
+    path: process.execPath, // electron.exe (bei ungepackter App)
+    args: [APP_DIR],
+  });
+}
+
+function createDesktopShortcut() {
+  const lnk = path.join(app.getPath('desktop'), 'WaitWords.lnk');
+  const iconIco = path.join(APP_DIR, 'assets', 'icon.ico');
+  try {
+    const ok = shell.writeShortcutLink(lnk, 'create', {
+      target: process.execPath,
+      args: `"${APP_DIR}"`, // Pfad quoten (Leerzeichen)
+      cwd: APP_DIR,
+      icon: fs.existsSync(iconIco) ? iconIco : process.execPath,
+      iconIndex: 0,
+      description: 'WaitWords — learn while you wait',
+    });
+    return { ok, path: lnk };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+// Vom Wizard-Abschluss: Startoptionen anwenden
+ipcMain.handle('apply-startup', (_e, opts) => {
+  opts = opts || {};
+  applyAutostart(!!opts.autostart);
+  const shortcut = opts.shortcut ? createDesktopShortcut() : { ok: true, skipped: true };
+  return { ok: true, shortcut };
+});
+
 ipcMain.on('close-popup', () => {
   if (popupWin && !popupWin.isDestroyed()) popupWin.close();
 });
@@ -568,6 +612,14 @@ function startServer() {
             break;
           case '/debug/onboard': // nur mit WAITWORDS_DEBUG=1: Wizard öffnen
             if (process.env.WAITWORDS_DEBUG === '1') showOnboarding();
+            break;
+          case '/debug/shortcut': // nur mit WAITWORDS_DEBUG=1: Desktop-Verknüpfung erstellen
+            if (process.env.WAITWORDS_DEBUG === '1') {
+              const r = createDesktopShortcut();
+              res.writeHead(200, { 'content-type': 'application/json' });
+              res.end(JSON.stringify(r));
+              return;
+            }
             break;
           case '/debug/onboard-js': // nur mit WAITWORDS_DEBUG=1: JS im Wizard ausführen
             if (process.env.WAITWORDS_DEBUG === '1' && onboardingWin && !onboardingWin.isDestroyed() && body.js) {
@@ -702,14 +754,7 @@ if (!gotLock) {
       if (!ok) console.error('Hotkey nicht registrierbar:', config.hotkey);
     }
 
-    if (config.autostart) {
-      // Nicht gepackte Electron-App: execPath = electron.exe, App-Pfad als Argument
-      app.setLoginItemSettings({
-        openAtLogin: true,
-        path: process.execPath,
-        args: [APP_DIR],
-      });
-    }
+    applyAutostart(autostartEnabled()); // Login-Item passend zur Präferenz setzen
 
     if (!usage.onboarded) showOnboarding(); // Wizard nur beim allerersten Start
   });

@@ -17,9 +17,9 @@ npm install
 npm start
 ```
 
-On the **first start** a short setup wizard opens: either keep the bundled Chinese deck, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. You can reopen it any time via tray → **New deck / setup…**.
+On the **first start** a short setup wizard opens: either keep the bundled Chinese deck, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. Its last step asks whether to **start with Windows** and/or add a **desktop shortcut**. You can reopen the wizard any time via tray → **New deck / setup…**.
 
-The app lives in the system tray (look for the gold **W**). It registers itself to start with Windows (disable with `"autostart": false` in `config.json`).
+The app lives in the system tray (look for the gold **W**). Prefer to start it yourself? Uncheck autostart in the wizard and use the desktop shortcut (or `npm start`).
 
 ### Hook up Claude Code (automatic popups)
 
@@ -92,6 +92,8 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 
 ## Configuration (`config.json`)
 
+Optional — the app runs on sensible defaults without it. To customize, copy `config.example.json` to `config.json` and edit. Your `config.json` and any decks you create (except the bundled `data/deck.json`) are gitignored, so they stay on your machine.
+
 | Field | Default | Meaning |
 |---|---|---|
 | `port` | 4823 | Local HTTP port (also change in `hook/notify.js` if you edit this) |
@@ -99,7 +101,7 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 | `cooldownMinutes` | 5 | Minimum gap between popups |
 | `hotkey` | Ctrl+Alt+L | Global hotkey for instant popup |
 | `wordsPerPopup` | 5 | Cards per popup |
-| `autostart` | true | Start with Windows |
+| `autostart` | true | Default for "start with Windows" until the wizard sets your choice |
 | `decks` | ["data/deck.json"] | Deck files; first 2 selectable in the free version |
 
 ## How detection works

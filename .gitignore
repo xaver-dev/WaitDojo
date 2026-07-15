@@ -1,2 +1,7 @@
 node_modules/
 *.log
+
+# Personal, stays on your machine — never published:
+config.json
+data/*.json
+!data/deck.json

@@ -4,6 +4,7 @@ const steps = {
   1: document.getElementById('step1'),
   2: document.getElementById('step2'),
   3: document.getElementById('step3'),
+  4: document.getElementById('step4'),
 };
 
 function show(n) {
@@ -14,9 +15,7 @@ function show(n) {
 const $ = (id) => document.getElementById(id);
 
 // ---- Step 1
-$('bundledBtn').addEventListener('click', async () => {
-  await ipcRenderer.invoke('finish-onboarding'); // schließt Fenster in main
-});
+$('bundledBtn').addEventListener('click', () => show(4)); // Beispieldeck behalten → Startoptionen
 $('createBtn').addEventListener('click', () => show(2));
 
 // ---- Step 2
@@ -91,10 +90,24 @@ $('createDeckBtn').addEventListener('click', async () => {
 
   if (r && r.ok) {
     msg.className = 'ok';
-    msg.textContent = `Deck "${r.title}" created with ${r.cards} cards. You're all set — this window will close.`;
-    setTimeout(() => ipcRenderer.invoke('finish-onboarding'), 1600);
+    msg.textContent = `Deck "${r.title}" created with ${r.cards} cards.`;
+    setTimeout(() => show(4), 700); // weiter zu den Startoptionen
   } else {
     msg.className = 'err';
     msg.textContent = 'Could not create the deck:\n' + ((r && r.error) || 'unknown error');
   }
+});
+
+// ---- Step 4: Startup options
+$('finishBtn').addEventListener('click', async () => {
+  $('finishBtn').disabled = true;
+  const res = await ipcRenderer.invoke('apply-startup', {
+    autostart: $('optAutostart').checked,
+    shortcut: $('optShortcut').checked,
+  });
+  const m = $('msg4');
+  if ($('optShortcut').checked && res && res.shortcut && !res.shortcut.ok) {
+    m.textContent = 'Note: desktop shortcut could not be created (' + (res.shortcut.error || 'unknown') + '). Autostart is set.';
+  }
+  await ipcRenderer.invoke('finish-onboarding'); // schließt Fenster
 });
