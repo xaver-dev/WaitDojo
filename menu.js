@@ -49,8 +49,11 @@ function renderDecks() {
     const badges =
       (d.active ? '<span class="badge active">active</span>' : '') +
       (d.locked ? '<span class="badge locked">free limit</span>' : '');
+    const used = data.limits.popupsPerDay
+      ? `${d.usedToday}/${data.limits.popupsPerDay} today`
+      : `${d.usedToday} today`;
     const sub = d.ok
-      ? `${d.cards} cards · ${d.usedToday}/${data.limits.popupsPerDay} today · ${themeNames[d.theme] || d.theme}`
+      ? `${d.cards} cards · ${used} · ${themeNames[d.theme] || d.theme}`
       : 'unreadable deck file';
     div.innerHTML = `
       <div class="deck-head">
@@ -168,10 +171,13 @@ function renderSettings() {
   $('setSize').value = s.popupSize;
   $('setAutostart').checked = data.autostart;
 
+  // 0 = unbegrenzt; wenn beide Limits offen sind, gibt es nichts anzumerken
   const note = $('setLimitNote');
-  note.hidden = false;
-  note.textContent = `Free version: ${data.limits.popupsPerDay} quiz popups per deck per day` +
-    (data.limits.maxDecks > 0 ? `, ${data.limits.maxDecks} active decks.` : '.');
+  const parts = [];
+  if (data.limits.popupsPerDay) parts.push(`${data.limits.popupsPerDay} quiz popups per deck per day`);
+  if (data.limits.maxDecks) parts.push(`${data.limits.maxDecks} active decks`);
+  note.hidden = parts.length === 0;
+  note.textContent = parts.length ? `Free version: ${parts.join(', ')}.` : '';
 }
 
 $('saveBtn').addEventListener('click', async () => {

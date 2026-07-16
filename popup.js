@@ -33,8 +33,9 @@ function applyTheme(m) {
 
 function renderStatus(payload) {
   const u = payload.usage || {};
+  // limit 0 = unbegrenzt: nur den Zähler zeigen
   document.getElementById('usageChip').innerHTML =
-    `<b>${u.used}</b>/${u.limit} today`;
+    u.limit ? `<b>${u.used}</b>/${u.limit} today` : `<b>${u.used}</b> today`;
 
   const sw = payload.switcher || { decks: [] };
   const pills = document.getElementById('deckPills');
@@ -68,7 +69,7 @@ async function init() {
   renderStatus(payload);
 
   const u = payload.usage;
-  if (u && u.used >= u.limit) {
+  if (u && u.limit && u.used >= u.limit) {
     document.getElementById('limitNote').hidden = false;
   }
 

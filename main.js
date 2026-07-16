@@ -30,12 +30,14 @@ try {
   console.error('config.json unreadable, using defaults:', e.message);
 }
 
-// Free-Limits: bewusst Konstanten statt config — siehe README („Free limits").
-// 5 Popups pro Deck und Tag, 2 aktive Decks.
-const POPUPS_PER_DECK_PER_DAY = 5;
-// Deck-Limit: config.maxDecks überschreibt (0 = unbegrenzt); Default 2. Nicht öffentlich dokumentiert.
+// Free-Limits: siehe README („Free limits") — 5 Popups pro Deck und Tag, 2 aktive Decks.
+// Beide per config überschreibbar (0 = unbegrenzt); absichtlich nicht öffentlich dokumentiert.
+const POPUPS_PER_DECK_PER_DAY = config.popupsPerDay === 0 ? Infinity
+  : (typeof config.popupsPerDay === 'number' && config.popupsPerDay > 0 ? config.popupsPerDay : 5);
 const MAX_DECKS = config.maxDecks === 0 ? Infinity
   : (typeof config.maxDecks === 'number' && config.maxDecks > 0 ? config.maxDecks : 2);
+// Über IPC/JSON gehen keine Infinity-Werte — 0 heißt für Renderer „unbegrenzt"
+const wire = (n) => (Number.isFinite(n) ? n : 0);
 const SUPPORT_URL = 'https://github.com/YOUR_USERNAME/WaitWords#support';
 
 // ---------------------------------------------------------------- Nutzung (Limits)
@@ -385,7 +387,7 @@ ipcMain.handle('get-quiz-words', () => {
   return {
     meta,
     words: lastQuiz,
-    usage: { used: usedToday(), limit: POPUPS_PER_DECK_PER_DAY },
+    usage: { used: usedToday(), limit: wire(POPUPS_PER_DECK_PER_DAY) },
     switcher: deckSwitcher(),
   };
 });
@@ -597,8 +599,8 @@ ipcMain.handle('get-menu-data', () => ({
   autostart: autostartEnabled(),
   decks: deckOverview(),
   limits: {
-    popupsPerDay: POPUPS_PER_DECK_PER_DAY,
-    maxDecks: Number.isFinite(MAX_DECKS) ? MAX_DECKS : 0, // 0 = unbegrenzt
+    popupsPerDay: wire(POPUPS_PER_DECK_PER_DAY), // 0 = unbegrenzt
+    maxDecks: wire(MAX_DECKS),
   },
 }));
 
@@ -789,7 +791,7 @@ function startServer() {
         app: 'waitwords',
         activeSessions: sessions.size,
         deck: meta.id,
-        usage: { used: usedToday(), limit: POPUPS_PER_DECK_PER_DAY },
+        usage: { used: usedToday(), limit: wire(POPUPS_PER_DECK_PER_DAY) },
       }));
       return;
     }
@@ -898,7 +900,10 @@ function makeTrayIcon() {
 
 function updateTrayTooltip() {
   if (!tray) return;
-  tray.setToolTip(`WaitWords — ${usedToday()}/${POPUPS_PER_DECK_PER_DAY} today (${meta.title})`);
+  const count = Number.isFinite(POPUPS_PER_DECK_PER_DAY)
+    ? `${usedToday()}/${POPUPS_PER_DECK_PER_DAY}`
+    : `${usedToday()}`;
+  tray.setToolTip(`WaitWords — ${count} today (${meta.title})`);
 }
 
 // Deck-Titel für Submenü (Dateiname als Fallback bei kaputtem/fehlendem Deck)
