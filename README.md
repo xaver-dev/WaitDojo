@@ -38,7 +38,7 @@ The hook script is fail-safe: if WaitWords isn't running it exits silently in ~1
 
 ### Everything else: hotkey
 
-ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. For those, press **`Ctrl+Alt+L`** whenever you find yourself waiting — popup appears instantly.
+ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. For those, press **`Ctrl+Alt+L`** whenever you find yourself waiting — popup appears instantly. Want a different combination? Decks & settings → Settings → click the hotkey field and press it.
 
 ## Using the popup
 
@@ -55,7 +55,7 @@ ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. F
 Click ⚙ in any popup (or tray menu → **Decks & settings…**) to open the main menu:
 
 - **Decks** — see every deck with its card count and today's usage; switch the active deck, edit a deck's headline, design preset and accent color, reset its learning progress, or delete it (moved to `data/.trash/`, recoverable). **+ New deck…** reopens the setup wizard.
-- **Settings** — popup frequency (every 1–60 minutes), trigger threshold, cards per popup, global hotkey, popup position (any screen corner), popup size (small/default/large), and autostart with Windows. Changes apply immediately, no restart needed.
+- **Settings** — popup frequency (every 1–60 minutes), trigger threshold, cards per popup, global hotkey (click the field and press the combination — it records and saves it right away), popup position (any screen corner), popup size (small/default/large), and autostart with Windows. Changes apply immediately, no restart needed.
 
 <p align="center">
   <img src="docs/screenshots/menu-decks.png" width="330" alt="Decks tab: both sample decks with card count, daily usage and buttons to use, edit or delete them">

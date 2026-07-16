@@ -61,6 +61,16 @@
   .rowflex > div { flex: 1; }
   .rowflex > div.shrink { flex: 0 0 auto; }
 
+  /* Hotkey-Feld: sieht aus wie ein Input, nimmt aber Tastenkombis auf */
+  button.hotkey {
+    width: 100%; text-align: left; font-family: inherit; font-size: 13px; font-weight: 400;
+    background: #1a1d24; border: 1px solid #3a3f4b; border-radius: 8px;
+    color: #e8e6e3; padding: 7px 10px; cursor: pointer;
+  }
+  button.hotkey:hover { border-color: #f0c674; }
+  button.hotkey.capturing { border-color: #f0c674; background: #242833; color: #f0c674; }
+  button.hotkey .off { color: #8a8f9c; }
+
   .btns { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
   button.primary {
     background: #f0c674; color: #1c1f26; border: none; border-radius: 9px;
@@ -143,8 +153,8 @@
       </div>
       <div>
         <label for="setHotkey">Global hotkey</label>
-        <input type="text" id="setHotkey" spellcheck="false" autocomplete="off" placeholder="e.g. Ctrl+Alt+L">
-        <div class="desc">Opens a popup instantly. Leave empty to disable.</div>
+        <button type="button" id="setHotkey" class="hotkey"></button>
+        <div class="desc">Opens a popup instantly. Click, then press your combination — Backspace turns it off.</div>
       </div>
     </div>
     <div class="rowflex">

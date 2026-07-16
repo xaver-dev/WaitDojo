@@ -152,6 +152,96 @@ function openEdit(d, div) {
 $('newDeckBtn').addEventListener('click', () => ipcRenderer.send('open-onboarding'));
 $('folderBtn').addEventListener('click', () => ipcRenderer.send('open-decks-folder'));
 
+// ---- Hotkey-Aufnahme
+// DOM-Tastennamen auf Electron-Accelerator-Namen abbilden; alles andere Einzelzeichen
+// (Buchstaben, Ziffern) geht großgeschrieben durch.
+const namedKeys = {
+  ' ': 'Space', 'Enter': 'Return', 'Tab': 'Tab', '+': 'Plus',
+  'ArrowUp': 'Up', 'ArrowDown': 'Down', 'ArrowLeft': 'Left', 'ArrowRight': 'Right',
+  'Home': 'Home', 'End': 'End', 'PageUp': 'PageUp', 'PageDown': 'PageDown', 'Insert': 'Insert',
+};
+const modifierKeys = ['Control', 'Alt', 'Shift', 'Meta', 'OS', 'AltGraph'];
+
+let capturing = false;
+
+function renderHotkey() {
+  const btn = $('setHotkey');
+  btn.classList.toggle('capturing', capturing);
+  if (capturing) btn.textContent = 'Press a key combination …';
+  else if (data.settings.hotkey) btn.textContent = data.settings.hotkey;
+  else btn.innerHTML = '<span class="off">off — click to set</span>';
+}
+
+function accelFrom(e) {
+  const mods = [];
+  if (e.ctrlKey) mods.push('Ctrl'); // Electron akzeptiert Ctrl und Control — Ctrl liest sich besser
+  if (e.altKey) mods.push('Alt');
+  if (e.shiftKey) mods.push('Shift');
+  if (e.metaKey) mods.push('Super');
+
+  let key = null;
+  if (/^F\d{1,2}$/.test(e.key)) key = e.key;
+  else if (namedKeys[e.key]) key = namedKeys[e.key];
+  else if (e.key.length === 1) key = e.key.toUpperCase();
+  return { mods, key };
+}
+
+async function applyHotkey(accel) {
+  const r = await ipcRenderer.invoke('set-hotkey', accel);
+  data.settings.hotkey = (r && r.hotkey) || '';
+  stopCapture();
+  if (r && r.ok) setMsg($('setMsg'), accel ? `Hotkey set to ${accel}.` : 'Hotkey turned off.', 'ok');
+  else setMsg($('setMsg'), (r && r.error) || 'Could not set that hotkey.', 'err');
+}
+
+async function onCaptureKey(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.key === 'Escape') { stopCapture(); return; }
+  if (e.key === 'Backspace' || e.key === 'Delete') { await applyHotkey(''); return; }
+  if (modifierKeys.includes(e.key)) return; // noch auf die eigentliche Taste warten
+
+  const { mods, key } = accelFrom(e);
+  if (!key) return;
+  // Ohne Ctrl/Alt/Win würde die Kombi beim normalen Tippen dauernd auslösen
+  if (!mods.some((m) => m !== 'Shift')) {
+    setMsg($('setMsg'), 'Hold Ctrl, Alt or Win as well — otherwise the hotkey would fire while you type.', 'err');
+    return;
+  }
+  await applyHotkey([...mods, key].join('+'));
+}
+
+function onCaptureMouse(e) {
+  // Windows-Hotkeys kennen nur Tasten — Maustasten (auch Zusatztasten) gehen nicht
+  if (e.button >= 3) {
+    e.preventDefault();
+    e.stopPropagation();
+    setMsg($('setMsg'), 'Global hotkeys are keyboard-only. Assign a key combination to that mouse button in your mouse software, then record it here.', 'err');
+    return;
+  }
+  stopCapture(); // Klick woanders bricht die Aufnahme ab
+}
+
+function startCapture() {
+  if (capturing) return;
+  capturing = true;
+  setMsg($('setMsg'), '');
+  renderHotkey();
+  // capture: true — die Tastendrücke sollen nirgends sonst ankommen
+  document.addEventListener('keydown', onCaptureKey, true);
+  document.addEventListener('mousedown', onCaptureMouse, true);
+}
+
+function stopCapture() {
+  capturing = false;
+  document.removeEventListener('keydown', onCaptureKey, true);
+  document.removeEventListener('mousedown', onCaptureMouse, true);
+  renderHotkey();
+}
+
+$('setHotkey').addEventListener('click', startCapture);
+window.addEventListener('blur', () => { if (capturing) stopCapture(); });
+
 // ---- Settings pane
 function renderSettings() {
   const s = data.settings;
@@ -166,7 +256,7 @@ function renderSettings() {
   sel.value = String(s.cooldownMinutes);
   $('setThreshold').value = s.thresholdSeconds;
   $('setWords').value = s.wordsPerPopup;
-  $('setHotkey').value = s.hotkey;
+  renderHotkey(); // Hotkey speichert sich selbst, nicht über „Save settings"
   $('setPosition').value = s.popupPosition;
   $('setSize').value = s.popupSize;
   $('setAutostart').checked = data.autostart;
@@ -185,15 +275,13 @@ $('saveBtn').addEventListener('click', async () => {
     cooldownMinutes: Number($('setCooldown').value),
     thresholdSeconds: Number($('setThreshold').value),
     wordsPerPopup: Number($('setWords').value),
-    hotkey: $('setHotkey').value,
     popupPosition: $('setPosition').value,
     popupSize: $('setSize').value,
     autostart: $('setAutostart').checked,
   });
-  if (r && r.hotkeyError) setMsg($('setMsg'), r.hotkeyError, 'err');
-  else if (r && r.ok) setMsg($('setMsg'), 'Settings saved.', 'ok');
+  if (r && r.ok) setMsg($('setMsg'), 'Settings saved.', 'ok');
   else setMsg($('setMsg'), 'Could not save settings.', 'err');
-  refresh(false); // Werte neu laden (geclampte Zahlen, behaltener Hotkey)
+  refresh(false); // Werte neu laden (geclampte Zahlen)
 });
 
 $('shortcutBtn').addEventListener('click', async () => {

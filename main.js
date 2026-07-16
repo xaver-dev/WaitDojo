@@ -663,29 +663,40 @@ ipcMain.handle('save-settings', (_e, s) => {
     config.popupSize = s.popupSize;
   }
 
-  // Hotkey live umregistrieren; bei Fehlschlag alten behalten
-  let hotkeyError = null;
-  const newHotkey = String(s.hotkey == null ? config.hotkey : s.hotkey).trim();
-  if (newHotkey !== (config.hotkey || '')) {
-    if (config.hotkey) { try { globalShortcut.unregister(config.hotkey); } catch {} }
-    if (newHotkey) {
-      let ok = false;
-      try { ok = globalShortcut.register(newHotkey, () => showPopup(true)); } catch { ok = false; }
-      if (ok) {
-        config.hotkey = newHotkey;
-      } else {
-        hotkeyError = `Hotkey "${newHotkey}" could not be registered — keeping "${config.hotkey || 'none'}".`;
-        if (config.hotkey) { try { globalShortcut.register(config.hotkey, () => showPopup(true)); } catch {} }
-      }
-    } else {
-      config.hotkey = '';
-    }
-  }
-
   if (typeof s.autostart === 'boolean') applyAutostart(s.autostart);
 
   writeConfig();
-  return { ok: true, hotkeyError };
+  return { ok: true };
+});
+
+// Hotkey wird im Menü aufgenommen und sofort gesetzt (eigener Pfad, nicht über save-settings).
+// Leerer String = Hotkey aus. Schlägt die Registrierung fehl (andere App hält die Kombi
+// bereits), bleibt der bisherige Hotkey aktiv.
+ipcMain.handle('set-hotkey', (_e, accel) => {
+  const next = String(accel || '').trim();
+  const prev = config.hotkey || '';
+  if (next === prev) return { ok: true, hotkey: prev };
+
+  if (prev) { try { globalShortcut.unregister(prev); } catch {} }
+  if (!next) {
+    config.hotkey = '';
+    writeConfig();
+    return { ok: true, hotkey: '' };
+  }
+
+  let ok = false;
+  try { ok = globalShortcut.register(next, () => showPopup(true)); } catch { ok = false; }
+  if (!ok) {
+    if (prev) { try { globalShortcut.register(prev, () => showPopup(true)); } catch {} }
+    return {
+      ok: false,
+      hotkey: prev,
+      error: `${next} is not available — another program already uses it. Still ${prev || 'off'}.`,
+    };
+  }
+  config.hotkey = next;
+  writeConfig();
+  return { ok: true, hotkey: next };
 });
 
 // Deck-Metadaten (Titel, Theme, Akzentfarbe) direkt in der Deck-Datei ändern
