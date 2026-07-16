@@ -1,7 +1,7 @@
 {
   "name": "waitwords",
   "version": "1.0.0",
-  "description": "Chinesisch-Vokabel-Popup für Wartezeiten auf lange Tool-Läufe",
+  "description": "Turn AI waiting time into learning time — quiz popups on any topic while long tool calls run",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

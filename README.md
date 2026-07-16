@@ -2,13 +2,13 @@
 
 Turn AI waiting time into learning time. WaitWords is a tiny Windows tray app: whenever a Claude Code tool call runs longer than 60 seconds, a small always-on-top popup appears in the corner with 5 quiz cards. Answer them while you wait, close it, get back to work.
 
-Ships with a Chinese vocabulary deck (HSK 1–2, Pinyin → German), but works with **any topic** — physics, Spanish, history, anatomy. Generate your own deck in two minutes with any AI chatbot: see [DECK_PROMPT.md](DECK_PROMPT.md).
+Ships with two sample decks (world capitals, science basics) so you can try it immediately, but works with **any topic** — physics, Spanish, history, anatomy. Generate your own deck in two minutes with any AI chatbot: see [DECK_PROMPT.md](DECK_PROMPT.md).
 
 The app remembers, per card, what you get right, what you struggle with, and what you haven't seen yet — and picks accordingly: each popup mixes problem cards, new cards, and the occasional review of a card you know.
 
 <p align="center">
-  <img src="docs/screenshots/popup-chinese.png" width="330" alt="Quiz popup with the Chinese deck (red & gold theme), status badges and deck switcher pills">
-  <img src="docs/screenshots/popup-physics.png" width="330" alt="Quiz popup with a custom physics deck (blue theme), daily counter and deck pills">
+  <img src="docs/screenshots/popup-capitals.png" width="330" alt="Quiz popup with the world capitals deck (gold theme), hints, status badges and deck switcher pills">
+  <img src="docs/screenshots/popup-science.png" width="330" alt="Quiz popup with the science basics deck (blue theme), daily counter and deck pills">
 </p>
 
 ## Install
@@ -22,7 +22,7 @@ npm install
 npm start
 ```
 
-On the **first start** a short setup wizard opens: either keep the bundled Chinese deck, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. Its last step asks whether to **start with Windows**, add a **desktop shortcut**, and how often popups may appear. You can reopen the wizard any time via tray → **New deck / setup…**.
+On the **first start** a short setup wizard opens: either pick one of the sample decks, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. Its last step asks whether to **start with Windows**, add a **desktop shortcut**, and how often popups may appear. You can reopen the wizard any time via tray → **New deck / setup…**.
 
 The app lives in the system tray (look for the gold **W**). Prefer to start it yourself? Uncheck autostart in the wizard and use the desktop shortcut (or `npm start`).
 
@@ -56,6 +56,11 @@ Click ⚙ in any popup (or tray menu → **Decks & settings…**) to open the ma
 
 - **Decks** — see every deck with its card count and today's usage; switch the active deck, edit a deck's headline, design preset and accent color, reset its learning progress, or delete it (moved to `data/.trash/`, recoverable). **+ New deck…** reopens the setup wizard.
 - **Settings** — popup frequency (every 1–60 minutes), trigger threshold, cards per popup, global hotkey, popup position (any screen corner), popup size (small/default/large), and autostart with Windows. Changes apply immediately, no restart needed.
+
+<p align="center">
+  <img src="docs/screenshots/menu-decks.png" width="330" alt="Decks tab: both sample decks with card count, daily usage and buttons to use, edit or delete them">
+  <img src="docs/screenshots/menu-settings.png" width="330" alt="Settings tab: popup frequency, trigger threshold, cards per popup, hotkey, popup position and size, autostart">
+</p>
 
 ## Free limits
 
@@ -147,7 +152,7 @@ Only active when started with env `WAITWORDS_DEBUG=1`: `GET /debug/quiz`, `POST 
 ## Ideas / not built yet
 
 - Browser extension (MV3) for chatgpt.com / Codex: content script watches the stop button, pings `/start` + `/stop` (server-side CORS is already open).
-- Character mode for the Chinese deck (`extra` field already stores hanzi).
+- Two-sided cards: show something extra on the solution (the `extra` field is already carried through — e.g. Chinese characters next to Pinyin).
 - Real spaced-repetition intervals.
 
 ## License

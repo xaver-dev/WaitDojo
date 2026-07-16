@@ -125,13 +125,17 @@ function activeDeckPath() {
   return deckList()[activeDeckIndex()];
 }
 
+// Deck-Titel sind fürs Popup-Heading gedacht („World capitals — quick break?"). Pills und
+// Wizard-Buttons haben wenig Platz und zeigen nur den Teil vor dem Gedankenstrich.
+const shortTitle = (t) => String(t).split('—')[0].trim() || String(t);
+
 // Für den Deck-Switcher im Popup: die frei wählbaren Decks mit Titel + aktiv-Flag
 function deckSwitcher() {
   const list = deckList();
   const ai = activeDeckIndex();
   const out = [];
   for (let i = 0; i < list.length && i < MAX_DECKS; i++) {
-    out.push({ index: i, title: deckTitle(list[i]), active: i === ai });
+    out.push({ index: i, title: shortTitle(deckTitle(list[i])), active: i === ai });
   }
   return { decks: out, freeCount: Math.min(list.length, MAX_DECKS), maxFree: MAX_DECKS };
 }
@@ -494,7 +498,45 @@ function createDeckFromPayload(payload) {
 
 ipcMain.handle('create-deck', (_e, payload) => createDeckFromPayload(payload));
 
-// Wizard: „Chinesisch-Beispieldeck behalten" oder Wizard später erneut geöffnet + abgebrochen
+// Mitgelieferte Beispiel-Decks (getrackt, siehe .gitignore). Wizard bietet sie zur Auswahl an.
+const SAMPLE_DECKS = ['data/deck.json', 'data/deck-science.json'];
+
+ipcMain.handle('get-sample-decks', () =>
+  SAMPLE_DECKS
+    .filter((p) => fs.existsSync(path.resolve(APP_DIR, p)))
+    .map((p) => ({ path: p, title: shortTitle(deckTitle(p)) })));
+
+// Wizard: Beispiel-Deck übernehmen. Beim allerersten Start ersetzt es die Default-Liste,
+// später kommt es zusätzlich rein (sofern noch ein Slot frei ist).
+ipcMain.handle('use-sample-deck', (_e, rel) => {
+  if (!SAMPLE_DECKS.includes(rel)) return { ok: false, error: 'unknown sample deck' };
+  const list = deckList();
+  let target;
+  if (!usage.onboarded) {
+    config.decks = [rel];
+    target = 0;
+  } else if (list.includes(rel)) {
+    target = list.indexOf(rel);
+    if (target >= MAX_DECKS) return { ok: false, error: 'That deck is beyond the free deck limit.' };
+  } else {
+    if (list.length >= MAX_DECKS) {
+      return { ok: false, error: `The free version keeps ${MAX_DECKS} active decks — delete one first.` };
+    }
+    config.decks = [...list, rel];
+    target = config.decks.length - 1;
+  }
+  writeConfig();
+  usage.activeDeckIndex = target;
+  saveUsage();
+  const err = loadDeck();
+  if (err) { dialog.showErrorBox('WaitWords — deck error', err); return { ok: false, error: err }; }
+  loadProgress();
+  buildTrayMenu();
+  updateTrayTooltip();
+  return { ok: true };
+});
+
+// Wizard abgeschlossen (Beispiel-Deck übernommen oder später erneut geöffnet + abgebrochen)
 ipcMain.handle('finish-onboarding', () => {
   usage.onboarded = true;
   saveUsage();

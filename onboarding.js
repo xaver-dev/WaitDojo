@@ -15,8 +15,40 @@ function show(n) {
 const $ = (id) => document.getElementById(id);
 
 // ---- Step 1
-$('bundledBtn').addEventListener('click', () => show(4)); // Beispieldeck behalten → Startoptionen
 $('createBtn').addEventListener('click', () => show(2));
+
+// Kurzbeschreibung je Beispiel-Deck; unbekannte Decks laufen ohne Untertitel
+const sampleSubs = {
+  'data/deck.json': 'Guess the capital — playable straight away, no prior knowledge needed',
+  'data/deck-science.json': 'Physics, chemistry and biology fundamentals',
+};
+
+// Beispiel-Decks aus main laden und als Buttons anbieten
+ipcRenderer.invoke('get-sample-decks').then((samples) => {
+  const box = $('samples');
+  (samples || []).forEach((s) => {
+    const b = document.createElement('button');
+    b.className = 'wide ghost';
+    b.textContent = s.title; // main liefert schon den gekürzten Titel
+    const sub = sampleSubs[s.path];
+    if (sub) {
+      const span = document.createElement('span');
+      span.className = 'sub';
+      span.textContent = sub;
+      b.appendChild(span);
+    }
+    b.addEventListener('click', async () => {
+      const r = await ipcRenderer.invoke('use-sample-deck', s.path);
+      if (r && r.ok) show(4); // weiter zu den Startoptionen
+      else {
+        const m = $('msg1');
+        m.className = 'err';
+        m.textContent = (r && r.error) || 'Could not activate that deck.';
+      }
+    });
+    box.appendChild(b);
+  });
+});
 
 // ---- Step 2
 $('back2').addEventListener('click', () => show(1));

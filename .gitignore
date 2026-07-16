@@ -1,8 +1,10 @@
 node_modules/
 *.log
 
-# Personal, stays on your machine — never published:
+# Personal, stays on your machine — never published.
+# Only the bundled sample decks (deck.json, deck-*.json) are tracked:
 config.json
 data/*.json
 !data/deck.json
+!data/deck-*.json
 data/.trash/

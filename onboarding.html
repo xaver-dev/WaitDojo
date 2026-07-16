@@ -42,9 +42,10 @@
     padding: 10px; font-size: 11px; white-space: pre-wrap; word-break: break-word;
     max-height: 200px; overflow-y: auto; color: #c9cdd6; margin-top: 6px;
   }
-  #msg { margin-top: 12px; font-size: 12px; }
-  #msg.err { color: #ff9caa; white-space: pre-wrap; }
-  #msg.ok { color: #96d9a4; }
+  #samples { display: flex; flex-direction: column; gap: 10px; }
+  #msg, #msg1 { margin-top: 12px; font-size: 12px; }
+  #msg.err, #msg1.err { color: #ff9caa; white-space: pre-wrap; }
+  #msg.ok, #msg1.ok { color: #96d9a4; }
   .step { display: none; }
   .step.active { display: block; }
   .steplabel { font-size: 11px; color: #8a8f9c; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 4px; }
@@ -63,10 +64,9 @@
       <button class="wide" id="createBtn">Create my own topic
         <span class="sub">Physics, Spanish, anatomy… you describe it, an AI chatbot builds the cards</span>
       </button>
-      <button class="wide ghost" id="bundledBtn">Use the bundled Chinese deck
-        <span class="sub">HSK 1–2 vocabulary (Pinyin → German), ready to go</span>
-      </button>
+      <div id="samples"></div>
     </div>
+    <div id="msg1"></div>
   </section>
 
   <!-- Step 2: Topic form -->
