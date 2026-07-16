@@ -633,7 +633,10 @@ function startServer() {
             break;
           case '/debug/onboard-js': // nur mit WAITWORDS_DEBUG=1: JS im Wizard ausführen
             if (process.env.WAITWORDS_DEBUG === '1' && onboardingWin && !onboardingWin.isDestroyed() && body.js) {
-              onboardingWin.webContents.executeJavaScript(String(body.js)).catch(() => {});
+              onboardingWin.webContents.executeJavaScript(String(body.js))
+                .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
+                .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
+              return;
             }
             break;
           case '/debug/create-deck': // nur mit WAITWORDS_DEBUG=1: create-deck-Pfad testen

@@ -6,6 +6,11 @@ Ships with a Chinese vocabulary deck (HSK 1–2, Pinyin → German), but works w
 
 The app remembers, per card, what you get right, what you struggle with, and what you haven't seen yet — and picks accordingly: each popup mixes problem cards, new cards, and the occasional review of a card you know.
 
+<p align="center">
+  <img src="docs/screenshots/popup-chinese.png" width="330" alt="Quiz popup with the Chinese deck (red & gold theme), status badges and deck switcher pills">
+  <img src="docs/screenshots/popup-physics.png" width="330" alt="Quiz popup with a custom physics deck (blue theme), daily counter and deck pills">
+</p>
+
 ## Install
 
 Requires [Node.js](https://nodejs.org) (18+).
@@ -58,6 +63,15 @@ With two decks that's up to 10 popups (~50 cards) a day — plenty for serious l
 This project is free. If it helps you and you want to support development, you can contribute voluntarily via the "Support this project ♥" link in the tray menu. Supporting is a pure donation — every user gets the identical software either way.
 
 ## Make it about YOUR topic
+
+The first-run wizard walks you through it — describe your topic, pick a design, paste the chatbot's JSON:
+
+<p align="center">
+  <img src="docs/screenshots/wizard-describe.png" width="330" alt="Setup wizard step 1: describe topic, level, language, design preset">
+  <img src="docs/screenshots/wizard-paste.png" width="330" alt="Setup wizard step 2: generated prompt and paste field for the chatbot's JSON">
+</p>
+
+Prefer doing it by hand?
 
 1. Open [DECK_PROMPT.md](DECK_PROMPT.md), copy the prompt template.
 2. Fill in topic, card count, answer language, difficulty. Paste into Claude/ChatGPT/etc.

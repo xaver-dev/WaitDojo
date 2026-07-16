@@ -71,16 +71,16 @@
 
   <!-- Step 2: Topic form -->
   <section class="step" id="step2">
-    <div class="steplabel">Step 1 of 2 — describe your deck</div>
+    <div class="steplabel">Step 1 of 3 — describe your deck</div>
     <h2>What do you want to learn?</h2>
     <label for="topic">Topic</label>
-    <input type="text" id="topic" placeholder="e.g. Physics basics, Spanish A1, Latin roots">
+    <input type="text" id="topic" spellcheck="false" autocomplete="off" placeholder="e.g. Physics basics, Spanish A1, Latin roots">
     <label for="desc">Your level &amp; focus (free text)</label>
-    <textarea id="desc" rows="3" placeholder="e.g. Absolute beginner. Everyday vocabulary only, no grammar terms."></textarea>
+    <textarea id="desc" rows="3" spellcheck="false" placeholder="e.g. Absolute beginner. Everyday vocabulary only, no grammar terms."></textarea>
     <div class="rowflex">
       <div>
         <label for="lang">Answer language</label>
-        <input type="text" id="lang" value="Deutsch">
+        <input type="text" id="lang" spellcheck="false" autocomplete="off" value="Deutsch">
       </div>
       <div>
         <label for="count">Number of cards</label>
@@ -88,7 +88,7 @@
       </div>
     </div>
     <label for="title">Popup headline <span class="muted">(optional)</span></label>
-    <input type="text" id="title" placeholder="defaults to your topic">
+    <input type="text" id="title" spellcheck="false" autocomplete="off" placeholder="defaults to your topic">
     <div class="rowflex">
       <div>
         <label for="theme">Design preset</label>
@@ -113,13 +113,13 @@
 
   <!-- Step 3: Paste -->
   <section class="step" id="step3">
-    <div class="steplabel">Step 2 of 2 — generate &amp; paste</div>
+    <div class="steplabel">Step 2 of 3 — generate &amp; paste</div>
     <h2>Generate the cards</h2>
     <p class="muted">1. The prompt below was copied to your clipboard. Paste it into any AI chatbot (Claude, ChatGPT, Gemini…).</p>
     <pre id="promptOut"></pre>
     <button class="ghost" id="copyBtn" style="margin-top:8px">Copy prompt again</button>
     <label for="json">2. Paste the chatbot's JSON answer here</label>
-    <textarea id="json" rows="6" placeholder='{ "meta": { … }, "cards": [ … ] }'></textarea>
+    <textarea id="json" rows="6" spellcheck="false" placeholder='{ "meta": { … }, "cards": [ … ] }'></textarea>
     <div id="msg"></div>
     <div class="btns">
       <button class="ghost" id="back3">Back</button>
@@ -129,7 +129,7 @@
 
   <!-- Step 4: Startup options -->
   <section class="step" id="step4">
-    <div class="steplabel">Almost done</div>
+    <div class="steplabel">Step 3 of 3 — almost done</div>
     <h2>How should WaitWords start?</h2>
     <p class="muted">You can change both later in the tray menu / Windows settings.</p>
     <label class="check">

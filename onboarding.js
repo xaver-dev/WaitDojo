@@ -21,6 +21,18 @@ $('createBtn').addEventListener('click', () => show(2));
 // ---- Step 2
 $('back2').addEventListener('click', () => show(1));
 
+// Farbfeld folgt dem Preset (Werte = --accent der Themes in popup.html); bleibt frei änderbar
+const presetAccents = {
+  default: '#f0c674',
+  chinese: '#e0b64a',
+  nature: '#8fbf6f',
+  medical: '#6fb7d6',
+  minimal: '#cfd3da',
+};
+$('theme').addEventListener('change', () => {
+  $('accent').value = presetAccents[$('theme').value] || presetAccents.default;
+});
+
 function buildPrompt() {
   const topic = $('topic').value.trim() || 'general knowledge';
   const desc = $('desc').value.trim() || 'mixed difficulty';
