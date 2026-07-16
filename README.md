@@ -22,7 +22,7 @@ npm install
 npm start
 ```
 
-On the **first start** a short setup wizard opens: either keep the bundled Chinese deck, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. Its last step asks whether to **start with Windows** and/or add a **desktop shortcut**. You can reopen the wizard any time via tray → **New deck / setup…**.
+On the **first start** a short setup wizard opens: either keep the bundled Chinese deck, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. Its last step asks whether to **start with Windows**, add a **desktop shortcut**, and how often popups may appear. You can reopen the wizard any time via tray → **New deck / setup…**.
 
 The app lives in the system tray (look for the gold **W**). Prefer to start it yourself? Uncheck autostart in the wizard and use the desktop shortcut (or `npm start`).
 
@@ -45,9 +45,17 @@ ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. F
 - Type your answer, **Enter** jumps to the next field, last Enter checks everything.
 - Wrong rows show the accepted solutions. Got marked wrong unfairly? Click **"I was right ✓"**.
 - **Esc** or ✕ closes. Unanswered cards count as *skipped*, never as wrong.
-- Popup never steals focus from your editor; max one popup per 5 minutes (tray menu has "Pause 1 hour").
+- Popup never steals focus from your editor; max one popup per 5 minutes by default (adjustable, and the tray menu has "Pause 1 hour").
 - The footer shows today's count (`3/5`) and a pill per deck — click another deck's pill to switch topic on the spot.
+- The ⚙ icon in the popup header opens **Decks & settings** (see below).
 - Tray menu → **Statistics** shows every card with its status: `new` / `learning` / `problem` / `good`.
+
+## Decks & settings
+
+Click ⚙ in any popup (or tray menu → **Decks & settings…**) to open the main menu:
+
+- **Decks** — see every deck with its card count and today's usage; switch the active deck, edit a deck's headline, design preset and accent color, reset its learning progress, or delete it (moved to `data/.trash/`, recoverable). **+ New deck…** reopens the setup wizard.
+- **Settings** — popup frequency (every 1–60 minutes), trigger threshold, cards per popup, global hotkey, popup position (any screen corner), popup size (small/default/large), and autostart with Windows. Changes apply immediately, no restart needed.
 
 ## Free limits
 
@@ -108,16 +116,18 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 
 ## Configuration (`config.json`)
 
-Optional — the app runs on sensible defaults without it. To customize, copy `config.example.json` to `config.json` and edit. Your `config.json` and any decks you create (except the bundled `data/deck.json`) are gitignored, so they stay on your machine.
+Optional — everything here is editable in the app under **Decks & settings**, and the app runs on sensible defaults without it. To customize by hand, copy `config.example.json` to `config.json` and edit. Your `config.json` and any decks you create (except the bundled `data/deck.json`) are gitignored, so they stay on your machine.
 
 | Field | Default | Meaning |
 |---|---|---|
 | `port` | 4823 | Local HTTP port (also change in `hook/notify.js` if you edit this) |
 | `thresholdSeconds` | 60 | How long a tool must run before the popup fires |
 | `cooldownMinutes` | 5 | Minimum gap between popups |
-| `hotkey` | Ctrl+Alt+L | Global hotkey for instant popup |
+| `hotkey` | Ctrl+Alt+L | Global hotkey for instant popup (empty = disabled) |
 | `wordsPerPopup` | 5 | Cards per popup |
 | `autostart` | true | Default for "start with Windows" until the wizard sets your choice |
+| `popupPosition` | bottom-right | Popup corner: `bottom-right`, `bottom-left`, `top-right`, `top-left` |
+| `popupSize` | default | Popup size: `small`, `default`, `large` |
 | `decks` | ["data/deck.json"] | Deck files; first 2 selectable in the free version |
 
 ## How detection works

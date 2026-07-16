@@ -131,7 +131,7 @@
   <section class="step" id="step4">
     <div class="steplabel">Step 3 of 3 — almost done</div>
     <h2>How should WaitWords start?</h2>
-    <p class="muted">You can change both later in the tray menu / Windows settings.</p>
+    <p class="muted">You can change all of this later under Decks &amp; settings (⚙ in any popup or via the tray menu).</p>
     <label class="check">
       <input type="checkbox" id="optAutostart" checked>
       <span><b>Start automatically with Windows</b>
@@ -142,6 +142,16 @@
       <span><b>Create a desktop shortcut</b>
         <span class="desc">A "WaitWords" icon to start it yourself whenever you want.</span></span>
     </label>
+    <label for="optCooldown">Popup frequency</label>
+    <select id="optCooldown">
+      <option value="1">up to every minute</option>
+      <option value="5" selected>every 5 minutes at most</option>
+      <option value="10">every 10 minutes at most</option>
+      <option value="15">every 15 minutes at most</option>
+      <option value="30">every 30 minutes at most</option>
+      <option value="60">every 60 minutes at most</option>
+    </select>
+    <span class="muted">Minimum gap between quiz popups — change any time under Decks &amp; settings.</span>
     <div id="msg4" class="muted" style="margin-top:12px"></div>
     <div class="btns">
       <button class="wide" id="finishBtn">Finish</button>

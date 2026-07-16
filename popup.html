@@ -58,12 +58,13 @@
   header { display: flex; align-items: center; justify-content: space-between; }
   header h1 { font-size: 15px; font-weight: 600; color: var(--accent); }
   header .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  #closeBtn {
+  #closeBtn, #menuBtn {
     -webkit-app-region: no-drag;
     background: none; border: none; color: var(--muted);
     font-size: 18px; cursor: pointer; padding: 2px 8px; border-radius: 8px;
   }
-  #closeBtn:hover { background: #2a2e38; color: #fff; }
+  #menuBtn { font-size: 14px; }
+  #closeBtn:hover, #menuBtn:hover { background: #2a2e38; color: #fff; }
   #rows { display: flex; flex-direction: column; gap: 8px; flex: 1; -webkit-app-region: no-drag; overflow-y: auto; min-height: 0; }
   #rows::-webkit-scrollbar { width: 6px; }
   #rows::-webkit-scrollbar-thumb { background: var(--frame); border-radius: 3px; }
@@ -136,7 +137,9 @@
         <h1 id="title"></h1>
         <div class="sub" id="instruction"></div>
       </div>
-      <button id="closeBtn" title="Close (Esc)">✕</button>
+      <div>
+        <button id="menuBtn" title="Decks &amp; settings">⚙</button><button id="closeBtn" title="Close (Esc)">✕</button>
+      </div>
     </header>
     <div id="rows"></div>
     <div id="limitNote" hidden>Last free popup for this deck today — resets at midnight</div>

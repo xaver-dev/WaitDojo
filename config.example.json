@@ -5,5 +5,7 @@
   "hotkey": "Ctrl+Alt+L",
   "wordsPerPopup": 5,
   "autostart": true,
+  "popupPosition": "bottom-right",
+  "popupSize": "default",
   "decks": ["data/deck.json"]
 }

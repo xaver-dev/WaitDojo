@@ -18,6 +18,8 @@ const defaults = {
   hotkey: 'Ctrl+Alt+L',
   wordsPerPopup: 5,
   autostart: true,
+  popupPosition: 'bottom-right', // bottom-right | bottom-left | top-right | top-left
+  popupSize: 'default',          // small | default | large
   deckPath: 'data/deck.json',
 };
 
@@ -281,12 +283,14 @@ function showPopup(force = false) {
   updateTrayTooltip();
 
   const { workArea } = screen.getPrimaryDisplay();
-  const w = 380, h = 560;
+  const sizes = { small: { w: 340, h: 480 }, default: { w: 380, h: 560 }, large: { w: 440, h: 660 } };
+  const { w, h } = sizes[config.popupSize] || sizes.default;
+  const pos = String(config.popupPosition || 'bottom-right');
   popupWin = new BrowserWindow({
     width: w,
     height: h,
-    x: workArea.x + workArea.width - w - 16,
-    y: workArea.y + workArea.height - h - 16,
+    x: pos.endsWith('left') ? workArea.x + 16 : workArea.x + workArea.width - w - 16,
+    y: pos.startsWith('top') ? workArea.y + 16 : workArea.y + workArea.height - h - 16,
     frame: false,
     transparent: true,
     resizable: false,
@@ -356,6 +360,23 @@ function showOnboarding() {
   onboardingWin.on('closed', () => { onboardingWin = null; });
 }
 
+let menuWin = null;
+function showMenu() {
+  if (menuWin && !menuWin.isDestroyed()) { menuWin.focus(); return; }
+  menuWin = new BrowserWindow({
+    width: 620,
+    height: 720,
+    title: 'WaitWords — Decks & Settings',
+    autoHideMenuBar: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+  menuWin.loadFile('menu.html');
+  menuWin.on('closed', () => { menuWin = null; });
+}
+
 // ---------------------------------------------------------------- IPC
 
 let lastQuiz = [];
@@ -410,6 +431,8 @@ function slugify(s) {
 
 function writeConfig() {
   try {
+    // Legacy-Feld nicht zurückschreiben, wenn decks[] maßgeblich ist
+    if (Array.isArray(config.decks) && config.decks.length > 0) delete config.deckPath;
     fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2) + '\n');
   } catch (e) {
     console.error('config.json nicht schreibbar:', e.message);
@@ -513,10 +536,15 @@ function createDesktopShortcut() {
   }
 }
 
-// Vom Wizard-Abschluss: Startoptionen anwenden
+// Vom Wizard-Abschluss: Startoptionen (+ optional Popup-Frequenz) anwenden
 ipcMain.handle('apply-startup', (_e, opts) => {
   opts = opts || {};
   applyAutostart(!!opts.autostart);
+  const cd = Number(opts.cooldownMinutes);
+  if (Number.isFinite(cd) && cd >= 0 && cd <= 720) {
+    config.cooldownMinutes = Math.round(cd);
+    writeConfig();
+  }
   const shortcut = opts.shortcut ? createDesktopShortcut() : { ok: true, skipped: true };
   return { ok: true, shortcut };
 });
@@ -524,6 +552,181 @@ ipcMain.handle('apply-startup', (_e, opts) => {
 ipcMain.on('close-popup', () => {
   if (popupWin && !popupWin.isDestroyed()) popupWin.close();
 });
+
+// ---- Hauptmenü (menu.html): Deck-Verwaltung + Einstellungen
+
+ipcMain.on('open-menu', () => showMenu());
+ipcMain.on('open-stats', () => showStats());
+ipcMain.on('open-onboarding', () => showOnboarding());
+ipcMain.on('open-support', () => shell.openExternal(SUPPORT_URL));
+ipcMain.on('open-decks-folder', () => shell.openPath(path.join(APP_DIR, 'data')));
+
+// Alle Decks mit Metadaten für die Menü-Liste (auch die über dem Free-Limit)
+function deckOverview() {
+  const list = deckList();
+  const ai = activeDeckIndex();
+  rolloverUsage();
+  return list.map((p, i) => {
+    let title = path.basename(p), cards = 0, theme = 'default', accent = '', id = null, ok = true;
+    try {
+      const d = readJson(path.resolve(APP_DIR, p));
+      title = (d.meta && d.meta.title) || title;
+      theme = (d.meta && d.meta.theme) || 'default';
+      accent = (d.meta && d.meta.accent) || '';
+      id = (d.meta && d.meta.id) || null;
+      cards = Array.isArray(d.cards) ? d.cards.length : 0;
+    } catch { ok = false; }
+    return {
+      index: i, path: p, title, cards, theme, accent, ok,
+      active: i === ai,
+      locked: i >= MAX_DECKS,
+      usedToday: id ? (usage.byDeck[id] || 0) : 0,
+    };
+  });
+}
+
+ipcMain.handle('get-menu-data', () => ({
+  settings: {
+    thresholdSeconds: config.thresholdSeconds,
+    cooldownMinutes: config.cooldownMinutes,
+    wordsPerPopup: config.wordsPerPopup,
+    hotkey: config.hotkey || '',
+    popupPosition: config.popupPosition || 'bottom-right',
+    popupSize: config.popupSize || 'default',
+  },
+  autostart: autostartEnabled(),
+  decks: deckOverview(),
+  limits: {
+    popupsPerDay: POPUPS_PER_DECK_PER_DAY,
+    maxDecks: Number.isFinite(MAX_DECKS) ? MAX_DECKS : 0, // 0 = unbegrenzt
+  },
+}));
+
+function clampNum(v, min, max, fallback) {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.max(min, Math.min(max, Math.round(n))) : fallback;
+}
+
+ipcMain.handle('save-settings', (_e, s) => {
+  s = s || {};
+  config.thresholdSeconds = clampNum(s.thresholdSeconds, 10, 3600, config.thresholdSeconds);
+  config.cooldownMinutes = clampNum(s.cooldownMinutes, 0, 720, config.cooldownMinutes);
+  config.wordsPerPopup = clampNum(s.wordsPerPopup, 1, 10, config.wordsPerPopup);
+  if (['bottom-right', 'bottom-left', 'top-right', 'top-left'].includes(s.popupPosition)) {
+    config.popupPosition = s.popupPosition;
+  }
+  if (['small', 'default', 'large'].includes(s.popupSize)) {
+    config.popupSize = s.popupSize;
+  }
+
+  // Hotkey live umregistrieren; bei Fehlschlag alten behalten
+  let hotkeyError = null;
+  const newHotkey = String(s.hotkey == null ? config.hotkey : s.hotkey).trim();
+  if (newHotkey !== (config.hotkey || '')) {
+    if (config.hotkey) { try { globalShortcut.unregister(config.hotkey); } catch {} }
+    if (newHotkey) {
+      let ok = false;
+      try { ok = globalShortcut.register(newHotkey, () => showPopup(true)); } catch { ok = false; }
+      if (ok) {
+        config.hotkey = newHotkey;
+      } else {
+        hotkeyError = `Hotkey "${newHotkey}" could not be registered — keeping "${config.hotkey || 'none'}".`;
+        if (config.hotkey) { try { globalShortcut.register(config.hotkey, () => showPopup(true)); } catch {} }
+      }
+    } else {
+      config.hotkey = '';
+    }
+  }
+
+  if (typeof s.autostart === 'boolean') applyAutostart(s.autostart);
+
+  writeConfig();
+  return { ok: true, hotkeyError };
+});
+
+// Deck-Metadaten (Titel, Theme, Akzentfarbe) direkt in der Deck-Datei ändern
+ipcMain.handle('update-deck', (_e, payload) => {
+  payload = payload || {};
+  const list = deckList();
+  const i = Number(payload.index);
+  if (!Number.isInteger(i) || i < 0 || i >= list.length) return { ok: false, error: 'bad index' };
+  const abs = path.resolve(APP_DIR, list[i]);
+  let deck;
+  try { deck = readJson(abs); } catch (e) { return { ok: false, error: 'Deck unreadable: ' + e.message }; }
+  deck.meta = deck.meta || {};
+  if (payload.title && String(payload.title).trim()) deck.meta.title = String(payload.title).trim();
+  if (payload.theme) deck.meta.theme = payload.theme;
+  if (typeof payload.accent === 'string') {
+    if (payload.accent) deck.meta.accent = payload.accent;
+    else delete deck.meta.accent;
+  }
+  try {
+    fs.writeFileSync(abs, JSON.stringify(deck, null, 2) + '\n');
+  } catch (e) {
+    return { ok: false, error: 'Could not write deck file: ' + e.message };
+  }
+  if (i === activeDeckIndex()) {
+    const err = loadDeck();
+    if (err) return { ok: false, error: err };
+  }
+  buildTrayMenu();
+  updateTrayTooltip();
+  return { ok: true };
+});
+
+// Deck aus dem Menü aktivieren (schließt offenes Popup, wie Tray-Wechsel)
+ipcMain.handle('menu-switch-deck', (_e, index) => {
+  const i = Number(index);
+  const list = deckList();
+  if (!Number.isInteger(i) || i < 0 || i >= list.length || i >= MAX_DECKS) return { ok: false };
+  switchDeck(i);
+  return { ok: true };
+});
+
+// Deck aus dem Menü löschen (Confirm-Dialog, dann trash-basiertes deleteDeckCore)
+ipcMain.handle('delete-deck', (_e, index) => {
+  const i = Number(index);
+  const list = deckList();
+  if (!Number.isInteger(i) || i < 0 || i >= list.length) return { ok: false, error: 'bad index' };
+  if (list.length <= 1) return { ok: false, error: 'You must keep at least one deck.' };
+  const title = deckTitle(list[i]);
+  const choice = dialog.showMessageBoxSync(menuWin, {
+    type: 'warning',
+    buttons: ['Delete', 'Cancel'],
+    defaultId: 1,
+    cancelId: 1,
+    title: 'Delete deck',
+    message: `Delete "${title}"?`,
+    detail: 'The deck file is moved to data/.trash (recoverable); its learning progress is removed.',
+  });
+  if (choice !== 0) return { ok: false, cancelled: true };
+  return deleteDeckCore(i);
+});
+
+// Lernfortschritt eines Decks zurücksetzen (alle Karten wieder "new")
+ipcMain.handle('reset-progress', (_e, index) => {
+  const list = deckList();
+  const i = Number(index);
+  if (!Number.isInteger(i) || i < 0 || i >= list.length) return { ok: false, error: 'bad index' };
+  let id = null;
+  try { id = (readJson(path.resolve(APP_DIR, list[i])).meta || {}).id || null; } catch {}
+  if (!id) return { ok: false, error: 'Deck unreadable.' };
+  const choice = dialog.showMessageBoxSync(menuWin, {
+    type: 'warning',
+    buttons: ['Reset', 'Cancel'],
+    defaultId: 1,
+    cancelId: 1,
+    title: 'Reset progress',
+    message: `Reset learning progress for "${deckTitle(list[i])}"?`,
+    detail: 'All cards go back to "new". This cannot be undone.',
+  });
+  if (choice !== 0) return { ok: false, cancelled: true };
+  try { fs.unlinkSync(path.join(app.getPath('userData'), `progress-${id}.json`)); } catch {}
+  if (i === activeDeckIndex()) progress = {};
+  return { ok: true };
+});
+
+ipcMain.handle('create-shortcut', () => createDesktopShortcut());
 
 // ---------------------------------------------------------------- Job-Tracking + HTTP-API
 
@@ -606,6 +809,7 @@ function startServer() {
           case '/shot': // nur mit WAITWORDS_DEBUG=1: sichtbares Fenster als PNG speichern
             if (process.env.WAITWORDS_DEBUG === '1' && body.path) {
               const win = (onboardingWin && !onboardingWin.isDestroyed()) ? onboardingWin
+                : (menuWin && !menuWin.isDestroyed()) ? menuWin
                 : (popupWin && !popupWin.isDestroyed()) ? popupWin : null;
               if (win) win.webContents.capturePage()
                 .then((img) => fs.writeFileSync(body.path, img.toPNG()))
@@ -614,6 +818,17 @@ function startServer() {
             break;
           case '/debug/onboard': // nur mit WAITWORDS_DEBUG=1: Wizard öffnen
             if (process.env.WAITWORDS_DEBUG === '1') showOnboarding();
+            break;
+          case '/debug/menu': // nur mit WAITWORDS_DEBUG=1: Hauptmenü öffnen
+            if (process.env.WAITWORDS_DEBUG === '1') showMenu();
+            break;
+          case '/debug/menu-js': // nur mit WAITWORDS_DEBUG=1: JS im Hauptmenü ausführen
+            if (process.env.WAITWORDS_DEBUG === '1' && menuWin && !menuWin.isDestroyed() && body.js) {
+              menuWin.webContents.executeJavaScript(String(body.js))
+                .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
+                .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
+              return;
+            }
             break;
           case '/debug/delete-deck': // nur mit WAITWORDS_DEBUG=1: deleteDeckCore testen
             if (process.env.WAITWORDS_DEBUG === '1') {
@@ -766,7 +981,7 @@ function confirmDeleteDeck(index) {
     cancelId: 1,
     title: 'Delete deck',
     message: `Delete "${title}"?`,
-    detail: 'This removes the deck and its learning progress. This cannot be undone.',
+    detail: 'The deck file is moved to data/.trash (recoverable); its learning progress is removed.',
   });
   if (choice === 0) {
     const r = deleteDeckCore(index);
@@ -791,6 +1006,7 @@ function buildTrayMenu() {
   }));
   const menu = Menu.buildFromTemplate([
     { label: 'Show popup now', click: () => showPopup(true) },
+    { label: 'Decks & settings…', click: () => showMenu() },
     { label: 'Statistics', click: () => showStats() },
     ...(list.length > 1 ? [{ label: 'Switch deck', submenu: deckItems }] : []),
     { label: 'New deck / setup…', click: () => showOnboarding() },

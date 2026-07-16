@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WaitWords — Decks &amp; Settings</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #1c1f26; color: #e8e6e3;
+    padding: 20px 22px; font-size: 13px; line-height: 1.5;
+  }
+  h1 { font-size: 18px; color: #f0c674; margin-bottom: 14px; }
+  .muted { color: #8a8f9c; font-size: 12px; }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab {
+    background: none; border: 1px solid #3a3f4b; color: #b8bdc9;
+    border-radius: 999px; padding: 6px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .tab:hover { border-color: #f0c674; color: #fff; }
+  .tab.active { background: #f0c674; border-color: #f0c674; color: #1c1f26; cursor: default; }
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  /* ---- Decks ---- */
+  .deck {
+    background: #242833; border: 1px solid #333846; border-radius: 10px;
+    padding: 10px 12px; margin-bottom: 8px;
+  }
+  .deck.locked { opacity: .55; }
+  .deck-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .deck-title { font-weight: 600; font-size: 14px; }
+  .deck-sub { font-size: 11px; color: #8a8f9c; }
+  .badge {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .5px;
+    padding: 2px 7px; border-radius: 6px; margin-left: 6px; vertical-align: 2px;
+  }
+  .badge.active { background: #24402c; color: #96d9a4; }
+  .badge.locked { background: #3a3f4b; color: #9aa0ae; }
+  .deck-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .deck-actions button {
+    background: none; border: 1px solid #3a3f4b; color: #b8bdc9;
+    border-radius: 7px; padding: 4px 10px; font-size: 12px; cursor: pointer;
+  }
+  .deck-actions button:hover { border-color: #f0c674; color: #fff; }
+  .deck-actions button.danger:hover { border-color: #8a3a49; color: #ff9caa; }
+
+  .deck-edit { border-top: 1px solid #333846; margin-top: 10px; padding-top: 4px; }
+  label { display: block; font-weight: 600; margin: 10px 0 4px; }
+  input[type=text], input[type=number], select {
+    width: 100%; background: #1a1d24; border: 1px solid #3a3f4b; border-radius: 8px;
+    color: #e8e6e3; font-size: 13px; padding: 7px 10px; outline: none; font-family: inherit;
+  }
+  input:focus, select:focus { border-color: #f0c674; }
+  input[type=color] {
+    width: 46px; height: 33px; padding: 2px;
+    background: #1a1d24; border: 1px solid #3a3f4b; border-radius: 8px; cursor: pointer;
+  }
+  .rowflex { display: flex; gap: 12px; }
+  .rowflex > div { flex: 1; }
+  .rowflex > div.shrink { flex: 0 0 auto; }
+
+  .btns { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  button.primary {
+    background: #f0c674; color: #1c1f26; border: none; border-radius: 9px;
+    padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  button.primary:hover { filter: brightness(1.08); }
+  button.ghost {
+    background: none; border: 1px solid #3a3f4b; color: #b8bdc9;
+    border-radius: 9px; padding: 9px 16px; font-size: 13px; cursor: pointer;
+  }
+  button.ghost:hover { border-color: #f0c674; color: #fff; }
+  button.ghost.danger:hover { border-color: #8a3a49; color: #ff9caa; }
+
+  /* ---- Settings ---- */
+  .desc { color: #8a8f9c; font-size: 11px; font-weight: 400; margin-top: 2px; }
+  label.check { display: flex; align-items: flex-start; gap: 9px; font-weight: 400; margin: 14px 0 0; cursor: pointer; }
+  label.check input { width: 16px; height: 16px; margin-top: 1px; accent-color: #f0c674; cursor: pointer; }
+  label.check b { font-weight: 600; }
+
+  .msg { margin-top: 10px; font-size: 12px; min-height: 18px; }
+  .msg.err { color: #ff9caa; white-space: pre-wrap; }
+  .msg.ok { color: #96d9a4; }
+
+  .limitnote {
+    margin-top: 16px; padding: 8px 12px; border: 1px dashed #3a3f4b; border-radius: 8px;
+    color: #8a8f9c; font-size: 11px;
+  }
+
+  footer {
+    margin-top: 18px; padding-top: 12px; border-top: 1px solid #333846;
+    font-size: 12px; color: #8a8f9c; display: flex; gap: 14px;
+  }
+  footer a { color: #b8bdc9; cursor: pointer; text-decoration: none; }
+  footer a:hover { color: #f0c674; }
+</style>
+</head>
+<body>
+  <h1>WaitWords</h1>
+  <div class="tabs">
+    <button class="tab active" data-tab="decks" id="tabDecks">Decks</button>
+    <button class="tab" data-tab="settings" id="tabSettings">Settings</button>
+  </div>
+
+  <!-- ---- Decks pane ---- -->
+  <section class="pane active" id="pane-decks">
+    <div id="deckList"></div>
+    <div class="btns">
+      <button class="primary" id="newDeckBtn">+ New deck…</button>
+      <button class="ghost" id="folderBtn">Open decks folder</button>
+    </div>
+    <div class="msg" id="deckMsg"></div>
+    <div class="limitnote" id="deckLimitNote" hidden></div>
+  </section>
+
+  <!-- ---- Settings pane ---- -->
+  <section class="pane" id="pane-settings">
+    <div class="rowflex">
+      <div>
+        <label for="setCooldown">Popup frequency</label>
+        <select id="setCooldown">
+          <option value="1">up to every minute</option>
+          <option value="5">every 5 minutes at most</option>
+          <option value="10">every 10 minutes at most</option>
+          <option value="15">every 15 minutes at most</option>
+          <option value="30">every 30 minutes at most</option>
+          <option value="60">every 60 minutes at most</option>
+        </select>
+        <div class="desc">Minimum gap between quiz popups.</div>
+      </div>
+      <div>
+        <label for="setThreshold">Trigger after (seconds)</label>
+        <input type="number" id="setThreshold" min="10" max="3600">
+        <div class="desc">How long a tool call must run before a popup fires.</div>
+      </div>
+    </div>
+    <div class="rowflex">
+      <div>
+        <label for="setWords">Cards per popup</label>
+        <input type="number" id="setWords" min="1" max="10">
+      </div>
+      <div>
+        <label for="setHotkey">Global hotkey</label>
+        <input type="text" id="setHotkey" spellcheck="false" autocomplete="off" placeholder="e.g. Ctrl+Alt+L">
+        <div class="desc">Opens a popup instantly. Leave empty to disable.</div>
+      </div>
+    </div>
+    <div class="rowflex">
+      <div>
+        <label for="setPosition">Popup position</label>
+        <select id="setPosition">
+          <option value="bottom-right">Bottom right</option>
+          <option value="bottom-left">Bottom left</option>
+          <option value="top-right">Top right</option>
+          <option value="top-left">Top left</option>
+        </select>
+      </div>
+      <div>
+        <label for="setSize">Popup size</label>
+        <select id="setSize">
+          <option value="small">Small</option>
+          <option value="default">Default</option>
+          <option value="large">Large</option>
+        </select>
+      </div>
+    </div>
+    <label class="check">
+      <input type="checkbox" id="setAutostart">
+      <span><b>Start automatically with Windows</b></span>
+    </label>
+    <div class="btns">
+      <button class="primary" id="saveBtn">Save settings</button>
+      <button class="ghost" id="shortcutBtn">Create desktop shortcut</button>
+    </div>
+    <div class="msg" id="setMsg"></div>
+    <div class="limitnote" id="setLimitNote" hidden></div>
+  </section>
+
+  <footer>
+    <a id="statsLink">Statistics</a>
+    <a id="supportLink">Support this project ♥</a>
+  </footer>
+
+  <script src="menu.js"></script>
+</body>
+</html>

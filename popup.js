@@ -168,6 +168,7 @@ mainBtn.addEventListener('click', () => {
 });
 
 document.getElementById('closeBtn').addEventListener('click', submitAndClose);
+document.getElementById('menuBtn').addEventListener('click', () => ipcRenderer.send('open-menu'));
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') submitAndClose();
 });

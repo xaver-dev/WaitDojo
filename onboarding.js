@@ -116,6 +116,7 @@ $('finishBtn').addEventListener('click', async () => {
   const res = await ipcRenderer.invoke('apply-startup', {
     autostart: $('optAutostart').checked,
     shortcut: $('optShortcut').checked,
+    cooldownMinutes: Number($('optCooldown').value),
   });
   const m = $('msg4');
   if ($('optShortcut').checked && res && res.shortcut && !res.shortcut.ok) {
