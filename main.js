@@ -311,12 +311,12 @@ function showPopup(force = false) {
   popupWin.loadFile('popup.html');
   popupWin.once('ready-to-show', () => {
     popupWin.showInactive(); // kein Fokusklau vom Editor
-    // Debug-Screenshot wie bei PlanetDesk: env WAITWISE_SHOT=<pfad.png>
-    if (process.env.WAITWISE_SHOT) {
+    // Debug-Screenshot wie bei PlanetDesk: env WAITDOJO_SHOT=<pfad.png>
+    if (process.env.WAITDOJO_SHOT) {
       setTimeout(() => {
         if (!popupWin || popupWin.isDestroyed()) return;
         popupWin.webContents.capturePage().then((img) => {
-          fs.writeFileSync(process.env.WAITWISE_SHOT, img.toPNG());
+          fs.writeFileSync(process.env.WAITDOJO_SHOT, img.toPNG());
         }).catch(() => {});
       }, 1500);
     }
@@ -329,7 +329,7 @@ function showStats() {
   statsWin = new BrowserWindow({
     width: 560,
     height: 640,
-    title: 'WaitWise — Statistics',
+    title: 'WaitDojo — Statistics',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
@@ -345,7 +345,7 @@ function showOnboarding() {
   onboardingWin = new BrowserWindow({
     width: 560,
     height: 660,
-    title: 'WaitWise — Setup',
+    title: 'WaitDojo — Setup',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
@@ -354,11 +354,11 @@ function showOnboarding() {
   });
   onboardingWin.loadFile('onboarding.html');
   onboardingWin.once('ready-to-show', () => {
-    if (process.env.WAITWISE_SHOT_ONBOARD) {
+    if (process.env.WAITDOJO_SHOT_ONBOARD) {
       setTimeout(() => {
         if (!onboardingWin || onboardingWin.isDestroyed()) return;
         onboardingWin.webContents.capturePage().then((img) => {
-          fs.writeFileSync(process.env.WAITWISE_SHOT_ONBOARD, img.toPNG());
+          fs.writeFileSync(process.env.WAITDOJO_SHOT_ONBOARD, img.toPNG());
         }).catch(() => {});
       }, 1200);
     }
@@ -372,7 +372,7 @@ function showMenu() {
   menuWin = new BrowserWindow({
     width: 620,
     height: 720,
-    title: 'WaitWise — Decks & Settings',
+    title: 'WaitDojo — Decks & Settings',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
@@ -410,7 +410,7 @@ ipcMain.handle('set-active-deck', (_e, index) => {
   usage.activeDeckIndex = index;
   saveUsage();
   const err = loadDeck();
-  if (err) { dialog.showErrorBox('WaitWise — deck error', err); return { ok: false }; }
+  if (err) { dialog.showErrorBox('WaitDojo — deck error', err); return { ok: false }; }
   loadProgress();
   buildTrayMenu();
   updateTrayTooltip();
@@ -529,7 +529,7 @@ ipcMain.handle('use-sample-deck', (_e, rel) => {
   usage.activeDeckIndex = target;
   saveUsage();
   const err = loadDeck();
-  if (err) { dialog.showErrorBox('WaitWise — deck error', err); return { ok: false, error: err }; }
+  if (err) { dialog.showErrorBox('WaitDojo — deck error', err); return { ok: false, error: err }; }
   loadProgress();
   buildTrayMenu();
   updateTrayTooltip();
@@ -563,7 +563,7 @@ function applyAutostart(enabled) {
 }
 
 function createDesktopShortcut() {
-  const lnk = path.join(app.getPath('desktop'), 'WaitWise.lnk');
+  const lnk = path.join(app.getPath('desktop'), 'WaitDojo.lnk');
   const iconIco = path.join(APP_DIR, 'assets', 'icon.ico');
   try {
     const ok = shell.writeShortcutLink(lnk, 'create', {
@@ -572,7 +572,7 @@ function createDesktopShortcut() {
       cwd: APP_DIR,
       icon: fs.existsSync(iconIco) ? iconIco : process.execPath,
       iconIndex: 0,
-      description: 'WaitWise — learn while you wait',
+      description: 'WaitDojo — learn while you wait',
     });
     return { ok, path: lnk };
   } catch (e) {
@@ -831,7 +831,7 @@ function startServer() {
     res.setHeader('Access-Control-Allow-Private-Network', 'true');
     if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
-    if (req.method === 'GET' && req.url === '/debug/quiz' && process.env.WAITWISE_DEBUG === '1') {
+    if (req.method === 'GET' && req.url === '/debug/quiz' && process.env.WAITDOJO_DEBUG === '1') {
       res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify(lastQuiz));
       return;
@@ -841,7 +841,7 @@ function startServer() {
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(JSON.stringify({
         ok: true,
-        app: 'waitwise',
+        app: 'waitdojo',
         activeSessions: sessions.size,
         deck: meta.id,
         usage: { used: usedToday(), limit: wire(POPUPS_PER_DECK_PER_DAY) },
@@ -861,8 +861,8 @@ function startServer() {
           case '/stop': jobStop(sessionId); break;
           case '/reset': jobReset(sessionId); break;
           case '/trigger': showPopup(true); break;
-          case '/shot': // nur mit WAITWISE_DEBUG=1: sichtbares Fenster als PNG speichern
-            if (process.env.WAITWISE_DEBUG === '1' && body.path) {
+          case '/shot': // nur mit WAITDOJO_DEBUG=1: sichtbares Fenster als PNG speichern
+            if (process.env.WAITDOJO_DEBUG === '1' && body.path) {
               const win = (onboardingWin && !onboardingWin.isDestroyed()) ? onboardingWin
                 : (menuWin && !menuWin.isDestroyed()) ? menuWin
                 : (popupWin && !popupWin.isDestroyed()) ? popupWin : null;
@@ -871,59 +871,59 @@ function startServer() {
                 .catch(() => {});
             }
             break;
-          case '/debug/onboard': // nur mit WAITWISE_DEBUG=1: Wizard öffnen
-            if (process.env.WAITWISE_DEBUG === '1') showOnboarding();
+          case '/debug/onboard': // nur mit WAITDOJO_DEBUG=1: Wizard öffnen
+            if (process.env.WAITDOJO_DEBUG === '1') showOnboarding();
             break;
-          case '/debug/menu': // nur mit WAITWISE_DEBUG=1: Hauptmenü öffnen
-            if (process.env.WAITWISE_DEBUG === '1') showMenu();
+          case '/debug/menu': // nur mit WAITDOJO_DEBUG=1: Hauptmenü öffnen
+            if (process.env.WAITDOJO_DEBUG === '1') showMenu();
             break;
-          case '/debug/menu-js': // nur mit WAITWISE_DEBUG=1: JS im Hauptmenü ausführen
-            if (process.env.WAITWISE_DEBUG === '1' && menuWin && !menuWin.isDestroyed() && body.js) {
+          case '/debug/menu-js': // nur mit WAITDOJO_DEBUG=1: JS im Hauptmenü ausführen
+            if (process.env.WAITDOJO_DEBUG === '1' && menuWin && !menuWin.isDestroyed() && body.js) {
               menuWin.webContents.executeJavaScript(String(body.js))
                 .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
                 .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
               return;
             }
             break;
-          case '/debug/delete-deck': // nur mit WAITWISE_DEBUG=1: deleteDeckCore testen
-            if (process.env.WAITWISE_DEBUG === '1') {
+          case '/debug/delete-deck': // nur mit WAITDOJO_DEBUG=1: deleteDeckCore testen
+            if (process.env.WAITDOJO_DEBUG === '1') {
               const r = deleteDeckCore(Number(body.index));
               res.writeHead(200, { 'content-type': 'application/json' });
               res.end(JSON.stringify(r));
               return;
             }
             break;
-          case '/debug/shortcut': // nur mit WAITWISE_DEBUG=1: Desktop-Verknüpfung erstellen
-            if (process.env.WAITWISE_DEBUG === '1') {
+          case '/debug/shortcut': // nur mit WAITDOJO_DEBUG=1: Desktop-Verknüpfung erstellen
+            if (process.env.WAITDOJO_DEBUG === '1') {
               const r = createDesktopShortcut();
               res.writeHead(200, { 'content-type': 'application/json' });
               res.end(JSON.stringify(r));
               return;
             }
             break;
-          case '/debug/onboard-js': // nur mit WAITWISE_DEBUG=1: JS im Wizard ausführen
-            if (process.env.WAITWISE_DEBUG === '1' && onboardingWin && !onboardingWin.isDestroyed() && body.js) {
+          case '/debug/onboard-js': // nur mit WAITDOJO_DEBUG=1: JS im Wizard ausführen
+            if (process.env.WAITDOJO_DEBUG === '1' && onboardingWin && !onboardingWin.isDestroyed() && body.js) {
               onboardingWin.webContents.executeJavaScript(String(body.js))
                 .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
                 .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
               return;
             }
             break;
-          case '/debug/create-deck': // nur mit WAITWISE_DEBUG=1: create-deck-Pfad testen
-            if (process.env.WAITWISE_DEBUG === '1') {
+          case '/debug/create-deck': // nur mit WAITDOJO_DEBUG=1: create-deck-Pfad testen
+            if (process.env.WAITDOJO_DEBUG === '1') {
               const r = createDeckFromPayload(body);
               res.writeHead(200, { 'content-type': 'application/json' });
               res.end(JSON.stringify(r));
               return;
             }
             break;
-          case '/debug/fill': // nur mit WAITWISE_DEBUG=1: Antworten setzen + prüfen
-            if (process.env.WAITWISE_DEBUG === '1' && popupWin && !popupWin.isDestroyed()) {
+          case '/debug/fill': // nur mit WAITDOJO_DEBUG=1: Antworten setzen + prüfen
+            if (process.env.WAITDOJO_DEBUG === '1' && popupWin && !popupWin.isDestroyed()) {
               popupWin.webContents.send('debug-fill', body.answers || []);
             }
             break;
-          case '/debug/finish': // nur mit WAITWISE_DEBUG=1: Fertig + schließen
-            if (process.env.WAITWISE_DEBUG === '1' && popupWin && !popupWin.isDestroyed()) {
+          case '/debug/finish': // nur mit WAITDOJO_DEBUG=1: Fertig + schließen
+            if (process.env.WAITDOJO_DEBUG === '1' && popupWin && !popupWin.isDestroyed()) {
               popupWin.webContents.send('debug-finish');
             }
             break;
@@ -956,7 +956,7 @@ function updateTrayTooltip() {
   const count = Number.isFinite(POPUPS_PER_DECK_PER_DAY)
     ? `${usedToday()}/${POPUPS_PER_DECK_PER_DAY}`
     : `${usedToday()}`;
-  tray.setToolTip(`WaitWise — ${count} today (${meta.title})`);
+  tray.setToolTip(`WaitDojo — ${count} today (${meta.title})`);
 }
 
 // Deck-Titel für Submenü (Dateiname als Fallback bei kaputtem/fehlendem Deck)
@@ -975,7 +975,7 @@ function switchDeck(index) {
   if (popupWin && !popupWin.isDestroyed()) popupWin.close(); // altes Quiz gehört zum alten Deck
   const err = loadDeck();
   if (err) {
-    dialog.showErrorBox('WaitWise — deck error', err);
+    dialog.showErrorBox('WaitDojo — deck error', err);
     usage.activeDeckIndex = 0;
     saveUsage();
     loadDeck();
@@ -1023,7 +1023,7 @@ function deleteDeckCore(index) {
 
   if (popupWin && !popupWin.isDestroyed()) popupWin.close();
   const err = loadDeck();
-  if (err) dialog.showErrorBox('WaitWise — deck error', err);
+  if (err) dialog.showErrorBox('WaitDojo — deck error', err);
   loadProgress();
   buildTrayMenu();
   updateTrayTooltip();
@@ -1097,7 +1097,7 @@ if (!gotLock) {
     loadUsage(); // vor loadDeck — activeDeckIndex steht in usage.json
     const deckError = loadDeck();
     if (deckError) {
-      dialog.showErrorBox('WaitWise — deck error', deckError);
+      dialog.showErrorBox('WaitDojo — deck error', deckError);
       app.quit();
       return;
     }

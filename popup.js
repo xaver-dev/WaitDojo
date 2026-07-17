@@ -174,7 +174,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') submitAndClose();
 });
 
-// Debug-Hooks (main sendet nur bei WAITWISE_DEBUG=1)
+// Debug-Hooks (main sendet nur bei WAITDOJO_DEBUG=1)
 ipcRenderer.on('debug-fill', (_e, answers) => {
   rowsEl.querySelectorAll('input').forEach((inp, i) => {
     if (answers[i] !== undefined) inp.value = answers[i];
