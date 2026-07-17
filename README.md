@@ -51,7 +51,11 @@ The hook script is fail-safe: if WaitDojo isn't running it exits silently in ~15
 
 ### Everything else: hotkey
 
-ChatGPT, Claude Desktop chat, Copilot and friends expose no "I'm busy" events. For those, press **`Ctrl+Alt+L`** whenever you find yourself waiting — popup appears instantly. Want a different combination? Decks & settings → Settings → click the hotkey field and press it.
+Claude Desktop chat, Copilot and friends expose no "I'm busy" events. For those, press **`Ctrl+Alt+L`** whenever you find yourself waiting — popup appears instantly. Want a different combination? Decks & settings → Settings → click the hotkey field and press it.
+
+### ChatGPT: experimental browser extension
+
+The [extension/](extension/) folder contains a Chrome extension (load unpacked, not on the Web Store yet) that watches chatgpt.com for the stop button and triggers popups automatically after ~30 s of generation — deep research and long thinking runs become quiz time. See [extension/README.md](extension/README.md).
 
 ## Using the popup
 
@@ -165,8 +169,8 @@ Only active when started with env `WAITDOJO_DEBUG=1`: `GET /debug/quiz`, `POST /
 
 ## Ideas / not built yet
 
-- Browser extension (MV3) for chatgpt.com / Codex: content script watches the stop button, pings `/start` + `/stop` (server-side CORS is already open).
-- Real spaced-repetition intervals.
+- Publish the ChatGPT extension on the Chrome Web Store.
+- Companion support for more sites (Codex, Gemini).
 
 ## License
 
