@@ -186,6 +186,16 @@ function loadProgress() {
   } catch {
     progress = {};
   }
+  // Migration von vor-SR-Daten: Einträge ohne due bekommen ein aus dem Streak
+  // abgeleitetes Intervall, damit alte Karten nicht alle auf einmal fällig werden.
+  for (const id of Object.keys(progress)) {
+    const s = progress[id];
+    if (s.lastSeen && s.due === undefined) {
+      s.ease = 2.5;
+      s.interval = s.streak >= 3 ? 6 : (s.streak >= 1 ? 1 : 0);
+      s.due = s.lastSeen + s.interval * DAY_MS;
+    }
+  }
 }
 
 function saveProgress() {
@@ -200,6 +210,24 @@ function statsFor(id) {
   return progress[id] || { correct: 0, wrong: 0, streak: 0, lastSeen: 0 };
 }
 
+// ---- Spaced Repetition (SM-2-lite)
+// Richtig: Intervall wächst 1 Tag -> 3 Tage -> Intervall*ease (ease 2.5, +0.05 je Treffer, max 2.8).
+// Falsch: ease sinkt (min 1.3), Intervall 0 -> Karte ist sofort wieder fällig.
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function schedule(s, correct) {
+  if (correct) {
+    s.ease = Math.min(2.8, (s.ease || 2.5) + 0.05);
+    if (!s.interval) s.interval = 1;
+    else if (s.interval === 1) s.interval = 3;
+    else s.interval = Math.min(365, Math.round(s.interval * s.ease));
+  } else {
+    s.ease = Math.max(1.3, (s.ease || 2.5) - 0.2);
+    s.interval = 0;
+  }
+  s.due = Date.now() + s.interval * DAY_MS;
+}
+
 // new: nie gesehen | good: streak >= 3 | problem: gesehen + schon falsch + streak < 3 | learning: Rest
 function statusOf(id) {
   const s = statsFor(id);
@@ -209,16 +237,21 @@ function statusOf(id) {
   return 'learning';
 }
 
-// Auswahl: 2 problem + 2 new + 1 good; Lücken auffüllen (problem/learning -> new -> good).
-// Innerhalb Pool: am längsten nicht gesehen zuerst.
+// Auswahl nach Fälligkeit: 3 fällige Wiederholungen + 2 neue Karten; Lücken auffüllen
+// (weitere fällige -> neue -> bald fällige). Fällige: am längsten überfällig zuerst.
 function pickWords(n) {
-  const pools = { problem: [], learning: [], new: [], good: [] };
-  for (const w of words) pools[statusOf(w.id)].push(w);
-  const byOldest = (a, b) => statsFor(a.id).lastSeen - statsFor(b.id).lastSeen;
-  pools.problem.sort(byOldest);
-  pools.learning.sort(byOldest);
-  pools.good.sort(byOldest);
-  shuffle(pools.new);
+  const now = Date.now();
+  const due = [], fresh = [], later = [];
+  for (const w of words) {
+    const s = statsFor(w.id);
+    if (!s.lastSeen) fresh.push(w);
+    else if ((s.due || 0) <= now) due.push(w);
+    else later.push(w);
+  }
+  const byDue = (a, b) => (statsFor(a.id).due || 0) - (statsFor(b.id).due || 0);
+  due.sort(byDue);
+  later.sort(byDue); // bald fällige zuerst, falls sonst nichts da ist
+  shuffle(fresh);
 
   const picked = [];
   const take = (pool, count) => {
@@ -227,11 +260,9 @@ function pickWords(n) {
       count--;
     }
   };
-  take(pools.problem, 2);
-  take(pools.new, 2);
-  take(pools.good, 1);
-  // Auffüllen bis n
-  for (const pool of [pools.problem, pools.learning, pools.new, pools.good]) {
+  take(due, 3);
+  take(fresh, 2);
+  for (const pool of [due, fresh, later]) {
     take(pool, n - picked.length);
   }
   shuffle(picked);
@@ -248,16 +279,18 @@ function shuffle(arr) {
 function applyResults(results) {
   const now = Date.now();
   for (const r of results) {
+    if (r.result === 'skipped') continue; // übersprungen zählt nicht als gesehen
     const s = statsFor(r.id);
     if (r.result === 'correct') {
       s.correct++;
       s.streak++;
-    } else if (r.result === 'wrong') {
+    } else {
       s.wrong++;
       s.streak = 0;
-    } // 'skipped': nur lastSeen aktualisieren? Nein — übersprungen zählt gar nicht als gesehen.
-    if (r.result !== 'skipped') s.lastSeen = now;
-    if (r.result !== 'skipped') progress[r.id] = s;
+    }
+    schedule(s, r.result === 'correct');
+    s.lastSeen = now;
+    progress[r.id] = s;
   }
   saveProgress();
 }

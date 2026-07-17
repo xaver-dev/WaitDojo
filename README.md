@@ -6,7 +6,7 @@ WaitDojo is a tiny Windows tray app: whenever a Claude Code tool call runs longe
 
 Ships with two sample decks (world capitals, science basics) so you can try it immediately, but works with **any topic** — physics, Spanish, history, anatomy. Generate your own deck in two minutes with any AI chatbot: see [DECK_PROMPT.md](DECK_PROMPT.md).
 
-The app remembers, per card, what you get right, what you struggle with, and what you haven't seen yet — and picks accordingly: each popup mixes problem cards, new cards, and the occasional review of a card you know.
+The app remembers every card and schedules it with spaced repetition: get a card right and it comes back after 1 day, then 3, then at growing intervals; miss it and it returns in the next popup. Each popup mixes due reviews with new cards, so you always see what's about to slip.
 
 <p align="center">
   <img src="docs/screenshots/popup-capitals.png" width="330" alt="Quiz popup with the world capitals deck (gold theme), hints, status badges and deck switcher pills">

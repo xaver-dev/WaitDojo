@@ -5,6 +5,15 @@ let filter = 'all';
 
 const order = { problem: 0, learning: 1, new: 2, good: 3 };
 
+// Wann ist die Karte wieder dran? (Spaced Repetition)
+function dueLabel(w) {
+  if (!w.lastSeen) return '–';
+  const diff = (w.due || 0) - Date.now();
+  if (diff <= 0) return 'now';
+  const days = Math.ceil(diff / (24 * 60 * 60 * 1000));
+  return days === 1 ? '1 day' : `${days} days`;
+}
+
 function render() {
   const counts = { new: 0, learning: 0, problem: 0, good: 0 };
   all.forEach((w) => counts[w.status]++);
@@ -28,6 +37,7 @@ function render() {
       <td>${w.correct}</td>
       <td>${w.wrong}</td>
       <td>${w.streak}</td>
+      <td>${dueLabel(w)}</td>
     </tr>
   `).join('');
 }
