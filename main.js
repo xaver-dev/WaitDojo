@@ -588,20 +588,37 @@ function autostartEnabled() {
 function applyAutostart(enabled) {
   usage.autostart = !!enabled;
   saveUsage();
+  if (process.platform === 'linux') {
+    // setLoginItemSettings tut auf Linux nichts — Freedesktop-Autostart-Datei stattdessen
+    const p = path.join(app.getPath('home'), '.config', 'autostart', 'waitdojo.desktop');
+    try {
+      if (enabled) {
+        fs.mkdirSync(path.dirname(p), { recursive: true });
+        const execLine = app.isPackaged ? `"${process.execPath}"` : `"${process.execPath}" "${APP_DIR}"`;
+        fs.writeFileSync(p, `[Desktop Entry]\nType=Application\nName=WaitDojo\nExec=${execLine}\nX-GNOME-Autostart-enabled=true\n`);
+      } else {
+        fs.rmSync(p, { force: true });
+      }
+    } catch (e) { console.error('Linux-Autostart fehlgeschlagen:', e.message); }
+    return;
+  }
   app.setLoginItemSettings({
     openAtLogin: !!enabled,
-    path: process.execPath, // electron.exe (bei ungepackter App)
-    args: [APP_DIR],
+    path: process.execPath, // electron.exe (dev) bzw. WaitDojo.exe (gepackt)
+    args: app.isPackaged ? [] : [APP_DIR],
   });
 }
 
 function createDesktopShortcut() {
+  if (process.platform !== 'win32') {
+    return { ok: false, error: 'Desktop shortcuts are only supported on Windows.' };
+  }
   const lnk = path.join(app.getPath('desktop'), 'WaitDojo.lnk');
   const iconIco = path.join(APP_DIR, 'assets', 'icon.ico');
   try {
     const ok = shell.writeShortcutLink(lnk, 'create', {
       target: process.execPath,
-      args: `"${APP_DIR}"`, // Pfad quoten (Leerzeichen)
+      args: app.isPackaged ? '' : `"${APP_DIR}"`, // Pfad quoten (Leerzeichen)
       cwd: APP_DIR,
       icon: fs.existsSync(iconIco) ? iconIco : process.execPath,
       iconIndex: 0,

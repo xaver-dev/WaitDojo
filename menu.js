@@ -284,6 +284,9 @@ $('saveBtn').addEventListener('click', async () => {
   refresh(false); // Werte neu laden (geclampte Zahlen)
 });
 
+// Desktop-Verknüpfung gibt es nur unter Windows
+if (process.platform !== 'win32') $('shortcutBtn').hidden = true;
+
 $('shortcutBtn').addEventListener('click', async () => {
   const r = await ipcRenderer.invoke('create-shortcut');
   if (r && r.ok) setMsg($('setMsg'), 'Desktop shortcut created.', 'ok');

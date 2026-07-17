@@ -143,6 +143,13 @@ $('createDeckBtn').addEventListener('click', async () => {
 });
 
 // ---- Step 4: Startup options
+// Desktop-Verknüpfung gibt es nur unter Windows
+if (process.platform !== 'win32') {
+  const label = $('optShortcut').closest('label');
+  if (label) label.hidden = true;
+  $('optShortcut').checked = false;
+}
+
 $('finishBtn').addEventListener('click', async () => {
   $('finishBtn').disabled = true;
   const res = await ipcRenderer.invoke('apply-startup', {

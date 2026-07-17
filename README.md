@@ -17,6 +17,8 @@ The app remembers every card and schedules it with spaced repetition: get a card
 
 Requires [Node.js](https://nodejs.org) (18+).
 
+Windows is the primary target. macOS and Linux should work (tray, popups, hotkey, autostart — via login items on macOS, a `.desktop` autostart file on Linux) but are less tested; the desktop shortcut option is Windows-only. Feedback welcome.
+
 ```
 git clone https://github.com/yoloswag179/WaitDojo.git
 cd WaitDojo
