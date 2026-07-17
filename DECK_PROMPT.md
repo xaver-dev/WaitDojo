@@ -36,6 +36,7 @@ JSON schema:
       "front": "<the question or term shown to the user — keep it SHORT, it must fit on one line>",
       "answers": ["<primary answer>", "<accepted synonym>", "<accepted abbreviation>"],
       "hint": "<optional short disambiguation hint in parentheses, omit if not needed>",
+      "extra": "<optional bonus shown next to the solution — a character, formula or short fact; omit if not needed>",
       "level": 1
     }
   ]
@@ -45,6 +46,7 @@ Rules:
 - "front" is what the user sees; "answers" is every string that counts as correct. Include common synonyms, abbreviations, and spelling variants — the app compares case-insensitively and ignores leading articles (der/die/das/ein/eine/the/a/an).
 - Answers should be 1–4 words. Never full sentences — the user types them into a small input field.
 - Add "hint" only when the front alone is ambiguous.
+- Add "extra" only when there is a natural bonus to reveal with the solution (the Chinese character for a Pinyin card, the formula behind a physics answer). It is shown after checking, never before.
 - "level": 1 for easier cards, 2 for harder ones. Mix both.
 - All ids must be unique.
 - Write meta.title, meta.instruction and meta.placeholder in {ANSWER LANGUAGE}.

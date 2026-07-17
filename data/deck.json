@@ -7,57 +7,471 @@
     "theme": "default"
   },
   "cards": [
-    { "id": "cap-france", "front": "France", "answers": ["Paris"], "level": 1 },
-    { "id": "cap-japan", "front": "Japan", "answers": ["Tokyo", "Tokio"], "level": 1 },
-    { "id": "cap-egypt", "front": "Egypt", "answers": ["Cairo"], "level": 1 },
-    { "id": "cap-mexico", "front": "Mexico", "answers": ["Mexico City", "Ciudad de Mexico"], "level": 1 },
-    { "id": "cap-spain", "front": "Spain", "answers": ["Madrid"], "level": 1 },
-    { "id": "cap-italy", "front": "Italy", "answers": ["Rome", "Roma"], "level": 1 },
-    { "id": "cap-greece", "front": "Greece", "answers": ["Athens", "Athen"], "level": 1 },
-    { "id": "cap-russia", "front": "Russia", "answers": ["Moscow", "Moskau"], "level": 1 },
-    { "id": "cap-china", "front": "China", "answers": ["Beijing", "Peking"], "level": 1 },
-    { "id": "cap-india", "front": "India", "answers": ["New Delhi", "Delhi"], "level": 1 },
-    { "id": "cap-argentina", "front": "Argentina", "answers": ["Buenos Aires"], "level": 1 },
-    { "id": "cap-portugal", "front": "Portugal", "answers": ["Lisbon", "Lisboa", "Lissabon"], "level": 1 },
-    { "id": "cap-poland", "front": "Poland", "answers": ["Warsaw", "Warschau", "Warszawa"], "level": 1 },
-    { "id": "cap-sweden", "front": "Sweden", "answers": ["Stockholm"], "level": 1 },
-    { "id": "cap-norway", "front": "Norway", "answers": ["Oslo"], "level": 1 },
-    { "id": "cap-ireland", "front": "Ireland", "answers": ["Dublin"], "level": 1 },
-    { "id": "cap-austria", "front": "Austria", "answers": ["Vienna", "Wien"], "level": 1 },
-    { "id": "cap-cuba", "front": "Cuba", "answers": ["Havana", "Havanna", "La Habana"], "level": 1 },
-    { "id": "cap-peru", "front": "Peru", "answers": ["Lima"], "level": 1 },
-    { "id": "cap-chile", "front": "Chile", "answers": ["Santiago", "Santiago de Chile"], "level": 1 },
-    { "id": "cap-thailand", "front": "Thailand", "answers": ["Bangkok"], "level": 1 },
-    { "id": "cap-indonesia", "front": "Indonesia", "answers": ["Jakarta"], "level": 1 },
-    { "id": "cap-kenya", "front": "Kenya", "answers": ["Nairobi"], "level": 1 },
-    { "id": "cap-czechia", "front": "Czechia", "answers": ["Prague", "Praha", "Prag"], "level": 1 },
-    { "id": "cap-hungary", "front": "Hungary", "answers": ["Budapest"], "level": 1 },
-    { "id": "cap-finland", "front": "Finland", "answers": ["Helsinki"], "level": 1 },
-    { "id": "cap-denmark", "front": "Denmark", "answers": ["Copenhagen", "Kopenhagen", "Koebenhavn"], "level": 1 },
-    { "id": "cap-usa", "front": "United States", "answers": ["Washington", "Washington DC", "Washington D.C."], "level": 1 },
-    { "id": "cap-uk", "front": "United Kingdom", "answers": ["London"], "level": 1 },
-    { "id": "cap-germany", "front": "Germany", "answers": ["Berlin"], "level": 1 },
-    { "id": "cap-australia", "front": "Australia", "hint": "not Sydney", "answers": ["Canberra"], "level": 2 },
-    { "id": "cap-canada", "front": "Canada", "hint": "not Toronto", "answers": ["Ottawa"], "level": 2 },
-    { "id": "cap-brazil", "front": "Brazil", "hint": "not Rio", "answers": ["Brasilia", "Brasília"], "level": 2 },
-    { "id": "cap-turkey", "front": "Turkey", "hint": "not Istanbul", "answers": ["Ankara"], "level": 2 },
-    { "id": "cap-switzerland", "front": "Switzerland", "hint": "not Zurich", "answers": ["Bern", "Berne"], "level": 2 },
-    { "id": "cap-newzealand", "front": "New Zealand", "hint": "not Auckland", "answers": ["Wellington"], "level": 2 },
-    { "id": "cap-nigeria", "front": "Nigeria", "hint": "not Lagos", "answers": ["Abuja"], "level": 2 },
-    { "id": "cap-morocco", "front": "Morocco", "hint": "not Casablanca", "answers": ["Rabat"], "level": 2 },
-    { "id": "cap-vietnam", "front": "Vietnam", "hint": "not Ho Chi Minh City", "answers": ["Hanoi", "Ha Noi"], "level": 2 },
-    { "id": "cap-pakistan", "front": "Pakistan", "hint": "not Karachi", "answers": ["Islamabad"], "level": 2 },
-    { "id": "cap-uae", "front": "United Arab Emirates", "hint": "not Dubai", "answers": ["Abu Dhabi"], "level": 2 },
-    { "id": "cap-myanmar", "front": "Myanmar", "answers": ["Naypyidaw", "Nay Pyi Taw"], "level": 2 },
-    { "id": "cap-kazakhstan", "front": "Kazakhstan", "answers": ["Astana"], "level": 2 },
-    { "id": "cap-ethiopia", "front": "Ethiopia", "answers": ["Addis Ababa"], "level": 2 },
-    { "id": "cap-colombia", "front": "Colombia", "answers": ["Bogota", "Bogotá"], "level": 2 },
-    { "id": "cap-philippines", "front": "Philippines", "answers": ["Manila"], "level": 2 },
-    { "id": "cap-saudi", "front": "Saudi Arabia", "answers": ["Riyadh", "Riad"], "level": 2 },
-    { "id": "cap-ukraine", "front": "Ukraine", "answers": ["Kyiv", "Kiev"], "level": 2 },
-    { "id": "cap-croatia", "front": "Croatia", "answers": ["Zagreb"], "level": 2 },
-    { "id": "cap-netherlands", "front": "Netherlands", "hint": "the constitutional capital", "answers": ["Amsterdam"], "level": 2 },
-    { "id": "cap-bolivia", "front": "Bolivia", "hint": "either of its two capitals", "answers": ["Sucre", "La Paz"], "level": 2 },
-    { "id": "cap-southafrica", "front": "South Africa", "hint": "any of its three capitals", "answers": ["Pretoria", "Cape Town", "Bloemfontein"], "level": 2 }
+    {
+      "id": "cap-france",
+      "front": "France",
+      "answers": [
+        "Paris"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-japan",
+      "front": "Japan",
+      "answers": [
+        "Tokyo",
+        "Tokio"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-egypt",
+      "front": "Egypt",
+      "answers": [
+        "Cairo"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-mexico",
+      "front": "Mexico",
+      "answers": [
+        "Mexico City",
+        "Ciudad de Mexico"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-spain",
+      "front": "Spain",
+      "answers": [
+        "Madrid"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-italy",
+      "front": "Italy",
+      "answers": [
+        "Rome",
+        "Roma"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-greece",
+      "front": "Greece",
+      "answers": [
+        "Athens",
+        "Athen"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-russia",
+      "front": "Russia",
+      "answers": [
+        "Moscow",
+        "Moskau"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-china",
+      "front": "China",
+      "answers": [
+        "Beijing",
+        "Peking"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-india",
+      "front": "India",
+      "answers": [
+        "New Delhi",
+        "Delhi"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-argentina",
+      "front": "Argentina",
+      "answers": [
+        "Buenos Aires"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-portugal",
+      "front": "Portugal",
+      "answers": [
+        "Lisbon",
+        "Lisboa",
+        "Lissabon"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-poland",
+      "front": "Poland",
+      "answers": [
+        "Warsaw",
+        "Warschau",
+        "Warszawa"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-sweden",
+      "front": "Sweden",
+      "answers": [
+        "Stockholm"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-norway",
+      "front": "Norway",
+      "answers": [
+        "Oslo"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-ireland",
+      "front": "Ireland",
+      "answers": [
+        "Dublin"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-austria",
+      "front": "Austria",
+      "answers": [
+        "Vienna",
+        "Wien"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-cuba",
+      "front": "Cuba",
+      "answers": [
+        "Havana",
+        "Havanna",
+        "La Habana"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-peru",
+      "front": "Peru",
+      "answers": [
+        "Lima"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-chile",
+      "front": "Chile",
+      "answers": [
+        "Santiago",
+        "Santiago de Chile"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-thailand",
+      "front": "Thailand",
+      "answers": [
+        "Bangkok"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-indonesia",
+      "front": "Indonesia",
+      "answers": [
+        "Jakarta"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-kenya",
+      "front": "Kenya",
+      "answers": [
+        "Nairobi"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-czechia",
+      "front": "Czechia",
+      "answers": [
+        "Prague",
+        "Praha",
+        "Prag"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-hungary",
+      "front": "Hungary",
+      "answers": [
+        "Budapest"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-finland",
+      "front": "Finland",
+      "answers": [
+        "Helsinki"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-denmark",
+      "front": "Denmark",
+      "answers": [
+        "Copenhagen",
+        "Kopenhagen",
+        "Koebenhavn"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-usa",
+      "front": "United States",
+      "answers": [
+        "Washington",
+        "Washington DC",
+        "Washington D.C."
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-uk",
+      "front": "United Kingdom",
+      "answers": [
+        "London"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-germany",
+      "front": "Germany",
+      "answers": [
+        "Berlin"
+      ],
+      "level": 1
+    },
+    {
+      "id": "cap-australia",
+      "front": "Australia",
+      "hint": "not Sydney",
+      "answers": [
+        "Canberra"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-canada",
+      "front": "Canada",
+      "hint": "not Toronto",
+      "answers": [
+        "Ottawa"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-brazil",
+      "front": "Brazil",
+      "hint": "not Rio",
+      "answers": [
+        "Brasilia",
+        "Brasília"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-turkey",
+      "front": "Turkey",
+      "hint": "not Istanbul",
+      "answers": [
+        "Ankara"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-switzerland",
+      "front": "Switzerland",
+      "hint": "not Zurich",
+      "answers": [
+        "Bern",
+        "Berne"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-newzealand",
+      "front": "New Zealand",
+      "hint": "not Auckland",
+      "answers": [
+        "Wellington"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-nigeria",
+      "front": "Nigeria",
+      "hint": "not Lagos",
+      "answers": [
+        "Abuja"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-morocco",
+      "front": "Morocco",
+      "hint": "not Casablanca",
+      "answers": [
+        "Rabat"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-vietnam",
+      "front": "Vietnam",
+      "hint": "not Ho Chi Minh City",
+      "answers": [
+        "Hanoi",
+        "Ha Noi"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-pakistan",
+      "front": "Pakistan",
+      "hint": "not Karachi",
+      "answers": [
+        "Islamabad"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-uae",
+      "front": "United Arab Emirates",
+      "hint": "not Dubai",
+      "answers": [
+        "Abu Dhabi"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-myanmar",
+      "front": "Myanmar",
+      "answers": [
+        "Naypyidaw",
+        "Nay Pyi Taw"
+      ],
+      "level": 2,
+      "extra": "purpose-built, replaced Yangon in 2005"
+    },
+    {
+      "id": "cap-kazakhstan",
+      "front": "Kazakhstan",
+      "answers": [
+        "Astana"
+      ],
+      "level": 2,
+      "extra": "was Astana, then Nur-Sultan, now Astana again"
+    },
+    {
+      "id": "cap-ethiopia",
+      "front": "Ethiopia",
+      "answers": [
+        "Addis Ababa"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-colombia",
+      "front": "Colombia",
+      "answers": [
+        "Bogota",
+        "Bogotá"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-philippines",
+      "front": "Philippines",
+      "answers": [
+        "Manila"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-saudi",
+      "front": "Saudi Arabia",
+      "answers": [
+        "Riyadh",
+        "Riad"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-ukraine",
+      "front": "Ukraine",
+      "answers": [
+        "Kyiv",
+        "Kiev"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-croatia",
+      "front": "Croatia",
+      "answers": [
+        "Zagreb"
+      ],
+      "level": 2
+    },
+    {
+      "id": "cap-netherlands",
+      "front": "Netherlands",
+      "hint": "the constitutional capital",
+      "answers": [
+        "Amsterdam"
+      ],
+      "level": 2,
+      "extra": "government sits in The Hague"
+    },
+    {
+      "id": "cap-bolivia",
+      "front": "Bolivia",
+      "hint": "either of its two capitals",
+      "answers": [
+        "Sucre",
+        "La Paz"
+      ],
+      "level": 2,
+      "extra": "Sucre = constitutional, La Paz = government"
+    },
+    {
+      "id": "cap-southafrica",
+      "front": "South Africa",
+      "hint": "any of its three capitals",
+      "answers": [
+        "Pretoria",
+        "Cape Town",
+        "Bloemfontein"
+      ],
+      "level": 2,
+      "extra": "Pretoria + Cape Town + Bloemfontein"
+    }
   ]
 }

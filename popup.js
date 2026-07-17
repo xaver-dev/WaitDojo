@@ -114,19 +114,23 @@ function check() {
     const val = inp.value;
     inp.readOnly = true;
 
+    // Kartenrückseite: optionales extra (Schriftzeichen, Formel, Zusatzinfo) neben der Lösung
+    const extra = w.extra ? `<span class="extraTag">${w.extra}</span>` : '';
+
     let result;
     if (!val.trim()) {
       result = 'skipped';
       row.classList.add('skipped');
-      sol.innerHTML = `${meta.ui.solution}: <b>${w.answers[0]}</b>`;
+      sol.innerHTML = `<span class="left">${meta.ui.solution}: <b>${w.answers[0]}</b>${extra}</span>`;
       sol.hidden = false;
     } else if (isCorrect(val, w.answers)) {
       result = 'correct';
       row.classList.add('correct');
+      if (extra) { sol.innerHTML = `<span class="left">${extra}</span>`; sol.hidden = false; }
     } else {
       result = 'wrong';
       row.classList.add('wrong');
-      sol.innerHTML = `${meta.ui.solution}: <b>${w.answers.join(' / ')}</b>
+      sol.innerHTML = `<span class="left">${meta.ui.solution}: <b>${w.answers.join(' / ')}</b>${extra}</span>
         <button class="override" data-i="${i}">${meta.ui.wasRight}</button>`;
       sol.hidden = false;
     }

@@ -117,6 +117,7 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 
 - `front` — what you see. `answers` — every accepted answer (case-insensitive, leading articles der/die/das/ein/eine/the/a/an ignored).
 - `hint` — optional disambiguation shown in grey. `level` — 1 or 2, shown in statistics.
+- `extra` — optional back side of the card, revealed next to the solution after checking (e.g. the Chinese character for a Pinyin card, or the formula behind an answer).
 - `meta.theme` — optional popup style preset: `default`, `chinese` (red & gold frame), `nature`, `medical`, `minimal`.
 - `meta.accent` — optional hex color overriding the preset's accent.
 - `meta.ui` — optional button-label translations, see [DECK_PROMPT.md](DECK_PROMPT.md).
@@ -154,7 +155,6 @@ Only active when started with env `WAITDOJO_DEBUG=1`: `GET /debug/quiz`, `POST /
 ## Ideas / not built yet
 
 - Browser extension (MV3) for chatgpt.com / Codex: content script watches the stop button, pings `/start` + `/stop` (server-side CORS is already open).
-- Two-sided cards: show something extra on the solution (the `extra` field is already carried through — e.g. Chinese characters next to Pinyin).
 - Real spaced-repetition intervals.
 
 ## License
