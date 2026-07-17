@@ -15,9 +15,16 @@ The app remembers every card and schedules it with spaced repetition: get a card
 
 ## Install
 
-Requires [Node.js](https://nodejs.org) (18+).
+### Option A — download (Windows, nothing to install)
 
-Windows is the primary target. macOS and Linux should work (tray, popups, hotkey, autostart — via login items on macOS, a `.desktop` autostart file on Linux) but are less tested; the desktop shortcut option is Windows-only. Feedback welcome.
+1. Grab `WaitDojo-<version>-win.zip` from [Releases](https://github.com/yoloswag179/WaitDojo/releases).
+2. Extract it anywhere you like (Documents, D:\Tools, …) and run `WaitDojo.exe`.
+
+For automatic popups with Claude Code: tray menu → **Claude Code hooks** → **Install / repair** (the hooks run a tiny Node script, so [Node.js](https://nodejs.org) must be on your PATH — without it, the global hotkey still works).
+
+### Option B — from source (all platforms)
+
+Requires [Node.js](https://nodejs.org) (18+).
 
 ```
 git clone https://github.com/yoloswag179/WaitDojo.git
@@ -25,6 +32,8 @@ cd WaitDojo
 npm install
 npm start
 ```
+
+Windows is the primary target. macOS and Linux should work (tray, popups, hotkey, autostart — via login items on macOS, a `.desktop` autostart file on Linux) but are less tested; the desktop shortcut option is Windows-only. Feedback welcome.
 
 On the **first start** a short setup wizard opens: either pick one of the sample decks, or describe your own topic (e.g. "Physics, beginner"). For a custom topic the wizard builds a ready-to-paste prompt, you drop it into any AI chatbot, paste the JSON answer back, and your deck is created — no API key, nothing to configure. Its last step asks whether to **start with Windows**, add a **desktop shortcut**, and how often popups may appear. You can reopen the wizard any time via tray → **New deck / setup…**.
 

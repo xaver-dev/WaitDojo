@@ -5,12 +5,37 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dist": "electron-builder --win zip",
     "install-hooks": "node scripts/install-hooks.js",
     "uninstall-hooks": "node scripts/install-hooks.js --remove"
   },
   "author": "xaver",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^37.2.0"
+    "electron": "^37.2.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.yoloswag179.waitdojo",
+    "productName": "WaitDojo",
+    "asar": false,
+    "files": [
+      "**/*",
+      "!docs/**",
+      "!dist/**",
+      "!.github/**",
+      "!extension/**",
+      "!config.json",
+      "!data/.trash/**",
+      "!data/*.json",
+      "data/deck.json",
+      "data/deck-science.json"
+    ],
+    "win": {
+      "target": [
+        "zip"
+      ],
+      "icon": "assets/icon.ico"
+    }
   }
 }

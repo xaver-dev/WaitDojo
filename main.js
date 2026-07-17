@@ -2,6 +2,8 @@ const { app, BrowserWindow, Tray, Menu, ipcMain, globalShortcut, screen, nativeI
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { spawnSync } = require('child_process');
+const { installHooks } = require('./scripts/install-hooks.js');
 
 // ---------------------------------------------------------------- Config
 
@@ -1099,6 +1101,35 @@ function confirmDeleteDeck(index) {
   }
 }
 
+// Claude-Code-Hooks aus der App heraus installieren/entfernen (gepackte User haben kein npm).
+// Die Hooks rufen `node hook/notify.js` auf — ohne Node auf dem PATH können sie nicht laufen.
+function hooksAction(remove) {
+  if (!remove) {
+    const probe = spawnSync('node', ['-v'], { shell: true });
+    if (probe.error || probe.status !== 0) {
+      dialog.showMessageBoxSync({
+        type: 'warning',
+        title: 'WaitDojo — Claude Code hooks',
+        message: 'Node.js not found on PATH',
+        detail: 'The hooks run a tiny Node script. Install Node.js from nodejs.org and try again — or skip hooks and use the global hotkey instead.',
+      });
+      return;
+    }
+  }
+  const r = installHooks({ remove });
+  if (!r.ok) { dialog.showErrorBox('WaitDojo — Claude Code hooks', r.error); return; }
+  dialog.showMessageBoxSync({
+    type: 'info',
+    title: 'WaitDojo — Claude Code hooks',
+    message: remove
+      ? (r.changed ? 'Hooks removed.' : 'No hooks were installed.')
+      : (r.changed ? 'Hooks installed.' : 'Hooks are already installed.'),
+    detail: r.changed
+      ? `Written to ${r.settingsPath} (backup: settings.json.bak). Takes effect in new Claude Code sessions.`
+      : '',
+  });
+}
+
 function buildTrayMenu() {
   const list = deckList();
   const deckItems = list.map((p, i) => ({
@@ -1119,6 +1150,13 @@ function buildTrayMenu() {
     ...(list.length > 1 ? [{ label: 'Switch deck', submenu: deckItems }] : []),
     { label: 'New deck / setup…', click: () => showOnboarding() },
     ...(list.length > 1 ? [{ label: 'Delete deck', submenu: deleteItems }] : []),
+    {
+      label: 'Claude Code hooks',
+      submenu: [
+        { label: 'Install / repair', click: () => hooksAction(false) },
+        { label: 'Remove', click: () => hooksAction(true) },
+      ],
+    },
     {
       label: 'Pause 1 hour',
       click: () => { pausedUntil = Date.now() + 60 * 60 * 1000; },

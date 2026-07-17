@@ -1,4 +1,5 @@
 node_modules/
+dist/
 *.log
 
 # Personal, stays on your machine — never published.
