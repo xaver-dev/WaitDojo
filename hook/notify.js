@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Claude-Code-Hook: liest Hook-JSON von stdin, pingt WaitWords auf localhost.
+// Claude-Code-Hook: liest Hook-JSON von stdin, pingt WaitWise auf localhost.
 // Muss IMMER schnell und leise enden — darf Claude Code nie blockieren.
 // Aufruf: node notify.js start|stop|reset
 

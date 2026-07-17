@@ -1,5 +1,5 @@
 {
-  "name": "waitwords",
+  "name": "waitwise",
   "version": "1.0.0",
   "description": "Turn AI waiting time into learning time — quiz popups on any topic while long tool calls run",
   "main": "main.js",

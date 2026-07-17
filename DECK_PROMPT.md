@@ -1,14 +1,14 @@
 # Create Your Own Deck
 
-WaitWords quizzes you on whatever is in `data/deck.json`. To build a deck for **your** topic (physics, Spanish vocabulary, history dates, medical terms, …), paste the prompt below into any AI chatbot (Claude, ChatGPT, Gemini, …), fill in the placeholders, and save the JSON it returns.
+WaitWise quizzes you on whatever is in `data/deck.json`. To build a deck for **your** topic (physics, Spanish vocabulary, history dates, medical terms, …), paste the prompt below into any AI chatbot (Claude, ChatGPT, Gemini, …), fill in the placeholders, and save the JSON it returns.
 
 ## How to use
 
 1. Copy the prompt template below.
 2. Replace `{TOPIC}`, `{NUMBER}`, `{ANSWER LANGUAGE}`, and `{DIFFICULTY}`.
 3. Paste it into your favorite AI chatbot.
-4. Save the JSON response as `data/deck.json` in the WaitWords folder (replace the example deck, or save under a different name and add it to the `decks` list in `config.json`).
-5. Restart WaitWords. If the file has a problem, the app shows an error dialog telling you what to fix. With multiple decks, switch via tray menu → "Switch deck".
+4. Save the JSON response as `data/deck.json` in the WaitWise folder (replace the example deck, or save under a different name and add it to the `decks` list in `config.json`).
+5. Restart WaitWise. If the file has a problem, the app shows an error dialog telling you what to fix. With multiple decks, switch via tray menu → "Switch deck".
 
 Your learning progress is stored separately per deck (keyed by `meta.id`), so switching decks never loses progress.
 

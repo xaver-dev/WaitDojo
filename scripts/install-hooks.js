@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Installs (or removes) the WaitWords hooks in ~/.claude/settings.json.
+// Installs (or removes) the WaitWise hooks in ~/.claude/settings.json.
 // Idempotent: running it twice never duplicates entries.
 //   node scripts/install-hooks.js            -> install
 //   node scripts/install-hooks.js --remove   -> uninstall
@@ -10,7 +10,7 @@ const path = require('path');
 
 const REMOVE = process.argv.includes('--remove');
 const NOTIFY = path.resolve(__dirname, '..', 'hook', 'notify.js');
-const MARKER = 'notify.js'; // erkennt WaitWords-Einträge unabhängig vom Installationspfad
+const MARKER = 'notify.js'; // erkennt WaitWise-Einträge unabhängig vom Installationspfad
 
 const claudeDir = path.join(os.homedir(), '.claude');
 const settingsPath = path.join(claudeDir, 'settings.json');
@@ -37,14 +37,14 @@ const wanted = {
   Stop: { hooks: [{ type: 'command', command: cmd('reset') }] },
 };
 
-const isWaitWordsEntry = (entry) =>
+const isWaitWiseEntry = (entry) =>
   (entry.hooks || []).some((h) => typeof h.command === 'string' && h.command.toLowerCase().includes(MARKER));
 
 let changed = false;
 
 for (const event of Object.keys(wanted)) {
   const list = Array.isArray(settings.hooks[event]) ? settings.hooks[event] : [];
-  const withoutOurs = list.filter((e) => !isWaitWordsEntry(e));
+  const withoutOurs = list.filter((e) => !isWaitWiseEntry(e));
   const hadOurs = withoutOurs.length !== list.length;
 
   if (REMOVE) {
@@ -56,7 +56,7 @@ for (const event of Object.keys(wanted)) {
     }
   } else {
     if (hadOurs) {
-      const ours = list.filter(isWaitWordsEntry);
+      const ours = list.filter(isWaitWiseEntry);
       if (ours.length === 1 && JSON.stringify(ours[0]) === JSON.stringify(wanted[event])) {
         continue; // schon exakt so installiert
       }

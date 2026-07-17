@@ -1,6 +1,6 @@
-# WaitWords
+# WaitWise
 
-Turn AI waiting time into learning time. WaitWords is a tiny Windows tray app: whenever a Claude Code tool call runs longer than 60 seconds, a small always-on-top popup appears in the corner with 5 quiz cards. Answer them while you wait, close it, get back to work.
+Turn AI waiting time into learning time. WaitWise is a tiny Windows tray app: whenever a Claude Code tool call runs longer than 60 seconds, a small always-on-top popup appears in the corner with 5 quiz cards. Answer them while you wait, close it, get back to work.
 
 Ships with two sample decks (world capitals, science basics) so you can try it immediately, but works with **any topic** — physics, Spanish, history, anatomy. Generate your own deck in two minutes with any AI chatbot: see [DECK_PROMPT.md](DECK_PROMPT.md).
 
@@ -16,8 +16,8 @@ The app remembers, per card, what you get right, what you struggle with, and wha
 Requires [Node.js](https://nodejs.org) (18+).
 
 ```
-git clone https://github.com/YOUR_USERNAME/WaitWords.git
-cd WaitWords
+git clone https://github.com/yoloswag179/WaitWise.git
+cd WaitWise
 npm install
 npm start
 ```
@@ -34,7 +34,7 @@ npm run install-hooks
 
 This adds three hooks to `~/.claude/settings.json` (backup written to `settings.json.bak`; `npm run uninstall-hooks` removes them). Hooks take effect in **new** Claude Code sessions. From then on: any tool call (build, long search, subagent, …) that runs 60+ seconds triggers the popup.
 
-The hook script is fail-safe: if WaitWords isn't running it exits silently in ~150 ms and never blocks Claude Code.
+The hook script is fail-safe: if WaitWise isn't running it exits silently in ~150 ms and never blocks Claude Code.
 
 ### Everything else: hotkey
 
@@ -64,7 +64,7 @@ Click ⚙ in any popup (or tray menu → **Decks & settings…**) to open the ma
 
 ## Free limits
 
-WaitWords is free and open source. To keep the door open for an optional premium version later (if this project takes off), the free version has two limits from day one — no surprises down the road:
+WaitWise is free and open source. To keep the door open for an optional premium version later (if this project takes off), the free version has two limits from day one — no surprises down the road:
 
 - **5 quiz popups per deck per day** (counter resets at midnight)
 - **2 active decks** (additional configured decks appear greyed out)
@@ -89,11 +89,11 @@ Prefer doing it by hand?
 1. Open [DECK_PROMPT.md](DECK_PROMPT.md), copy the prompt template.
 2. Fill in topic, card count, answer language, difficulty. Paste into Claude/ChatGPT/etc.
 3. Save the returned JSON as `data/deck.json` — or as a new file added to the `decks` list in `config.json`.
-4. Restart WaitWords. With multiple decks, switch via tray menu → "Switch deck".
+4. Restart WaitWise. With multiple decks, switch via tray menu → "Switch deck".
 
 Switch or remove decks from the tray: **Switch deck** and **Delete deck**. Deleting asks for confirmation and moves the deck file to `data/.trash/` (recoverable) rather than erasing it. The free version keeps up to 2 active decks — delete one to make room for another.
 
-Invalid deck files produce a clear error dialog on startup instead of a crash. Learning progress is stored per deck (`%APPDATA%\waitwords\progress-<deck-id>.json`), so switching decks keeps every deck's progress.
+Invalid deck files produce a clear error dialog on startup instead of a crash. Learning progress is stored per deck (`%APPDATA%\waitwise\progress-<deck-id>.json`), so switching decks keeps every deck's progress.
 
 ### Deck format
 
@@ -147,7 +147,7 @@ A tool running 60 s without its stop event → popup. That's the whole trick.
 
 ## Debug endpoints
 
-Only active when started with env `WAITWORDS_DEBUG=1`: `GET /debug/quiz`, `POST /debug/fill {"answers":[…]}`, `POST /debug/finish`, `POST /shot {"path":"out.png"}` (popup screenshot). Off in normal operation.
+Only active when started with env `WAITWISE_DEBUG=1`: `GET /debug/quiz`, `POST /debug/fill {"answers":[…]}`, `POST /debug/finish`, `POST /shot {"path":"out.png"}` (popup screenshot). Off in normal operation.
 
 ## Ideas / not built yet
 
