@@ -130,6 +130,11 @@
   .pill.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); cursor: default; }
 
   footer { display: flex; gap: 8px; align-items: center; -webkit-app-region: no-drag; }
+  #laterBtn {
+    background: none; border: 1px solid var(--row-border); color: var(--muted);
+    border-radius: 10px; padding: 9px 12px; font-size: 12px; cursor: pointer; white-space: nowrap;
+  }
+  #laterBtn:hover { border-color: var(--accent); color: var(--text); }
   #mainBtn {
     flex: 1;
     background: var(--accent); color: var(--accent-ink); border: none;
@@ -157,6 +162,7 @@
       <div id="deckPills"></div>
     </div>
     <footer>
+      <button id="laterBtn"></button>
       <span id="summary"></span>
       <button id="mainBtn"></button>
     </footer>

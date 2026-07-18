@@ -19,10 +19,36 @@ function normalize(s) {
     .replace(/^(der|die|das|ein|eine|the|a|an) /, '');
 }
 
-function isCorrect(input, accepted) {
+// Editierdistanz mit frühem Abbruch — für Tippfehler-Toleranz reicht max=1
+function editDistance(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  const dp = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+  }
+  return dp[a.length][b.length];
+}
+
+// Exakter Treffer -> correct. 1 Buchstabe daneben (erst ab 5 Zeichen, sonst
+// wären N/M oder 42/43 "fast richtig") -> almost, zählt trotzdem als richtig.
+function matchAnswer(input, accepted) {
   const n = normalize(input);
-  if (!n) return false;
-  return accepted.some((a) => normalize(a) === n);
+  if (!n) return null;
+  for (const a of accepted) {
+    if (normalize(a) === n) return { kind: 'correct', answer: a };
+  }
+  for (const a of accepted) {
+    const na = normalize(a);
+    if (na.length >= 5 && editDistance(n, na, 1) <= 1) return { kind: 'almost', answer: a };
+  }
+  return null;
 }
 
 function applyTheme(m) {
@@ -66,6 +92,7 @@ async function init() {
   document.getElementById('title').textContent = meta.title;
   document.getElementById('instruction').textContent = meta.instruction;
   mainBtn.textContent = meta.ui.check;
+  document.getElementById('laterBtn').textContent = meta.ui.later;
   renderStatus(payload);
 
   const u = payload.usage;
@@ -118,16 +145,25 @@ function check() {
     // Kartenrückseite: optionales extra (Schriftzeichen, Formel, Zusatzinfo) neben der Lösung
     const extra = w.extra ? `<span class="extraTag">${w.extra}</span>` : '';
 
+    const m = val.trim() ? matchAnswer(val, w.answers) : null;
+
     let result;
     if (!val.trim()) {
       result = 'skipped';
       row.classList.add('skipped');
       sol.innerHTML = `<span class="left">${meta.ui.solution}: <b>${w.answers[0]}</b>${extra}</span>`;
       sol.hidden = false;
-    } else if (isCorrect(val, w.answers)) {
+    } else if (m) {
       result = 'correct';
       row.classList.add('correct');
-      if (extra) { sol.innerHTML = `<span class="left">${extra}</span>`; sol.hidden = false; }
+      if (m.kind === 'almost') {
+        // Tippfehler: zählt als richtig, aber korrekte Schreibweise zeigen
+        sol.innerHTML = `<span class="left">${meta.ui.almost} <b>${m.answer}</b>${extra}</span>`;
+        sol.hidden = false;
+      } else if (extra) {
+        sol.innerHTML = `<span class="left">${extra}</span>`;
+        sol.hidden = false;
+      }
     } else {
       result = 'wrong';
       row.classList.add('wrong');
@@ -152,6 +188,8 @@ function check() {
 
   updateSummary();
   mainBtn.textContent = meta.ui.done;
+  // Nach dem Check ist Zurücklegen sinnlos — Ergebnisse stehen fest
+  document.getElementById('laterBtn').hidden = true;
 }
 
 function updateSummary() {
@@ -175,6 +213,7 @@ mainBtn.addEventListener('click', () => {
 
 document.getElementById('closeBtn').addEventListener('click', submitAndClose);
 document.getElementById('menuBtn').addEventListener('click', () => ipcRenderer.send('open-menu'));
+document.getElementById('laterBtn').addEventListener('click', () => ipcRenderer.send('snooze-popup'));
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') submitAndClose();
 });

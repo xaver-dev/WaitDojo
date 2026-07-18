@@ -105,6 +105,8 @@ const uiDefaults = {
   wasRight: 'I was right ✓',
   correct: 'correct',
   allSkipped: 'all skipped',
+  almost: 'Almost right — spelling:',
+  later: 'Later',
 };
 
 let meta = { ...metaDefaults, ui: { ...uiDefaults } };
@@ -322,6 +324,8 @@ function showPopup(force = false) {
   usage.byDeck[meta.id] = usedToday() + 1;
   saveUsage();
   updateTrayTooltip();
+  // Ein wie auch immer ausgelöstes Popup erledigt einen offenen Snooze
+  if (snoozeTimer) { clearTimeout(snoozeTimer); snoozeTimer = null; }
 
   const { workArea } = screen.getPrimaryDisplay();
   const sizes = { small: { w: 340, h: 480 }, default: { w: 380, h: 560 }, large: { w: 440, h: 660 } };
@@ -651,6 +655,23 @@ ipcMain.on('close-popup', () => {
   if (popupWin && !popupWin.isDestroyed()) popupWin.close();
 });
 
+// „Später": Popup zurücklegen — Tageszähler zurückerstatten, in SNOOZE_MINUTES erneut
+const SNOOZE_MINUTES = 10;
+let snoozeTimer = null;
+
+ipcMain.on('snooze-popup', () => {
+  rolloverUsage();
+  if (usage.byDeck[meta.id] > 0) usage.byDeck[meta.id]--;
+  saveUsage();
+  updateTrayTooltip();
+  if (popupWin && !popupWin.isDestroyed()) popupWin.close();
+  clearTimeout(snoozeTimer);
+  snoozeTimer = setTimeout(() => {
+    snoozeTimer = null;
+    showPopup(); // respektiert Pause + Cooldown — kein Zwangs-Popup
+  }, SNOOZE_MINUTES * 60 * 1000);
+});
+
 // ---- Hauptmenü (menu.html): Deck-Verwaltung + Einstellungen
 
 ipcMain.on('open-menu', () => showMenu());
@@ -939,6 +960,14 @@ function startServer() {
               return;
             }
             break;
+          case '/debug/popup-js': // nur mit WAITDOJO_DEBUG=1: JS im Popup ausführen
+            if (process.env.WAITDOJO_DEBUG === '1' && popupWin && !popupWin.isDestroyed() && body.js) {
+              popupWin.webContents.executeJavaScript(String(body.js))
+                .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
+                .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
+              return;
+            }
+            break;
           case '/debug/delete-deck': // nur mit WAITDOJO_DEBUG=1: deleteDeckCore testen
             if (process.env.WAITDOJO_DEBUG === '1') {
               const r = deleteDeckCore(Number(body.index));
@@ -995,6 +1024,37 @@ function startServer() {
   });
   server.listen(config.port, '127.0.0.1');
   server.on('error', (e) => console.error('HTTP-Server-Fehler:', e.message));
+}
+
+// ---------------------------------------------------------------- Update-Check
+
+// Stiller Check gegen die GitHub-Releases-API; bei neuerer Version Tray-Eintrag.
+// Kein Release / offline / rate limit -> einfach nichts tun.
+let updateInfo = null; // { version, url }
+
+function versionNewer(a, b) {
+  const pa = String(a).split('.').map(Number);
+  const pb = String(b).split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d !== 0) return d > 0;
+  }
+  return false;
+}
+
+async function checkForUpdate() {
+  try {
+    const res = await fetch('https://api.github.com/repos/yoloswag179/WaitDojo/releases/latest', {
+      headers: { accept: 'application/vnd.github+json' },
+    });
+    if (!res.ok) return;
+    const rel = await res.json();
+    const latest = String(rel.tag_name || '').replace(/^v/, '');
+    if (latest && versionNewer(latest, app.getVersion())) {
+      updateInfo = { version: latest, url: rel.html_url };
+      buildTrayMenu();
+    }
+  } catch {}
 }
 
 // ---------------------------------------------------------------- Tray
@@ -1164,6 +1224,10 @@ function buildTrayMenu() {
       click: () => { pausedUntil = Date.now() + 60 * 60 * 1000; },
     },
     { type: 'separator' },
+    ...(updateInfo ? [{
+      label: `Update available: v${updateInfo.version}`,
+      click: () => shell.openExternal(updateInfo.url),
+    }] : []),
     { label: 'Support this project ♥', click: () => shell.openExternal(SUPPORT_URL) },
     { label: 'Quit', click: () => app.quit() },
   ]);
@@ -1201,6 +1265,10 @@ if (!gotLock) {
     }
 
     applyAutostart(autostartEnabled()); // Login-Item passend zur Präferenz setzen
+
+    // Update-Check: verzögert (Start nicht bremsen), dann täglich
+    setTimeout(checkForUpdate, 30 * 1000);
+    setInterval(checkForUpdate, 24 * 60 * 60 * 1000);
 
     if (!usage.onboarded) showOnboarding(); // Wizard nur beim allerersten Start
   });
