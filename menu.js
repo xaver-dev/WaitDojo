@@ -270,7 +270,10 @@ function renderSettings() {
   note.textContent = parts.length ? `Free version: ${parts.join(', ')}.` : '';
 }
 
-$('saveBtn').addEventListener('click', async () => {
+// Auto-Save: jede Änderung wirkt und speichert sofort — wie der Hotkey.
+// Number-Inputs feuern change erst bei Blur/Enter, nicht je Tastendruck.
+let savedMsgTimer = null;
+async function saveNow() {
   const r = await ipcRenderer.invoke('save-settings', {
     cooldownMinutes: Number($('setCooldown').value),
     thresholdSeconds: Number($('setThreshold').value),
@@ -279,9 +282,17 @@ $('saveBtn').addEventListener('click', async () => {
     popupSize: $('setSize').value,
     autostart: $('setAutostart').checked,
   });
-  if (r && r.ok) setMsg($('setMsg'), 'Settings saved.', 'ok');
-  else setMsg($('setMsg'), 'Could not save settings.', 'err');
-  refresh(false); // Werte neu laden (geclampte Zahlen)
+  await refresh(false); // geclampte Werte anzeigen
+  if (r && r.ok) {
+    setMsg($('setMsg'), 'Saved.', 'ok');
+    clearTimeout(savedMsgTimer);
+    savedMsgTimer = setTimeout(() => setMsg($('setMsg'), ''), 1500);
+  } else {
+    setMsg($('setMsg'), 'Could not save settings.', 'err');
+  }
+}
+['setCooldown', 'setThreshold', 'setWords', 'setPosition', 'setSize', 'setAutostart'].forEach((id) => {
+  $(id).addEventListener('change', saveNow);
 });
 
 // Desktop-Verknüpfung gibt es nur unter Windows

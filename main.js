@@ -422,7 +422,9 @@ function showMenu() {
 
 let lastQuiz = [];
 ipcMain.handle('get-quiz-words', () => {
-  lastQuiz = pickWords(config.wordsPerPopup).map((w) => ({ ...w, status: statusOf(w.id) }));
+  // Deck darf die Kartenzahl übersteuern (Lektions-Decks setzen z.B. 3 statt 5)
+  const perPopup = clampNum(meta.wordsPerPopup, 1, 10, config.wordsPerPopup);
+  lastQuiz = pickWords(perPopup).map((w) => ({ ...w, status: statusOf(w.id) }));
   return {
     meta,
     words: lastQuiz,

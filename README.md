@@ -94,7 +94,7 @@ This project is free. If it helps you and you want to support development, you c
 
 ## Make it about YOUR topic
 
-The first-run wizard walks you through it — describe your topic, pick a design, paste the chatbot's JSON:
+The first-run wizard walks you through it — describe your topic, pick a design, paste the chatbot's JSON. The generated prompt automatically picks the right card style: fact topics (capitals, vocabulary) become plain Q&A cards, concept topics (how something works, study findings, learning a skill) become **lesson cards** — a short intro with an example, then the question — with fewer cards per popup:
 
 <p align="center">
   <img src="docs/screenshots/wizard-describe.png" width="330" alt="Setup wizard step 1: describe topic, level, language, design preset">
@@ -132,7 +132,9 @@ Invalid deck files produce a clear error dialog on startup instead of a crash. L
 
 - `front` — what you see. `answers` — every accepted answer (case-insensitive, leading articles der/die/das/ein/eine/the/a/an ignored).
 - `hint` — optional disambiguation shown in grey. `level` — 1 or 2, shown in statistics.
+- `lesson` — optional 2–4 sentence mini-lesson with an example, shown **above** the question. For concept topics that need context before a question makes sense.
 - `extra` — optional back side of the card, revealed next to the solution after checking (e.g. the Chinese character for a Pinyin card, or the formula behind an answer).
+- `meta.wordsPerPopup` — optional per-deck override for cards per popup (lesson decks use 3 so popups stay readable).
 - `meta.theme` — optional popup style preset: `default`, `chinese` (red & gold frame), `nature`, `medical`, `minimal`.
 - `meta.accent` — optional hex color overriding the preset's accent.
 - `meta.ui` — optional button-label translations, see [DECK_PROMPT.md](DECK_PROMPT.md).

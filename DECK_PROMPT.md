@@ -28,7 +28,8 @@ JSON schema:
     "id": "<short-kebab-case-slug-for-this-deck>",
     "title": "<short friendly popup headline for this topic>",
     "instruction": "<one short line telling the user what to do>",
-    "placeholder": "<placeholder text for the answer input>"
+    "placeholder": "<placeholder text for the answer input>",
+    "wordsPerPopup": "<ONLY for concept-style decks with lesson cards: the number 3 — omit entirely for fact-style decks>"
   },
   "cards": [
     {
@@ -36,6 +37,7 @@ JSON schema:
       "front": "<the question or term shown to the user — keep it SHORT, it must fit on one line>",
       "answers": ["<primary answer>", "<accepted synonym>", "<accepted abbreviation>"],
       "hint": "<optional short disambiguation hint in parentheses, omit if not needed>",
+      "lesson": "<optional: 2-4 sentence mini-lesson with one concrete example — only for concept-style decks, omit for fact-style>",
       "extra": "<optional bonus shown next to the solution — a character, formula or short fact; omit if not needed>",
       "level": 1
     }
@@ -47,6 +49,7 @@ Rules:
 - Answers should be 1–4 words. Never full sentences — the user types them into a small input field.
 - Add "hint" only when the front alone is ambiguous.
 - Add "extra" only when there is a natural bonus to reveal with the solution (the Chinese character for a Pinyin card, the formula behind a physics answer). It is shown after checking, never before.
+- Decide the deck style from the topic. Fact-style topics (capitals, vocabulary, dates, units): plain Q&A cards without "lesson", about {NUMBER} cards. Concept-style topics (how something works, methods, study findings, learning a skill): lesson cards — each card carries a "lesson" of 2–4 sentences with ONE concrete example, and a "front" question that tests exactly that lesson; make about half of {NUMBER} cards and set meta.wordsPerPopup to 3.
 - "level": 1 for easier cards, 2 for harder ones. Mix both.
 - All ids must be unique.
 - Write meta.title, meta.instruction and meta.placeholder in {ANSWER LANGUAGE}.
@@ -68,6 +71,20 @@ Rules:
     { "id": "speed-light", "front": "Speed of light in vacuum (km/s)?", "answers": ["300000", "300,000", "299792"], "hint": "(rounded)", "level": 1 },
     { "id": "second-law", "front": "Newton's second law (formula)?", "answers": ["F = ma", "F=ma", "F = m*a"], "level": 2 }
   ]
+}
+```
+
+## Example lesson card (concept-style deck)
+
+For concept topics ("learn ML basics", "findings of study X") the cards teach first, then ask — and `meta.wordsPerPopup` is set to 3 so popups stay readable:
+
+```json
+{
+  "id": "learning-rate",
+  "lesson": "Gradient descent tunes model weights step by step, and the learning rate controls the step size. Example: with lr=0.01 training converges slowly but safely; with lr=10 each step overshoots the minimum.",
+  "front": "What does a too-high learning rate cause?",
+  "answers": ["overshooting", "divergence", "overshoot"],
+  "level": 2
 }
 ```
 

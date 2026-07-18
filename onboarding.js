@@ -85,7 +85,8 @@ JSON schema:
     "id": "${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'deck'}",
     "title": ${JSON.stringify(title)},
     "instruction": "Type the answer, Enter = next field",
-    "placeholder": "answer …"
+    "placeholder": "answer …",
+    "wordsPerPopup": "<ONLY for concept-style decks with lesson cards: the number 3 — omit entirely for fact-style decks>"
   },
   "cards": [
     {
@@ -93,6 +94,8 @@ JSON schema:
       "front": "<the question or term shown to the user — keep it SHORT, one line>",
       "answers": ["<primary answer>", "<accepted synonym or abbreviation>"],
       "hint": "<optional short hint in parentheses, omit if not needed>",
+      "lesson": "<optional: 2-4 sentence mini-lesson with one concrete example — only for concept-style decks, omit for fact-style>",
+      "extra": "<optional bonus shown next to the solution — a character, formula or short fact; omit if not needed>",
       "level": 1
     }
   ]
@@ -102,9 +105,10 @@ Rules:
 - "front" is what the user sees; "answers" lists every string that counts as correct (synonyms, abbreviations, spelling variants). Comparison is case-insensitive and ignores leading articles (der/die/das/ein/eine/the/a/an).
 - Answers must be 1–4 words, never full sentences.
 - Add "hint" only when the front alone is ambiguous.
+- Decide the deck style from the topic. Fact-style topics (capitals, vocabulary, dates, units): plain Q&A cards without "lesson", about ${count} cards. Concept-style topics (how something works, methods, study findings, learning a skill): lesson cards — each card carries a "lesson" of 2-4 sentences with ONE concrete example, and a "front" question that tests exactly that lesson; make about ${Math.max(5, Math.round(count / 2))} cards and set meta.wordsPerPopup to 3.
 - Mix "level" 1 (easier) and 2 (harder).
 - All ids must be unique.
-- Match the learner description for difficulty and scope. Write meta text in ${lang}.
+- Match the learner description for difficulty and scope. Write meta text, lessons and hints in ${lang}.
 - No trick questions; every card has a clearly correct short answer.`;
 }
 

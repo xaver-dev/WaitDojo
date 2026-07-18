@@ -78,6 +78,7 @@ async function init() {
     const row = document.createElement('div');
     row.className = 'row';
     row.innerHTML = `
+      ${w.lesson ? `<div class="lesson">${w.lesson}</div>` : ''}
       <div class="top">
         <span class="front">${w.front}${w.hint ? ` <span class="hint">${w.hint}</span>` : ''}</span>
         <span class="badge ${w.status}">${w.status}</span>
