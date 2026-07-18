@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WaitDojo — Card library</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background: #1c1f26; color: #e8e6e3;
+    padding: 20px 22px; font-size: 13px; line-height: 1.5;
+    display: flex; flex-direction: column; height: 100vh;
+  }
+  h1 { font-size: 17px; color: #f0c674; margin-bottom: 2px; }
+  .sub { color: #8a8f9c; font-size: 12px; margin-bottom: 12px; }
+  input[type=text], textarea, select {
+    width: 100%; background: #1a1d24; border: 1px solid #3a3f4b; border-radius: 8px;
+    color: #e8e6e3; font-size: 13px; padding: 7px 10px; outline: none; font-family: inherit;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #f0c674; }
+  textarea { resize: vertical; }
+  label { display: block; font-weight: 600; margin: 10px 0 4px; }
+  label .opt { color: #8a8f9c; font-weight: 400; font-size: 11px; }
+  .rowflex { display: flex; gap: 12px; }
+  .rowflex > div { flex: 1; }
+  .rowflex > div.shrink { flex: 0 0 90px; }
+
+  #filter { margin-bottom: 4px; }
+  #editor { flex: 1; overflow-y: auto; min-height: 0; padding-bottom: 8px; }
+  #editor::-webkit-scrollbar { width: 6px; }
+  #editor::-webkit-scrollbar-thumb { background: #3a3f4b; border-radius: 3px; }
+
+  .btns { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  button.primary {
+    background: #f0c674; color: #1c1f26; border: none; border-radius: 9px;
+    padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  button.primary:hover { filter: brightness(1.08); }
+  button.ghost {
+    background: none; border: 1px solid #3a3f4b; color: #b8bdc9;
+    border-radius: 9px; padding: 9px 16px; font-size: 13px; cursor: pointer;
+  }
+  button.ghost:hover { border-color: #f0c674; color: #fff; }
+  button.ghost.danger:hover { border-color: #8a3a49; color: #ff9caa; }
+
+  .msg { margin-top: 8px; font-size: 12px; min-height: 18px; }
+  .msg.err { color: #ff9caa; white-space: pre-wrap; }
+  .msg.ok { color: #96d9a4; }
+
+  footer {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding-top: 12px; border-top: 1px solid #333846;
+  }
+  footer button {
+    background: #242833; border: 1px solid #333846; color: #b8bdc9;
+    border-radius: 9px; padding: 8px 14px; font-size: 14px; cursor: pointer;
+  }
+  footer button:hover:not(:disabled) { border-color: #f0c674; color: #fff; }
+  footer button:disabled { opacity: .35; cursor: default; }
+  #jump {
+    width: 64px; text-align: center; background: #1a1d24; border: 1px solid #3a3f4b;
+    border-radius: 8px; color: #e8e6e3; font-size: 13px; padding: 7px 4px; outline: none;
+  }
+  #jump:focus { border-color: #f0c674; }
+  #total { color: #8a8f9c; white-space: nowrap; }
+  #empty { color: #8a8f9c; text-align: center; margin-top: 40px; }
+</style>
+</head>
+<body>
+  <h1 id="deckTitle"></h1>
+  <div class="sub" id="deckSub"></div>
+  <input type="text" id="filter" spellcheck="false" autocomplete="off" placeholder="Search cards (question or answer) …">
+
+  <div id="editor">
+    <label for="f-front">Question / front</label>
+    <input type="text" id="f-front" spellcheck="false" autocomplete="off">
+    <label for="f-answers">Accepted answers <span class="opt">(one per line — first one is shown as the solution)</span></label>
+    <textarea id="f-answers" rows="3" spellcheck="false"></textarea>
+    <div class="rowflex">
+      <div>
+        <label for="f-hint">Hint <span class="opt">(optional)</span></label>
+        <input type="text" id="f-hint" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="shrink">
+        <label for="f-level">Level</label>
+        <select id="f-level"><option value="1">1</option><option value="2">2</option></select>
+      </div>
+    </div>
+    <label for="f-lesson">Lesson <span class="opt">(optional — short intro shown above the question)</span></label>
+    <textarea id="f-lesson" rows="3" spellcheck="false"></textarea>
+    <label for="f-extra">Extra <span class="opt">(optional — shown next to the solution, e.g. character or formula)</span></label>
+    <input type="text" id="f-extra" spellcheck="false" autocomplete="off">
+    <div class="btns">
+      <button class="primary" id="saveBtn">Save card</button>
+      <button class="ghost" id="addBtn">+ New card</button>
+      <button class="ghost danger" id="delBtn">Delete card</button>
+    </div>
+    <div class="msg" id="msg"></div>
+  </div>
+  <div id="empty" hidden>No cards match your search.</div>
+
+  <footer>
+    <button id="prevBtn" title="Previous card">◀</button>
+    <input type="text" id="jump" spellcheck="false" autocomplete="off">
+    <span id="total"></span>
+    <button id="nextBtn" title="Next card">▶</button>
+  </footer>
+
+  <script src="cards.js"></script>
+</body>
+</html>

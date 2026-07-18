@@ -63,6 +63,7 @@ function renderDecks() {
         </div>
         <div class="deck-actions">
           ${d.active || d.locked ? '' : `<button data-act="use">Use</button>`}
+          <button data-act="cards" title="Browse and edit every card">Cards</button>
           <button data-act="edit">Edit</button>
           <button data-act="delete" class="danger" title="Move to data/.trash">Delete</button>
         </div>
@@ -91,6 +92,8 @@ async function onDeckAction(act, index, div) {
     const r = await ipcRenderer.invoke('menu-switch-deck', index);
     if (r && r.ok) refresh();
     else setMsg($('deckMsg'), 'Could not switch deck.', 'err');
+  } else if (act === 'cards') {
+    ipcRenderer.send('open-cards', index);
   } else if (act === 'delete') {
     const r = await ipcRenderer.invoke('delete-deck', index);
     if (r && r.ok) { editIndex = null; refresh(); }

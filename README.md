@@ -72,6 +72,7 @@ The [extension/](extension/) folder contains a Chrome extension (load unpacked, 
 Click ⚙ in any popup (or tray menu → **Decks & settings…**) to open the main menu:
 
 - **Decks** — see every deck with its card count and today's usage; switch the active deck, edit a deck's headline, design preset and accent color, reset its learning progress, or delete it (moved to `data/.trash/`, recoverable). **+ New deck…** reopens the setup wizard.
+- **Cards** — the card library: browse a deck one card at a time (◀ ▶, jump field, search), fix anything the AI generated wrong — question, answers, hint, lesson, extra, level — and add or delete cards. Changes to the active deck apply to the next popup immediately.
 - **Settings** — popup frequency (every 1–60 minutes), trigger threshold, cards per popup, global hotkey (click the field and press the combination — it records and saves it right away), popup position (any screen corner), popup size (small/default/large), and autostart with Windows. Changes apply immediately, no restart needed.
 
 <p align="center">

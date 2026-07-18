@@ -405,6 +405,23 @@ function showOnboarding() {
   onboardingWin.on('closed', () => { onboardingWin = null; });
 }
 
+let cardsWin = null;
+function showCards(deckIndex) {
+  if (cardsWin && !cardsWin.isDestroyed()) { cardsWin.close(); } // pro Aufruf frisches Deck laden
+  cardsWin = new BrowserWindow({
+    width: 560,
+    height: 680,
+    title: 'WaitDojo — Card library',
+    autoHideMenuBar: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+  cardsWin.loadFile('cards.html', { query: { deck: String(deckIndex) } });
+  cardsWin.on('closed', () => { cardsWin = null; });
+}
+
 let menuWin = null;
 function showMenu() {
   if (menuWin && !menuWin.isDestroyed()) { menuWin.focus(); return; }
@@ -675,6 +692,10 @@ ipcMain.on('snooze-popup', () => {
 // ---- Hauptmenü (menu.html): Deck-Verwaltung + Einstellungen
 
 ipcMain.on('open-menu', () => showMenu());
+ipcMain.on('open-cards', (_e, index) => {
+  const i = Number(index);
+  if (Number.isInteger(i) && i >= 0 && i < deckList().length) showCards(i);
+});
 ipcMain.on('open-stats', () => showStats());
 ipcMain.on('open-onboarding', () => showOnboarding());
 ipcMain.on('open-support', () => shell.openExternal(SUPPORT_URL));
@@ -858,6 +879,42 @@ ipcMain.handle('reset-progress', (_e, index) => {
 
 ipcMain.handle('create-shortcut', () => createDesktopShortcut());
 
+// ---- Karten-Bibliothek: ganzes Deck lesen/schreiben (cards.html)
+
+ipcMain.handle('get-deck-file', (_e, index) => {
+  const list = deckList();
+  const i = Number(index);
+  if (!Number.isInteger(i) || i < 0 || i >= list.length) return { ok: false, error: 'bad index' };
+  try {
+    const deck = readJson(path.resolve(APP_DIR, list[i]));
+    deck.meta = deck.meta || {};
+    return { ok: true, deck };
+  } catch (e) {
+    return { ok: false, error: 'Deck unreadable: ' + e.message };
+  }
+});
+
+ipcMain.handle('save-deck-file', (_e, payload) => {
+  payload = payload || {};
+  const list = deckList();
+  const i = Number(payload.index);
+  if (!Number.isInteger(i) || i < 0 || i >= list.length) return { ok: false, error: 'bad index' };
+  const errors = validateDeckObject(payload.deck);
+  if (errors.length > 0) return { ok: false, error: errors.slice(0, 8).join('\n') };
+  try {
+    fs.writeFileSync(path.resolve(APP_DIR, list[i]), JSON.stringify(payload.deck, null, 2) + '\n');
+  } catch (e) {
+    return { ok: false, error: 'Could not write deck file: ' + e.message };
+  }
+  if (i === activeDeckIndex()) {
+    const err = loadDeck(); // aktives Deck: Karten sofort für neue Popups übernehmen
+    if (err) return { ok: false, error: err };
+  }
+  buildTrayMenu();
+  updateTrayTooltip();
+  return { ok: true };
+});
+
 // ---------------------------------------------------------------- Job-Tracking + HTTP-API
 
 // sessions: { [sessionId]: { count, timer } }
@@ -939,6 +996,7 @@ function startServer() {
           case '/shot': // nur mit WAITDOJO_DEBUG=1: sichtbares Fenster als PNG speichern
             if (process.env.WAITDOJO_DEBUG === '1' && body.path) {
               const win = (onboardingWin && !onboardingWin.isDestroyed()) ? onboardingWin
+                : (cardsWin && !cardsWin.isDestroyed()) ? cardsWin
                 : (menuWin && !menuWin.isDestroyed()) ? menuWin
                 : (popupWin && !popupWin.isDestroyed()) ? popupWin : null;
               if (win) win.webContents.capturePage()
@@ -955,6 +1013,17 @@ function startServer() {
           case '/debug/menu-js': // nur mit WAITDOJO_DEBUG=1: JS im Hauptmenü ausführen
             if (process.env.WAITDOJO_DEBUG === '1' && menuWin && !menuWin.isDestroyed() && body.js) {
               menuWin.webContents.executeJavaScript(String(body.js))
+                .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
+                .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
+              return;
+            }
+            break;
+          case '/debug/cards': // nur mit WAITDOJO_DEBUG=1: Karten-Bibliothek öffnen
+            if (process.env.WAITDOJO_DEBUG === '1') showCards(Number(body.index) || 0);
+            break;
+          case '/debug/cards-js': // nur mit WAITDOJO_DEBUG=1: JS in der Karten-Bibliothek ausführen
+            if (process.env.WAITDOJO_DEBUG === '1' && cardsWin && !cardsWin.isDestroyed() && body.js) {
+              cardsWin.webContents.executeJavaScript(String(body.js))
                 .then((v) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: true, value: String(v) })); })
                 .catch((e) => { res.writeHead(200, { 'content-type': 'application/json' }); res.end(JSON.stringify({ ok: false, error: e.message })); });
               return;
