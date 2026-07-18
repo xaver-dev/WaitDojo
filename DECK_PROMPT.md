@@ -50,6 +50,8 @@ Rules:
 - Add "hint" only when the front alone is ambiguous.
 - Add "extra" only when there is a natural bonus to reveal with the solution (the Chinese character for a Pinyin card, the formula behind a physics answer). It is shown after checking, never before.
 - Decide the deck style from the topic. Fact-style topics (capitals, vocabulary, dates, units): plain Q&A cards without "lesson", about {NUMBER} cards. Concept-style topics (how something works, methods, study findings, learning a skill): lesson cards — each card carries a "lesson" of 2–4 sentences with ONE concrete example, and a "front" question that tests exactly that lesson; make about half of {NUMBER} cards and set meta.wordsPerPopup to 3.
+
+Want a specific style instead of letting the chatbot decide? Replace that rule with either "Make plain Q&A cards only, no lesson fields" or "Every card carries a lesson" — the in-app wizard offers the same choice as a dropdown.
 - "level": 1 for easier cards, 2 for harder ones. Mix both.
 - All ids must be unique.
 - Write meta.title, meta.instruction and meta.placeholder in {ANSWER LANGUAGE}.

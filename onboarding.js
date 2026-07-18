@@ -72,6 +72,14 @@ function buildPrompt() {
   const count = Math.max(5, Math.min(200, Number($('count').value) || 30));
   const title = $('title').value.trim() || `${topic} — quick break?`;
 
+  // Kartenstil: User entscheidet; „auto" überlässt es dem Chatbot (Thema-basiert)
+  const lessonCount = Math.max(5, Math.round(count / 2));
+  const styleRule = {
+    auto: `- Decide the deck style from the topic. Fact-style topics (capitals, vocabulary, dates, units): plain Q&A cards without "lesson", about ${count} cards. Concept-style topics (how something works, methods, study findings, learning a skill): lesson cards — each card carries a "lesson" of 2-4 sentences with ONE concrete example, and a "front" question that tests exactly that lesson; make about ${lessonCount} cards and set meta.wordsPerPopup to 3.`,
+    quiz: `- Make plain Q&A cards only: no "lesson" fields, omit meta.wordsPerPopup, about ${count} cards.`,
+    lessons: `- EVERY card carries a "lesson" of 2-4 sentences with ONE concrete example, and a "front" question that tests exactly that lesson. Make about ${lessonCount} cards and set meta.wordsPerPopup to 3.`,
+  }[$('cardstyle').value] || '';
+
   return `Create a quiz deck as a single JSON object for a flashcard app. Output ONLY the raw JSON, no markdown fences, no explanations.
 
 Topic: ${topic}
@@ -105,7 +113,7 @@ Rules:
 - "front" is what the user sees; "answers" lists every string that counts as correct (synonyms, abbreviations, spelling variants). Comparison is case-insensitive and ignores leading articles (der/die/das/ein/eine/the/a/an).
 - Answers must be 1–4 words, never full sentences.
 - Add "hint" only when the front alone is ambiguous.
-- Decide the deck style from the topic. Fact-style topics (capitals, vocabulary, dates, units): plain Q&A cards without "lesson", about ${count} cards. Concept-style topics (how something works, methods, study findings, learning a skill): lesson cards — each card carries a "lesson" of 2-4 sentences with ONE concrete example, and a "front" question that tests exactly that lesson; make about ${Math.max(5, Math.round(count / 2))} cards and set meta.wordsPerPopup to 3.
+${styleRule}
 - Mix "level" 1 (easier) and 2 (harder).
 - All ids must be unique.
 - Match the learner description for difficulty and scope. Write meta text, lessons and hints in ${lang}.
