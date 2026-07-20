@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WaitDojo Companion",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Tells WaitDojo when ChatGPT is generating, so quiz popups appear while you wait.",
   "host_permissions": ["http://127.0.0.1:4823/*"],
   "background": { "service_worker": "background.js" },

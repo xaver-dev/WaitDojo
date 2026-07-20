@@ -1,6 +1,6 @@
 # WaitDojo Companion (Chrome extension) — experimental
 
-Makes ChatGPT trigger WaitDojo popups automatically, like Claude Code does via hooks: while ChatGPT is generating a long answer (deep research, long thinking), a quiz popup appears after ~30 seconds.
+Makes ChatGPT trigger WaitDojo popups automatically, like Claude Code does via hooks: while ChatGPT is generating a longer answer (a detailed explanation, code, a table, deep research), a quiz popup appears after ~15 seconds.
 
 ## How it works
 
@@ -18,5 +18,5 @@ Makes ChatGPT trigger WaitDojo popups automatically, like Claude Code does via h
 ## Status: experimental
 
 - The stop-button selectors match the chatgpt.com DOM as of July 2026. When OpenAI changes their markup, detection breaks until the selectors in `content.js` are updated — the extension then simply does nothing (it never breaks ChatGPT itself).
-- Trigger threshold is 30 seconds (shorter than Claude Code's 60, because chat answers are shorter than tool runs). Change `THRESHOLD_SECONDS` in `background.js` if you want a different one.
+- Trigger threshold is 15 seconds (shorter than Claude Code's 60, because chat answers are shorter than tool runs). Change `THRESHOLD_SECONDS` in `background.js` if you want a different one — raise it if popups feel too eager, lower it to catch shorter answers.
 - Closed tabs and page reloads clean up their counters automatically.

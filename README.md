@@ -55,7 +55,7 @@ Claude Desktop chat, Copilot and friends expose no "I'm busy" events. For those,
 
 ### ChatGPT: experimental browser extension
 
-The [extension/](extension/) folder contains a Chrome extension (load unpacked, not on the Web Store yet) that watches chatgpt.com for the stop button and triggers popups automatically after ~30 s of generation — deep research and long thinking runs become quiz time. See [extension/README.md](extension/README.md).
+The [extension/](extension/) folder contains a Chrome extension (load unpacked, not on the Web Store yet) that watches chatgpt.com for the stop button and triggers popups automatically after ~15 s of generation — longer answers, deep research and long thinking runs become quiz time. See [extension/README.md](extension/README.md).
 
 ## Using the popup
 

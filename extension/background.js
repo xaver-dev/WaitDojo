@@ -4,8 +4,9 @@
 
 const BASE = 'http://127.0.0.1:4823';
 
-// ChatGPT-Antworten sind meist kürzer als Claude-Code-Tool-Läufe — niedrigere Schwelle
-const THRESHOLD_SECONDS = 30;
+// ChatGPT-Antworten sind meist kürzer als Claude-Code-Tool-Läufe — niedrigere Schwelle.
+// 15 s trifft mittellange Antworten (Erklärungen, Code, Tabellen), lässt kurze Fragen in Ruhe.
+const THRESHOLD_SECONDS = 15;
 
 async function ping(path, body) {
   try {
