@@ -328,7 +328,8 @@ function showPopup(force = false) {
   if (snoozeTimer) { clearTimeout(snoozeTimer); snoozeTimer = null; }
 
   const { workArea } = screen.getPrimaryDisplay();
-  const sizes = { small: { w: 340, h: 480 }, default: { w: 380, h: 560 }, large: { w: 440, h: 660 } };
+  // Breite bewusst schmal: unten rechts soll die zentrierte Textspalte (ChatGPT/Claude) frei bleiben
+  const sizes = { small: { w: 300, h: 440 }, default: { w: 336, h: 520 }, large: { w: 400, h: 620 } };
   const { w, h } = sizes[config.popupSize] || sizes.default;
   const pos = String(config.popupPosition || 'bottom-right');
   popupWin = new BrowserWindow({
