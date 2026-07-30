@@ -40,7 +40,7 @@ const MAX_DECKS = config.maxDecks === 0 ? Infinity
   : (typeof config.maxDecks === 'number' && config.maxDecks > 0 ? config.maxDecks : 2);
 // Über IPC/JSON gehen keine Infinity-Werte — 0 heißt für Renderer „unbegrenzt"
 const wire = (n) => (Number.isFinite(n) ? n : 0);
-const SUPPORT_URL = 'https://github.com/sponsors/yoloswag179';
+const SUPPORT_URL = 'https://github.com/sponsors/xaver-dev';
 
 // ---------------------------------------------------------------- Nutzung (Limits)
 
@@ -1114,7 +1114,7 @@ function versionNewer(a, b) {
 
 async function checkForUpdate() {
   try {
-    const res = await fetch('https://api.github.com/repos/yoloswag179/WaitDojo/releases/latest', {
+    const res = await fetch('https://api.github.com/repos/xaver-dev/WaitDojo/releases/latest', {
       headers: { accept: 'application/vnd.github+json' },
     });
     if (!res.ok) return;

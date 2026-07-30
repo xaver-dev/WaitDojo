@@ -17,7 +17,7 @@ The app remembers every card and schedules it with spaced repetition: get a card
 
 ### Option A — download (Windows, nothing to install)
 
-1. Grab `WaitDojo-<version>-win.zip` from [Releases](https://github.com/yoloswag179/WaitDojo/releases).
+1. Grab `WaitDojo-<version>-win.zip` from [Releases](https://github.com/xaver-dev/WaitDojo/releases).
 2. Extract it anywhere you like (Documents, D:\Tools, …) and run `WaitDojo.exe`.
 
 For automatic popups with Claude Code: tray menu → **Claude Code hooks** → **Install / repair** (the hooks run a tiny Node script, so [Node.js](https://nodejs.org) must be on your PATH — without it, the global hotkey still works).
@@ -27,7 +27,7 @@ For automatic popups with Claude Code: tray menu → **Claude Code hooks** → *
 Requires [Node.js](https://nodejs.org) (18+).
 
 ```
-git clone https://github.com/yoloswag179/WaitDojo.git
+git clone https://github.com/xaver-dev/WaitDojo.git
 cd WaitDojo
 npm install
 npm start

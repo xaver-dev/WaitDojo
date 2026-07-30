@@ -16,7 +16,7 @@
     "electron-builder": "^26.15.3"
   },
   "build": {
-    "appId": "com.yoloswag179.waitdojo",
+    "appId": "com.xaver-dev.waitdojo",
     "productName": "WaitDojo",
     "asar": false,
     "files": [
